@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Round 2 repository** | https://github.com/Yogesh-101/cube26-pck-0122-yogesh-101 |
-| **Commit integrated** | `ec29525ebf43185f40616b2769477759f9c97cfd` |
+| **Commit integrated** | `9642e53` (complete held-out photo eval 38/38, 0 false SEALs) |
 | **Owner** | @Yogesh-101 |
 | **Stage** | `pack` |
 | **Agent id** | `pack-manager@1` |
@@ -13,7 +13,7 @@
 The full Round 2 Pack Manager tree lives under `runtime/`:
 
 - `runtime/app/` — FastAPI UI, Gemini client, order-blind VLM prompt, quality gate, decision engine, SQLite persistence
-- `runtime/data/` — sample CSV, catalogue, held-out photo eval fixtures and results
+- `runtime/data/` — sample CSV, catalogue, held-out photo eval fixtures and results (`held_out_latest.json`: 38/38, 0 false SEAL)
 - `runtime/tests/` — unit, integration, and evaluation tests
 - `runtime/docs/`, `runtime/submissions/` — evaluation report and submission artefacts
 - `runtime/requirements.txt`, Docker/Render deploy files

@@ -5,6 +5,7 @@
   "mode": "inproc",
   "url": "http://localhost:8103",
   "module": "agents.pack.app",
-  "implementation": "Round 2 Pack Manager: order-blind Gemini VLM observation + deterministic decision engine (seal / stop_and_fix / pending_review). Falls back to decision engine on labelled sample observations when captures are absent.",
-  "notes": "Requires GEMINI_API_KEY for live photo verification. Without captures, handle() still produces contract-valid evidence via the decision engine."
+  "implementation": "Round 2 Pack Manager: order-blind Gemini VLM + quality gate + deterministic decision engine (seal / stop_and_fix / pending_review). Held-out photo eval 38/38 complete, 0 false SEALs (commit 9642e53).",
+  "notes": "Requires GEMINI_API_KEY for live photo verification (GEMINI_MODEL=gemini-flash-lite-latest recommended on free tier). Without captures, handle() still produces contract-valid evidence via the decision engine."
 }
+
