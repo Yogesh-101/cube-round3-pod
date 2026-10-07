@@ -1,44 +1,56 @@
-# agents/pack/  ·  Pack Manager
+# agents/pack/ · Pack Manager
 
-**Owner:** Member 3 (Pack Manager)  (set `owner` in `agent.json` and the handle in `.github/CODEOWNERS`)
+**Owner:** @Yogesh-101 · **Agent:** `pack-manager@1`
 
-> **This folder currently contains an organiser stub** that replays the synthetic Round 2 CSV. It is *not* an agent. Replace it, then replace this README with one that describes what you actually built, how to run it, and its limits.
+Merchant-fulfilled / 3PL pack verification: from an open-box photo and the order lines, decide **seal**, **stop_and_fix**, or **pending_review**. Amazon FBA is out of scope (`route == "mfn"` only).
 
 | | |
 |---|---|
-| **Reads (inputs)** | A photo of the open box before sealing, and the order lines |
-| **Reads (previous evidence)** | Receiving |
-| **Produces** | items present, quantities correct, nothing extra; seal or stop-and-fix |
-| **Recommended `check_key`s** | `items_present, quantities_correct, no_extra_items` |
-| **`decision.outcome` values** | `seal, stop_and_fix, pending_review` |
+| **Reads (inputs)** | Open-box photo(s), order lines |
+| **Reads (previous evidence)** | Receiving (upstream refs cited) |
+| **Produces** | `items_present`, `quantities_correct`, `no_extra_items` (+ `no_wrong_items`, `image_quality`) |
+| **`decision.outcome`** | `seal`, `stop_and_fix`, `pending_review` |
 
-Only merchant-fulfilled / 3PL units reach Pack (`route == "mfn"`): Amazon packs FBA boxes. Your record is what Returns and Recovery rely on to say what was actually sent, so the `observed_in_box` evidence must be citable.
-
-## Where your code goes
+## Layout
 
 ```text
 agents/pack/
-├── app.py          ← expose  handle(agent_input: dict) -> dict  (an Agent Output). Keep `app = make_app(...)` to serve over HTTP.
-├── agent.json      ← stage · agent_id · owner · mode (inproc | http) · url · an honest `implementation` description
-├── PROVENANCE.md   ← your Round 2 repo URL + commit this came from (create it)
-├── README.md       ← this file, rewritten
-└── …               ← your Round 2 code, prompts, rules, fixtures
+├── app.py            ← handle(agent_input) → Agent Output
+├── agent.json
+├── PROVENANCE.md     ← Round 2 repo + commit
+├── README.md
+└── runtime/          ← full Round 2 Pack Manager codebase
 ```
 
-## Integrating, in order
+## How it works
 
-1. Read [`INTEGRATION-GUIDE.md`](../../INTEGRATION-GUIDE.md) and [`EVIDENCE-CONTRACT.md`](../../EVIDENCE-CONTRACT.md); open [`examples/end-to-end/`](../../examples/) for a real Agent Output.
-2. In `handle()`: read `request["subject"]`, `request["inputs"]` (your captures) and `request["previous_evidence"]`; run your agent (**one batched model call per unit**); build the record with `shared.utils.records.build_record()` and wrap it with `build_output()`.
-3. **Fail open.** On a model error return `pending_output(...)`, not an exception. Never invent evidence: if you did not see it, say UNCERTAIN with an `uncertain_reason`.
-4. **Refuse other tenants.** Raise `LookupError` (HTTP 404) for a subject that is not under `subject.org_id`.
-5. Make it idempotent: the same `request_id` must yield the same `record_id`. Use the **latest override** of previous evidence (`context.overrides`).
-6. Run `pytest tests/integration/test_agent_contracts.py`, first on the stub (it passes), then on yours, **with your own fixtures**.
-7. Run the whole system: `make run` and `make test`.
+1. **Observation (order-blind):** Gemini sees photos + catalogue only — not the expected order.
+2. **Decision (deterministic):** compares observations to order lines; UNCERTAIN never auto-seals.
+3. **Fail-open:** VLM errors → `pending_output` / pending review; the line is not blocked.
+4. **Tenancy:** wrong `org_id` raises `LookupError` (HTTP 404).
 
-## Run on its own
+Without resolved image files in `request["inputs"]`, the adapter still emits a contract-valid record by running the decision engine on labelled sample observations (no fabricated VLM calls).
+
+## Run
 
 ```sh
-.venv/bin/uvicorn agents.pack.app:app --port 8103
+# from repo root, with deps installed
+uvicorn agents.pack.app:app --port 8103
 curl localhost:8103/health
 ```
-Then set `"mode": "http"` in `agent.json` if you want the orchestrator to call it over HTTP.
+
+Live photo mode needs `GEMINI_API_KEY` (see `runtime/.env.example`).
+
+## Tests
+
+```sh
+pytest tests/integration/test_agent_contracts.py -k pack
+# Round 2 unit/eval tests (from runtime/):
+cd agents/pack/runtime && pytest tests/unit -q
+```
+
+## Limits
+
+- Needs clear open-box photos; opaque packaging → UNCERTAIN
+- Free-tier Gemini quotas can force pending / incomplete live photo evals
+- Held-out photo fixtures are Unsplash composites, not live warehouse phone captures

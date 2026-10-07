@@ -1,10 +1,10 @@
 {
   "stage": "pack",
-  "agent_id": "pack-stub@0",
-  "owner": "@github-handle-of-the-owner",
+  "agent_id": "pack-manager@1",
+  "owner": "@Yogesh-101",
   "mode": "inproc",
   "url": "http://localhost:8103",
   "module": "agents.pack.app",
-  "implementation": "organiser-stub",
-  "notes": "Set mode to \"http\" if your agent is not Python or runs as its own service. Change implementation to a short honest description of what you built."
+  "implementation": "Round 2 Pack Manager: order-blind Gemini VLM observation + deterministic decision engine (seal / stop_and_fix / pending_review). Falls back to decision engine on labelled sample observations when captures are absent.",
+  "notes": "Requires GEMINI_API_KEY for live photo verification. Without captures, handle() still produces contract-valid evidence via the decision engine."
 }

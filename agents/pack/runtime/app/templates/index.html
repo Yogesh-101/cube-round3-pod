@@ -1,0 +1,281 @@
+{% extends "base.html" %}
+{% set active_page = 'dashboard' %}
+{% block title %}Dashboard — Pack Manager{% endblock %}
+
+{% block content %}
+<div class="page-head">
+    <div class="page-head-row">
+        <div>
+            <span class="eyebrow">Packing verification</span>
+            <h1>Inspection dashboard</h1>
+            <p>Verify every order against the open box before it is sealed. Each inspection produces an
+               evidence record that Returns and Recovery can look up by unit ID.</p>
+        </div>
+        <a href="/inspect" class="btn btn-primary btn-lg btn-block-sm">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            New inspection
+        </a>
+    </div>
+</div>
+
+<div class="bench-rules" aria-label="Operating rules">
+    <span>Uncertain never seals</span>
+    <span>Model outage stays pending</span>
+    <span>One organisation at a time</span>
+    <span>Unit ID joins Returns and Recovery</span>
+</div>
+
+<div class="grid-4" style="margin-bottom: 18px;" id="stats">
+    <div class="stat"><div class="stat-label">Total</div><div class="stat-value" id="stat-total">—</div><div class="stat-sub">inspections in this org</div></div>
+    <div class="stat is-seal"><div class="stat-label">Sealed</div><div class="stat-value" id="stat-seal">—</div><div class="stat-sub">cleared to close</div></div>
+    <div class="stat is-stop"><div class="stat-label">Stop &amp; fix</div><div class="stat-value" id="stat-stop">—</div><div class="stat-sub">discrepancy found</div></div>
+    <div class="stat is-uncertain"><div class="stat-label">Needs review</div><div class="stat-value" id="stat-review">—</div><div class="stat-sub">agent declined to judge</div></div>
+</div>
+
+<div class="card" id="mix-card">
+    <div class="card-head">
+        <h2>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5M4 19h16"/><path d="M8 19V9M13 19V6M18 19v-7"/></svg>
+            Verdict mix
+        </h2>
+    </div>
+    <div id="verdict-mix"></div>
+</div>
+
+<div class="card">
+    <div class="card-head">
+        <h2>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h18M3 12h18M3 19h18"/></svg>
+            Recent inspections
+        </h2>
+        <div class="row">
+            <label class="sr-only" for="search">Filter inspections</label>
+            <input id="search" type="search" placeholder="Filter by order, unit or ID…" class="toolbar-search" autocomplete="off">
+            <label class="sr-only" for="filter">Filter by outcome</label>
+            <select id="filter" class="toolbar-select">
+                <option value="all">All outcomes</option>
+                <option value="seal">Sealed</option>
+                <option value="stop">Stop &amp; fix</option>
+                <option value="uncertain">Needs review</option>
+                <option value="pending">Pending</option>
+            </select>
+            <button class="btn btn-ghost btn-sm" id="refresh" title="Refresh list">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v5h-5"/></svg>
+                Refresh
+            </button>
+        </div>
+    </div>
+
+    <p class="hint" style="margin-bottom: 14px;">
+        Showing inspections for <strong class="mono" id="org-echo" style="color: var(--blue-300);"></strong>.
+        Switch organisation from the header to confirm tenancy isolation.
+    </p>
+
+    <div id="inspections-list">
+        <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
+    </div>
+</div>
+
+<div class="grid-2">
+    <div class="card">
+        <h2>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 16v-5M12 8h.01"/></svg>
+            How a pack check runs
+        </h2>
+        <ol class="flow">
+            <li><span class="flow-n">1</span><p>Photograph the <strong>open</strong> package from the angles that show every item.</p></li>
+            <li><span class="flow-n">2</span><p>Enter the order lines the box is supposed to contain.</p></li>
+            <li><span class="flow-n">3</span><p>One batched model call runs all five checks on the unit.</p></li>
+            <li><span class="flow-n">4</span><p>You get <strong>SEAL</strong>, <strong>STOP &amp; FIX</strong>, or <strong>NEEDS REVIEW</strong> when the evidence will not support a call.</p></li>
+            <li><span class="flow-n">5</span><p>Override when you disagree. The original verdict and your reason are both kept.</p></li>
+        </ol>
+    </div>
+
+    <div class="card">
+        <h2>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M8 4v16"/></svg>
+            System
+        </h2>
+        <div class="table-wrap">
+            <table class="kv">
+                <tbody>
+                    <tr><td>Agent</td><td class="mono">pack_manager</td></tr>
+                    <tr><td>Version</td><td class="mono">1.0.0</td></tr>
+                    <tr><td>Evidence schema</td><td class="mono">1.0.0</td></tr>
+                    <tr><td>Active org</td><td class="mono" id="org-echo-2" style="color: var(--blue-300);"></td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="callout callout-info" style="margin-top: 14px;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 16v-5M12 8h.01"/></svg>
+            <span>Records carry a SHA-256 <strong>content hash</strong> over their canonical JSON. That detects
+            accidental change of the evidence record.</span>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const esc = window.PCK.esc;
+let rows = [];
+
+function statusKey(item) {
+    return window.PCK.presentDecision(item.decision, item.status).key;
+}
+
+const MIX = [
+    { key: 'seal', label: 'Seal', color: 'var(--seal)' },
+    { key: 'stop', label: 'Stop & fix', color: 'var(--stop)' },
+    { key: 'uncertain', label: 'Needs review', color: 'var(--uncertain)' },
+    { key: 'pending', label: 'Pending', color: 'var(--pending)' },
+];
+
+function renderStats() {
+    const count = key => rows.filter(r => statusKey(r) === key).length;
+    document.getElementById('stat-total').textContent = rows.length;
+    document.getElementById('stat-seal').textContent = count('seal');
+    document.getElementById('stat-stop').textContent = count('stop');
+    document.getElementById('stat-review').textContent = count('uncertain');
+    renderMix();
+}
+
+function renderMix() {
+    const host = document.getElementById('verdict-mix');
+    if (!host) return;
+    if (!rows.length) {
+        host.innerHTML = `
+            <div class="empty" style="padding:28px 12px;">
+                <h3>No inspections in this organisation</h3>
+                <p>The mix is counted from records already loaded for the active org. There are none yet.</p>
+                <a href="/inspect" class="btn btn-primary">New inspection</a>
+            </div>`;
+        return;
+    }
+    const counts = {};
+    for (const item of MIX) counts[item.key] = rows.filter(r => statusKey(r) === item.key).length;
+    const total = rows.length;
+    const held = counts.stop + counts.uncertain;
+    const active = document.getElementById('filter').value;
+    const segments = MIX.filter(item => counts[item.key] > 0).map(item =>
+        `<button type="button" data-outcome="${item.key}" style="width:${(counts[item.key] / total) * 100}%;background:${item.color}" title="${esc(item.label)}: ${counts[item.key]}" aria-label="${esc(item.label)} ${counts[item.key]}"></button>`
+    ).join('');
+    const legend = MIX.map(item =>
+        `<button type="button" data-outcome="${item.key}" aria-pressed="${active === item.key ? 'true' : 'false'}">
+            <span class="mix-swatch" style="background:${item.color}"></span>${esc(item.label)} · ${counts[item.key]}
+        </button>`
+    ).join('');
+    host.innerHTML = `
+        <div class="mix-layout">
+            <div>
+                <div class="mix-bar" role="img" aria-label="Verdict mix for this organisation">${segments}</div>
+                <div class="mix-legend">${legend}</div>
+                <p class="hint" style="margin-top:10px;">Counted from the ${total} inspection${total === 1 ? '' : 's'} loaded for this org. A segment filters the table below.</p>
+            </div>
+            <div>
+                <div class="stat-label">Held before seal</div>
+                <div class="held-num">${held}</div>
+                <p class="hint">Stop &amp; fix plus needs review. Pending stays separate, and is not a seal.</p>
+            </div>
+        </div>`;
+}
+
+function renderTable() {
+    const container = document.getElementById('inspections-list');
+    const term = document.getElementById('search').value.trim().toLowerCase();
+    const outcome = document.getElementById('filter').value;
+
+    const visible = rows.filter(item => {
+        if (outcome !== 'all' && statusKey(item) !== outcome) return false;
+        if (!term) return true;
+        return [item.order_id, item.unit_id, item.inspection_id]
+            .some(v => String(v || '').toLowerCase().includes(term));
+    });
+
+    if (!rows.length) {
+        container.innerHTML = `
+            <div class="empty">
+                <div class="empty-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8v8a2 2 0 0 1-1 1.73l-7 4a2 2 0 0 1-2 0l-7-4A2 2 0 0 1 3 16V8a2 2 0 0 1 1-1.73l7-4a2 2 0 0 1 2 0l7 4A2 2 0 0 1 21 8z"/><path d="m3.3 7 8.7 5 8.7-5M12 22V12"/></svg>
+                </div>
+                <h3>No inspections yet</h3>
+                <p>Nothing has been verified for this organisation. Run your first pack check to create an evidence record.</p>
+                <a href="/inspect" class="btn btn-primary">Start an inspection</a>
+            </div>`;
+        return;
+    }
+
+    if (!visible.length) {
+        container.innerHTML = `
+            <div class="empty">
+                <div class="empty-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+                </div>
+                <h3>No matches</h3>
+                <p>No inspection matches that filter. Clear the search or pick a different outcome.</p>
+            </div>`;
+        return;
+    }
+
+    let html = `<div class="table-wrap"><table>
+        <thead><tr>
+            <th>Unit</th><th>Order</th><th>Outcome</th><th>Status</th><th></th>
+        </tr></thead><tbody>`;
+
+    for (const item of visible) {
+        const d = window.PCK.presentDecision(item.decision, item.status);
+        html += `<tr>
+            <td class="mono nowrap">${esc(item.unit_id) || '<span class="faint">—</span>'}</td>
+            <td class="mono nowrap">${esc(item.order_id) || '<span class="faint">—</span>'}</td>
+            <td><span class="badge badge-${d.cls}">${d.label}</span></td>
+            <td class="muted nowrap">${esc(window.PCK.titleise(item.status))}</td>
+            <td style="text-align:right;">
+                <a href="/results/${encodeURIComponent(item.inspection_id)}" class="btn btn-ghost btn-sm">
+                    View
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                </a>
+            </td>
+        </tr>`;
+    }
+
+    html += `</tbody></table></div>`;
+    if (visible.length !== rows.length) {
+        html += `<p class="hint" style="margin-top:10px;">Showing ${visible.length} of ${rows.length} inspections.</p>`;
+    }
+    container.innerHTML = html;
+}
+
+async function loadInspections() {
+    const container = document.getElementById('inspections-list');
+    const org = window.PCK.getOrg();
+    document.getElementById('org-echo').textContent = org;
+    document.getElementById('org-echo-2').textContent = org;
+
+    container.innerHTML = '<div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>';
+
+    try {
+        const res = await fetch(`/api/v1/inspections?org_id=${encodeURIComponent(org)}`);
+        if (!res.ok) throw new Error(`Request failed (${res.status})`);
+        const data = await res.json();
+        rows = Array.isArray(data) ? data : [];
+        renderStats();
+        renderTable();
+    } catch (err) {
+        rows = [];
+        renderStats();
+        container.innerHTML = `
+            <div class="callout callout-stop">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>
+                <span><strong>Could not load inspections.</strong> ${esc(err.message)}</span>
+            </div>`;
+    }
+}
+
+document.getElementById('search').addEventListener('input', renderTable);
+document.getElementById('filter').addEventListener('change', renderTable);
+document.getElementById('refresh').addEventListener('click', loadInspections);
+window.PCK.onOrgChange(loadInspections);
+
+loadInspections();
+</script>
+{% endblock %}

@@ -3,7 +3,7 @@
 # GitHub shows these owners as suggested reviewers. Enforcement needs branch protection (see GITHUB-GUIDE.md).
 /agents/receiving/    @receiving-owner-handle
 /agents/prep/         @prep-owner-handle
-/agents/pack/         @pack-owner-handle
+/agents/pack/         @Yogesh-101
 /agents/returns/      @returns-owner-handle
 /agents/recovery/     @recovery-owner-handle
 /orchestration/       @member1 @member2 @member3 @member4 @member5

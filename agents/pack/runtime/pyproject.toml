@@ -1,0 +1,12 @@
+[project]
+name = "pack-manager"
+version = "1.0.0"
+description = "CUBE Buildathon — PCK Pack Manager Agent"
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+markers = [
+    "live: tests that require a live Gemini API key (deselect with -m 'not live')",
+]
