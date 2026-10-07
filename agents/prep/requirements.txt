@@ -1,0 +1,6 @@
+python-dotenv
+google-genai
+anthropic
+groq
+streamlit
+pytest

@@ -1,44 +1,109 @@
-# agents/prep/  ·  Prep Manager
+# Prep Manager
 
-**Owner:** Member 2 (Prep Manager; none in Specialist Pods)  (set `owner` in `agent.json` and the handle in `.github/CODEOWNERS`)
+Prep Manager is an automated visual packaging compliance tool for Amazon FBA preparation. It inspects product photographs using a vision language model to extract physical evidence (such as polybag presence, suffocation warnings, barcode masking, label placement, expiration dates, and handling marks), and then applies deterministic, work-order-gated rules to determine whether a unit passes, fails, or requires manual review.
 
-> **This folder currently contains an organiser stub** that replays the synthetic Round 2 CSV. It is *not* an agent. Replace it, then replace this README with one that describes what you actually built, how to run it, and its limits.
+For complete technical documentation and pipeline diagrams, see [ARCHITECTURE.md](ARCHITECTURE.md).
 
-| | |
-|---|---|
-| **Reads (inputs)** | Photos of the prepped unit and the work order |
-| **Reads (previous evidence)** | Receiving |
-| **Produces** | per-requirement compliance verdicts, plus measured weight/dimensions if you can |
-| **Recommended `check_key`s** | `polybag_sealed, suffocation_warning, fnsku_label_placement, original_barcode_covered, expiry_legible, handling_marks` |
-| **`decision.outcome` values** | `compliant, non_compliant, pending_review` |
+---
 
-**Specialist Pods have no Prep Manager: this folder is unused there** (the Specialist flow skips it). For Standard Pods: Recovery has asked Prep to record measured weight and dimensions in `payload.measurements`, because most sample fee lines are weight-tier fees with no evidence (finding F-07, see [`docs/decisions.md`](../../docs/decisions.md)). Look up Amazon's published prep requirements; do not infer them from the sample CSV. Your cost per check has to fit inside $0.40–$1.10 per unit.
+## Local Setup
 
-## Where your code goes
+### 1. Prerequisites
+* Python 3.10+ (tested on Python 3.11/3.12)
+* Git
 
-```text
-agents/prep/
-├── app.py          ← expose  handle(agent_input: dict) -> dict  (an Agent Output). Keep `app = make_app(...)` to serve over HTTP.
-├── agent.json      ← stage · agent_id · owner · mode (inproc | http) · url · an honest `implementation` description
-├── PROVENANCE.md   ← your Round 2 repo URL + commit this came from (create it)
-├── README.md       ← this file, rewritten
-└── …               ← your Round 2 code, prompts, rules, fixtures
+### 2. Virtual Environment & Dependencies
+
+Create and activate a virtual environment, then install dependencies:
+
+```bash
+# Create virtual environment
+python -m venv .venv
+
+# Activate on Windows (PowerShell)
+.venv\Scripts\Activate.ps1
+# Or on Linux / macOS:
+# source .venv/bin/activate
+
+# Install requirements
+pip install -r requirements.txt
 ```
 
-## Integrating, in order
+### 3. Environment Configuration
 
-1. Read [`INTEGRATION-GUIDE.md`](../../INTEGRATION-GUIDE.md) and [`EVIDENCE-CONTRACT.md`](../../EVIDENCE-CONTRACT.md); open [`examples/end-to-end/`](../../examples/) for a real Agent Output.
-2. In `handle()`: read `request["subject"]`, `request["inputs"]` (your captures) and `request["previous_evidence"]`; run your agent (**one batched model call per unit**); build the record with `shared.utils.records.build_record()` and wrap it with `build_output()`.
-3. **Fail open.** On a model error return `pending_output(...)`, not an exception. Never invent evidence: if you did not see it, say UNCERTAIN with an `uncertain_reason`.
-4. **Refuse other tenants.** Raise `LookupError` (HTTP 404) for a subject that is not under `subject.org_id`.
-5. Make it idempotent: the same `request_id` must yield the same `record_id`. Use the **latest override** of previous evidence (`context.overrides`).
-6. Run `pytest tests/integration/test_agent_contracts.py`, first on the stub (it passes), then on yours, **with your own fixtures**.
-7. Run the whole system: `make run` and `make test`.
+Copy the example environment template and configure your API credentials:
 
-## Run on its own
-
-```sh
-.venv/bin/uvicorn agents.prep.app:app --port 8102
-curl localhost:8102/health
+```bash
+cp .env.example .env
 ```
-Then set `"mode": "http"` in `agent.json` if you want the orchestrator to call it over HTTP.
+
+Open `.env` and specify your vision provider and API key:
+
+```env
+# Choose provider: groq, gemini, anthropic, or mock
+VISION_PROVIDER=groq
+
+# Provider API keys (populate the key matching your chosen provider)
+GROQ_API_KEY=your_groq_api_key_here
+GEMINI_API_KEY=your_gemini_api_key_here
+ANTHROPIC_API_KEY=your_anthropic_api_key_here
+
+# Optional model overrides
+GROQ_VISION_MODEL=qwen/qwen3.8-27b
+GEMINI_VISION_MODEL=gemini-2.5-flash
+```
+
+For offline development without API keys, set `VISION_PROVIDER=mock`.
+
+---
+
+## Running the Application
+
+Prep Manager provides two user interfaces:
+
+### Option A: Web Server & Checker (Recommended)
+
+Start the built-in HTTP server:
+
+```bash
+python server.py
+```
+
+Once running, navigate to:
+* **Landing Page**: [http://localhost:8000/docs/landing/index.html](http://localhost:8000/docs/landing/index.html)
+* **Compliance Checker**: [http://localhost:8000/docs/landing/checker.html](http://localhost:8000/docs/landing/checker.html)
+* **Health API**: [http://localhost:8000/api/health](http://localhost:8000/api/health)
+
+The web checker allows you to select sample images from `fixtures/prep/` or upload a package photo, configure work-order toggles, and view per-check compliance breakdowns and evidence in real time.
+
+### Option B: Streamlit Dashboard
+
+Alternatively, launch the Streamlit interface:
+
+```bash
+streamlit run streamlit_app.py
+```
+
+The Streamlit app provides interactive work-order configuration, image upload previews, compliance status badges, and an organization-scoped history log backed by local SQLite storage.
+
+---
+
+## Evaluation
+
+An evaluation runner is included to benchmark the vision model's observations against ground-truth labels:
+
+```bash
+python eval/run_eval.py
+```
+
+The runner evaluates the test images listed in `data/eval_labels.csv` against `fixtures/prep/` and writes a detailed markdown report to [docs/eval-report.md](docs/eval-report.md).
+
+### Current Development Benchmark
+On the current 5-image development dataset (`fixtures/prep/a.jpg` through `e.jpg`):
+* **Images Evaluated**: 5
+* **Total Labeled Checks Scored**: 30
+* **Model Failures (`PENDING`)**: 0
+* **Matches**: 22 / 30
+* **Overall Match Rate**: 73.3%
+
+> **Status Notice**: The 73.3% match rate reflects a small, 5-image development set with hand-labeled ground truth used for local testing. It does not represent an independent validation benchmark.
