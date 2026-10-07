@@ -32,15 +32,16 @@ agents/pack/
 4. **FBA route** → fail-open `pending_output` (`wrong_route`), never seal.
 5. **VLM/API failure** → `pending_output` (`vlm_unavailable` / `agent_exception`).
 6. **UNCERTAIN checks** → outcome `pending_review`; never auto-seal.
+7. **Durable inspections** (runtime) → SQLite WAL/FULL + JSONL mirror under `STORAGE_ROOT`; mount `/app/storage` in Docker/Render so redeploys keep history.
 
 See Pod decision **D-007** in [`docs/decisions.md`](../../docs/decisions.md).
 
 ## Run
 
 ```sh
-# from repo root
-pip install -r requirements.txt -r agents/pack/requirements.txt
-uvicorn agents.pack.app:app --port 8103
+# from repo root — prefer python -m pip if bare pip launcher is broken
+python -m pip install -r requirements.txt -r agents/pack/requirements.txt
+python -m uvicorn agents.pack.app:app --port 8103
 curl localhost:8103/health
 ```
 
