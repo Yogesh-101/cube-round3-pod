@@ -1,0 +1,4 @@
+evidence_id,evidence_type,shipment_id,order_id,sku,result,description,timestamp,source,reference_data
+EV-DEMO-201,prep,SH-1002,ORD-2002,SKU-HOME-02,PASS,Packaging inspection passed with bubble wrap and sealed polybag,2026-09-19T14:30:00,WMS-PrepStation-2,"{""inspector"": ""A. Smith""}"
+EV-DEMO-202,prep,SH-1001,ORD-2001,SKU-ELEC-01,FAIL,Packaging torn and seal missing,2026-09-18T10:15:00,WMS-PrepStation-1,"{""issue"": ""torn_seal""}"
+EV-DEMO-203,packing,SH-1004,ORD-2004,SKU-BEAUTY-04,VERIFIED,Carton tape inspection camera passed,2026-09-20T11:45:00,PackScan-Camera-01,"{""camera"": ""CAM-01""}"

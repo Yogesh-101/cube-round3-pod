@@ -1,0 +1,391 @@
+{
+  "total_cases": 30,
+  "verdict_accuracy": 0.9667,
+  "claim_correctness": 1.0,
+  "evidence_precision": 0.963,
+  "evidence_recall": 1.0,
+  "unsupported_claim_rate": 0.0,
+  "evidence_traceability": 1.0,
+  "ai_deterministic_agreement": 1.0,
+  "case_results": [
+    {
+      "case_id": "CASE-01",
+      "category": "supported",
+      "expected_verdict": "SUPPORTED",
+      "actual_verdict": "SUPPORTED",
+      "verdict_correct": true,
+      "expected_claim": 0.0,
+      "actual_claim": 0.0,
+      "claim_correct": true,
+      "retrieved_evidence": [
+        "EV-01-A"
+      ]
+    },
+    {
+      "case_id": "CASE-02",
+      "category": "supported",
+      "expected_verdict": "SUPPORTED",
+      "actual_verdict": "SUPPORTED",
+      "verdict_correct": true,
+      "expected_claim": 0.0,
+      "actual_claim": 0.0,
+      "claim_correct": true,
+      "retrieved_evidence": [
+        "EV-02-A"
+      ]
+    },
+    {
+      "case_id": "CASE-03",
+      "category": "supported",
+      "expected_verdict": "SUPPORTED",
+      "actual_verdict": "SUPPORTED",
+      "verdict_correct": true,
+      "expected_claim": 0.0,
+      "actual_claim": 0.0,
+      "claim_correct": true,
+      "retrieved_evidence": [
+        "EV-03-A"
+      ]
+    },
+    {
+      "case_id": "CASE-04",
+      "category": "supported",
+      "expected_verdict": "SUPPORTED",
+      "actual_verdict": "SUPPORTED",
+      "verdict_correct": true,
+      "expected_claim": 0.0,
+      "actual_claim": 0.0,
+      "claim_correct": true,
+      "retrieved_evidence": [
+        "EV-04-A"
+      ]
+    },
+    {
+      "case_id": "CASE-05",
+      "category": "contradicted",
+      "expected_verdict": "CONTRADICTED",
+      "actual_verdict": "CONTRADICTED",
+      "verdict_correct": true,
+      "expected_claim": 55.0,
+      "actual_claim": 55.0,
+      "claim_correct": true,
+      "retrieved_evidence": [
+        "EV-05-A"
+      ]
+    },
+    {
+      "case_id": "CASE-06",
+      "category": "contradicted",
+      "expected_verdict": "CONTRADICTED",
+      "actual_verdict": "CONTRADICTED",
+      "verdict_correct": true,
+      "expected_claim": 140.0,
+      "actual_claim": 140.0,
+      "claim_correct": true,
+      "retrieved_evidence": [
+        "EV-06-A"
+      ]
+    },
+    {
+      "case_id": "CASE-07",
+      "category": "contradicted",
+      "expected_verdict": "CONTRADICTED",
+      "actual_verdict": "CONTRADICTED",
+      "verdict_correct": true,
+      "expected_claim": 95.0,
+      "actual_claim": 95.0,
+      "claim_correct": true,
+      "retrieved_evidence": [
+        "EV-07-A"
+      ]
+    },
+    {
+      "case_id": "CASE-08",
+      "category": "contradicted",
+      "expected_verdict": "CONTRADICTED",
+      "actual_verdict": "CONTRADICTED",
+      "verdict_correct": true,
+      "expected_claim": 40.0,
+      "actual_claim": 40.0,
+      "claim_correct": true,
+      "retrieved_evidence": [
+        "EV-08-A"
+      ]
+    },
+    {
+      "case_id": "CASE-09",
+      "category": "silent",
+      "expected_verdict": "SILENT",
+      "actual_verdict": "SILENT",
+      "verdict_correct": true,
+      "expected_claim": 0.0,
+      "actual_claim": 0.0,
+      "claim_correct": true,
+      "retrieved_evidence": []
+    },
+    {
+      "case_id": "CASE-10",
+      "category": "silent",
+      "expected_verdict": "SILENT",
+      "actual_verdict": "SILENT",
+      "verdict_correct": true,
+      "expected_claim": 0.0,
+      "actual_claim": 0.0,
+      "claim_correct": true,
+      "retrieved_evidence": []
+    },
+    {
+      "case_id": "CASE-11",
+      "category": "silent",
+      "expected_verdict": "SILENT",
+      "actual_verdict": "SILENT",
+      "verdict_correct": true,
+      "expected_claim": 0.0,
+      "actual_claim": 0.0,
+      "claim_correct": true,
+      "retrieved_evidence": []
+    },
+    {
+      "case_id": "CASE-12",
+      "category": "silent",
+      "expected_verdict": "SILENT",
+      "actual_verdict": "SILENT",
+      "verdict_correct": true,
+      "expected_claim": 0.0,
+      "actual_claim": 0.0,
+      "claim_correct": true,
+      "retrieved_evidence": []
+    },
+    {
+      "case_id": "CASE-13",
+      "category": "partial_evidence",
+      "expected_verdict": "SILENT",
+      "actual_verdict": "SILENT",
+      "verdict_correct": true,
+      "expected_claim": 0.0,
+      "actual_claim": 0.0,
+      "claim_correct": true,
+      "retrieved_evidence": [
+        "EV-13-A"
+      ]
+    },
+    {
+      "case_id": "CASE-14",
+      "category": "partial_evidence",
+      "expected_verdict": "SILENT",
+      "actual_verdict": "SILENT",
+      "verdict_correct": true,
+      "expected_claim": 0.0,
+      "actual_claim": 0.0,
+      "claim_correct": true,
+      "retrieved_evidence": [
+        "EV-14-A"
+      ]
+    },
+    {
+      "case_id": "CASE-15",
+      "category": "partial_evidence",
+      "expected_verdict": "SILENT",
+      "actual_verdict": "SILENT",
+      "verdict_correct": true,
+      "expected_claim": 0.0,
+      "actual_claim": 0.0,
+      "claim_correct": true,
+      "retrieved_evidence": []
+    },
+    {
+      "case_id": "CASE-16",
+      "category": "partial_evidence",
+      "expected_verdict": "SILENT",
+      "actual_verdict": "SILENT",
+      "verdict_correct": true,
+      "expected_claim": 0.0,
+      "actual_claim": 0.0,
+      "claim_correct": true,
+      "retrieved_evidence": [
+        "EV-16-A"
+      ]
+    },
+    {
+      "case_id": "CASE-17",
+      "category": "conflicting_evidence",
+      "expected_verdict": "SILENT",
+      "actual_verdict": "SILENT",
+      "verdict_correct": true,
+      "expected_claim": 0.0,
+      "actual_claim": 0.0,
+      "claim_correct": true,
+      "retrieved_evidence": [
+        "EV-17-A",
+        "EV-17-B"
+      ]
+    },
+    {
+      "case_id": "CASE-18",
+      "category": "conflicting_evidence",
+      "expected_verdict": "SILENT",
+      "actual_verdict": "SILENT",
+      "verdict_correct": true,
+      "expected_claim": 0.0,
+      "actual_claim": 0.0,
+      "claim_correct": true,
+      "retrieved_evidence": [
+        "EV-18-A",
+        "EV-18-B"
+      ]
+    },
+    {
+      "case_id": "CASE-19",
+      "category": "conflicting_evidence",
+      "expected_verdict": "SILENT",
+      "actual_verdict": "SILENT",
+      "verdict_correct": true,
+      "expected_claim": 0.0,
+      "actual_claim": 0.0,
+      "claim_correct": true,
+      "retrieved_evidence": [
+        "EV-19-A",
+        "EV-19-B"
+      ]
+    },
+    {
+      "case_id": "CASE-20",
+      "category": "conflicting_evidence",
+      "expected_verdict": "SILENT",
+      "actual_verdict": "SILENT",
+      "verdict_correct": true,
+      "expected_claim": 0.0,
+      "actual_claim": 0.0,
+      "claim_correct": true,
+      "retrieved_evidence": [
+        "EV-20-A",
+        "EV-20-B"
+      ]
+    },
+    {
+      "case_id": "CASE-21",
+      "category": "irrelevant_evidence",
+      "expected_verdict": "SILENT",
+      "actual_verdict": "SILENT",
+      "verdict_correct": true,
+      "expected_claim": 0.0,
+      "actual_claim": 0.0,
+      "claim_correct": true,
+      "retrieved_evidence": []
+    },
+    {
+      "case_id": "CASE-22",
+      "category": "irrelevant_evidence",
+      "expected_verdict": "SILENT",
+      "actual_verdict": "SILENT",
+      "verdict_correct": true,
+      "expected_claim": 0.0,
+      "actual_claim": 0.0,
+      "claim_correct": true,
+      "retrieved_evidence": []
+    },
+    {
+      "case_id": "CASE-23",
+      "category": "multiple_charges",
+      "expected_verdict": "CONTRADICTED",
+      "actual_verdict": "CONTRADICTED",
+      "verdict_correct": true,
+      "expected_claim": 40.0,
+      "actual_claim": 40.0,
+      "claim_correct": true,
+      "retrieved_evidence": [
+        "EV-23-A"
+      ]
+    },
+    {
+      "case_id": "CASE-24",
+      "category": "multiple_charges",
+      "expected_verdict": "SUPPORTED",
+      "actual_verdict": "SILENT",
+      "verdict_correct": false,
+      "expected_claim": 0.0,
+      "actual_claim": 0.0,
+      "claim_correct": true,
+      "retrieved_evidence": [
+        "EV-23-A",
+        "EV-24-A"
+      ]
+    },
+    {
+      "case_id": "CASE-25",
+      "category": "duplicate_charges",
+      "expected_verdict": "CONTRADICTED",
+      "actual_verdict": "CONTRADICTED",
+      "verdict_correct": true,
+      "expected_claim": 50.0,
+      "actual_claim": 50.0,
+      "claim_correct": true,
+      "retrieved_evidence": [
+        "EV-25-A"
+      ]
+    },
+    {
+      "case_id": "CASE-26",
+      "category": "duplicate_charges",
+      "expected_verdict": "CONTRADICTED",
+      "actual_verdict": "CONTRADICTED",
+      "verdict_correct": true,
+      "expected_claim": 50.0,
+      "actual_claim": 50.0,
+      "claim_correct": true,
+      "retrieved_evidence": [
+        "EV-25-A"
+      ]
+    },
+    {
+      "case_id": "CASE-27",
+      "category": "missing_identifiers",
+      "expected_verdict": "CONTRADICTED",
+      "actual_verdict": "CONTRADICTED",
+      "verdict_correct": true,
+      "expected_claim": 50.0,
+      "actual_claim": 50.0,
+      "claim_correct": true,
+      "retrieved_evidence": [
+        "EV-27-A"
+      ]
+    },
+    {
+      "case_id": "CASE-28",
+      "category": "missing_identifiers",
+      "expected_verdict": "SILENT",
+      "actual_verdict": "SILENT",
+      "verdict_correct": true,
+      "expected_claim": 0.0,
+      "actual_claim": 0.0,
+      "claim_correct": true,
+      "retrieved_evidence": []
+    },
+    {
+      "case_id": "CASE-29",
+      "category": "ambiguous_evidence",
+      "expected_verdict": "SILENT",
+      "actual_verdict": "SILENT",
+      "verdict_correct": true,
+      "expected_claim": 0.0,
+      "actual_claim": 0.0,
+      "claim_correct": true,
+      "retrieved_evidence": [
+        "EV-29-A"
+      ]
+    },
+    {
+      "case_id": "CASE-30",
+      "category": "ambiguous_evidence",
+      "expected_verdict": "SILENT",
+      "actual_verdict": "SILENT",
+      "verdict_correct": true,
+      "expected_claim": 0.0,
+      "actual_claim": 0.0,
+      "claim_correct": true,
+      "retrieved_evidence": [
+        "EV-30-A"
+      ]
+    }
+  ]
+}

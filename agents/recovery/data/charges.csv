@@ -1,0 +1,4 @@
+charge_id,shipment_id,order_id,sku,reason,amount,currency,charge_date,status
+CHG-DEMO-101,SH-1001,ORD-2001,SKU-ELEC-01,Packaging Defect Charge,45.00,USD,2026-09-20T10:00:00,PENDING
+CHG-DEMO-102,SH-1002,ORD-2002,SKU-HOME-02,Packaging Defect Charge,38.00,USD,2026-09-21T09:00:00,PENDING
+CHG-DEMO-103,SH-1003,ORD-2003,SKU-TOY-03,Late Delivery Surcharge,25.00,USD,2026-09-22T14:00:00,PENDING
