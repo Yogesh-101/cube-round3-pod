@@ -76,4 +76,12 @@ A contradiction between documents or data is a **finding**, not a failure. Open 
 
 ## Your Pod's decisions
 
-_Add entries below._
+### D-007 · Pack Manager: MFN/3PL only; sample observations when captures absent
+- Date / Owner: 2026-10-07 / @Yogesh-101
+- Context: Round 3 Pack must speak the evidence contract while reusing the Round 2 Pack Manager (order-blind Gemini + decision engine). Demo/contract tests pass empty `inputs`.
+- Options considered: (A) CSV stub forever; (B) live VLM only (breaks contract tests without photos); (C) hybrid adapter.
+- Decision: **(C)** `agents/pack/app.py` runs the live pipeline when captures resolve (request inputs or `data/input/<id>/pack/`). Otherwise it runs the **same decision engine** on labelled sample `observed_in_box` (never invents VLM observations). FBA `route` returns `pending_output` (`wrong_route`), not a seal. `subject.unit_scope` = `order` (Pack verifies an order box, F-08). Payload always carries `order_lines` + `observed_in_box`.
+- Why: keeps contract tests green, keeps production path real, refuses cross-tenant via sample lookup / foreign-org check, fail-open on model errors.
+- Consequences: custom subjects need `context.order_lines` (or sample row). Changing F-08 scope means editing one adapter field.
+
+_Add further entries below._
