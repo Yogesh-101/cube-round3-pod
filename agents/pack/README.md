@@ -26,7 +26,7 @@ agents/pack/
 
 ## Integration behaviour
 
-1. **Captures present** (`request.inputs` or `data/input/<subject_id>/pack/`) → order-blind Gemini + quality gate + decision engine.
+1. **Captures present** (`request.inputs` or `data/input/<subject_id>/pack/`) → **OpenCV** quality gate (blur / low light / contrast / clipped regions) → order-blind Gemini → decision engine. Soft quality fails never auto-seal.
 2. **No captures** (contract/demo) → decision engine on labelled sample observations (no invented VLM evidence).
 3. **Wrong tenant** → `LookupError` (HTTP 404).
 4. **FBA route** → fail-open `pending_output` (`wrong_route`), never seal.

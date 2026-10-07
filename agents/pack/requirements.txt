@@ -1,6 +1,8 @@
-# Extra deps for Pack Manager live VLM mode (pod root requirements.txt covers FastAPI/jsonschema).
+# Extra deps for Pack Manager live VLM + OpenCV quality gate.
 # Install: pip install -r agents/pack/requirements.txt
 google-genai>=1.0.0
 Pillow>=10.0.0
+opencv-python-headless>=4.8.0
+numpy>=1.26.0
 python-dotenv>=1.0.0
 pydantic>=2.9.0
