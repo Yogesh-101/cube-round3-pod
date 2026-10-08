@@ -6,6 +6,10 @@ import {
   getInspection,
   overrideInspection,
   uploadInspectionImages,
+  fetchFacilities,
+  fetchMetrics,
+  fetchPO,
+  runBenchmark
 } from './services/api';
 
 const defaultPo = {
@@ -55,6 +59,40 @@ export default function App() {
   const [agentLog, setAgentLog] = useState([
     { id: 'boot', text: 'Agent ready. Waiting for receiving intake.', complete: false },
   ]);
+  const [activeTab, setActiveTab] = useState('Live Dock Scanner');
+  const [toastMessage, setToastMessage] = useState('');
+  const [soundOn, setSoundOn] = useState(true);
+  const [facilities, setFacilities] = useState([]);
+  const [metrics, setMetrics] = useState(null);
+
+  useEffect(() => {
+    fetchFacilities().then(setFacilities).catch(console.error);
+    fetchMetrics().then(setMetrics).catch(console.error);
+  }, []);
+
+  const playBeep = () => {
+    if (!soundOn) return;
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(440, ctx.currentTime);
+      gain.gain.setValueAtTime(0.1, ctx.currentTime);
+      osc.start();
+      gain.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + 0.1);
+      osc.stop(ctx.currentTime + 0.1);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const showToast = (message) => {
+    setToastMessage(message);
+    setTimeout(() => setToastMessage(''), 3000);
+  };
 
   const previewUrls = useMemo(
     () => selectedFiles.map((file) => ({ file, url: URL.createObjectURL(file) })),
@@ -229,59 +267,72 @@ export default function App() {
         </header>
 
         <nav className="nav-row">
-          <button className="nav-button active">
-            <span className="nav-icon">◉</span>
-            Live Dock Scanner
-          </button>
-          <button className="nav-button">
-            <span className="nav-icon">◎</span>
-            10-Scenario Benchmark
-          </button>
-          <button className="nav-button">
-            <span className="nav-icon">◫</span>
-            Evidence Ledger &amp; Cross-Pod
-          </button>
-          <button className="nav-button">
-            <span className="nav-icon">▣</span>
-            Rules &amp; Architecture
-          </button>
+          {['Live Dock Scanner', '10-Scenario Benchmark', 'Evidence Ledger & Cross-Pod', 'Rules & Architecture'].map((tab, idx) => (
+            <button
+              key={tab}
+              className={`nav-button ${activeTab === tab ? 'active' : ''}`}
+              onClick={() => setActiveTab(tab)}
+            >
+              <span className="nav-icon">{['◉', '◎', '◫', '▣'][idx]}</span>
+              {tab}
+            </button>
+          ))}
         </nav>
 
         <div className="toolbar-row">
           <div className="toolbar-pills">
-            <button className="toolbar-pill compact">🔊 SOUND ON</button>
-            <button className="toolbar-pill">🏷 Tenant Isolation</button>
+            <button 
+              className={`toolbar-pill compact ${soundOn ? 'active' : ''}`}
+              onClick={() => {
+                const newState = !soundOn;
+                setSoundOn(newState);
+                if (newState) playBeep();
+                showToast(`Sound ${newState ? 'enabled' : 'disabled'}`);
+              }}
+            >
+              {soundOn ? '🔊 SOUND ON' : '🔇 SOUND OFF'}
+            </button>
+            <button className="toolbar-pill" onClick={() => showToast('Tenant settings opened')}>🏷 Tenant Isolation</button>
           </div>
 
-          <div className="toolbar-select">
-            <label>Alpha Logistics 3PL</label>
+          <div className="toolbar-select" onClick={() => showToast('Facility selection opened')}>
+            <label>{facilities.length ? facilities[0].name : 'Loading...'}</label>
             <span>▾</span>
           </div>
         </div>
 
-        <section className="kpi-grid">
+        {activeTab !== 'Live Dock Scanner' ? (
+          <section className="empty-state-panel">
+            <div className="empty-icon">🚧</div>
+            <div className="empty-title">{activeTab} Module Under Construction</div>
+            <div className="empty-subtitle">This area is currently being built in this demo environment. Return to the Live Dock Scanner to continue testing.</div>
+            <button className="empty-button" onClick={() => setActiveTab('Live Dock Scanner')}>Back to Live Dock Scanner</button>
+          </section>
+        ) : (
+          <>
+            <section className="kpi-grid">
           <div className="kpi-card">
-            <span className="kpi-label">24H DOCK INGESTED</span>
-            <strong>1,428 cartons</strong>
-            <small>+8.2% vs weekly baseline</small>
+            <span className="kpi-label">TOTAL PASS</span>
+            <strong>{metrics?.pass_count || 0}</strong>
+            <small>Approved inspections</small>
           </div>
 
           <div className="kpi-card">
-            <span className="kpi-label">DOCK DWELL TIME</span>
-            <strong>38s</strong>
-            <small>14m 20s - 20m 20s</small>
+            <span className="kpi-label">TOTAL FAIL</span>
+            <strong>{metrics?.fail_count || 0}</strong>
+            <small>Exceptions flagged</small>
           </div>
 
           <div className="kpi-card">
-            <span className="kpi-label">DISPUTES RECOVERED</span>
-            <strong>$48,350 USD</strong>
-            <small>Across 19 claims</small>
+            <span className="kpi-label">UNCERTAIN</span>
+            <strong>{metrics?.uncertain_count || 0}</strong>
+            <small>Needs review</small>
           </div>
 
           <div className="kpi-card">
-            <span className="kpi-label">EVIDENCE AUTHENTICITY</span>
-            <strong>100% SHA-256</strong>
-            <small>Verified chain of custody</small>
+            <span className="kpi-label">AVG LATENCY</span>
+            <strong>{metrics?.avg_latency || 0}s</strong>
+            <small>Processing speed</small>
           </div>
 
           <div className="kpi-card accent-card">
@@ -323,7 +374,15 @@ export default function App() {
         <section className="rule-panel">
           <div className="rule-topline">
             <div className="section-title">◌ 1. Authoritative PO Line (Rule 5)</div>
-            <button className="link-button">Retrieve Specification</button>
+            <button className="link-button" onClick={async () => {
+              try {
+                const poData = await fetchPO(po.po_id);
+                setPo(poData);
+                showToast(`Retrieved ${poData.po_id} successfully`);
+              } catch (e) {
+                showToast(`Failed to retrieve PO: ${e.message}`);
+              }
+            }}>Retrieve Specification</button>
           </div>
 
           <div className="select-shell">
@@ -409,7 +468,10 @@ export default function App() {
             <div className="empty-icon">◌</div>
             <div className="empty-title">No Active Receiving Analysis</div>
             <div className="empty-subtitle">Select a Purchase Order line on the left, capture the shipment photographs, and click Run Analysis.</div>
-            <button className="empty-button" onClick={handleAnalyze}>Run 10-Scenario Test Suite Instead</button>
+            <button className="empty-button" onClick={async () => {
+              const b = await runBenchmark();
+              showToast(b.message || 'Benchmark complete');
+            }}>Run API Benchmark Suite</button>
           </section>
         )}
 
@@ -493,7 +555,14 @@ export default function App() {
             )}
           </section>
         )}
+          </>
+        )}
       </div>
+      {toastMessage && (
+        <div className="toast-notification">
+          {toastMessage}
+        </div>
+      )}
     </main>
   );
 }

@@ -4,6 +4,7 @@ from fastapi.responses import JSONResponse
 
 from backend.app.core.config import get_settings
 from .api.inspections import router as inspections_router
+from .api.extra_endpoints import router as extra_endpoints_router
 
 app = FastAPI(title="Receiving Manager", version="0.1.0")
 settings = get_settings()
@@ -16,6 +17,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.middleware("http")
+async def add_security_headers(request, call_next):
+    response = await call_next(request)
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    return response
 
 @app.get("/api/health")
 def health() -> JSONResponse:
@@ -23,7 +31,7 @@ def health() -> JSONResponse:
 
 
 app.include_router(inspections_router)
-
+app.include_router(extra_endpoints_router)
 
 if __name__ == "__main__":
     import uvicorn

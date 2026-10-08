@@ -1,22 +1,22 @@
 :root {
-  --bg: #060d18;
-  --bg-2: #0d1725;
-  --panel: #101c2b;
-  --panel-2: #0d1b29;
-  --border: rgba(153, 177, 204, 0.18);
-  --soft-border: rgba(146, 171, 199, 0.12);
-  --text: #edf4ff;
-  --muted: #8ea5bf;
-  --muted-2: #788fa9;
-  --purple: #8f5bff;
-  --purple-2: #b76bff;
-  --purple-soft: rgba(143, 91, 255, 0.18);
-  --green: #7ce6b6;
-  --green-soft: rgba(124, 230, 182, 0.12);
-  --yellow: #f2ca67;
-  --yellow-soft: rgba(242, 202, 103, 0.12);
-  --danger: #ff7383;
-  --danger-soft: rgba(255, 115, 131, 0.12);
+  --bg: #111411;
+  --bg-2: #191c19;
+  --panel: #202420;
+  --panel-2: #272a27;
+  --border: rgba(180, 190, 180, 0.18);
+  --soft-border: rgba(180, 190, 180, 0.12);
+  --text: #f0f4f0;
+  --muted: #a0afa0;
+  --muted-2: #808f80;
+  --purple: #ff9800; /* Amber/Orange replacing purple */
+  --purple-2: #ffb74d;
+  --purple-soft: rgba(255, 152, 0, 0.18);
+  --green: #4caf50;
+  --green-soft: rgba(76, 175, 80, 0.12);
+  --yellow: #fdd835;
+  --yellow-soft: rgba(253, 216, 53, 0.12);
+  --danger: #ef5350;
+  --danger-soft: rgba(239, 83, 80, 0.12);
   --shadow: 0 12px 35px rgba(0,0,0,0.38);
 }
 
@@ -904,4 +904,30 @@ button {
   .toolbar-select {
     min-width: 100%;
   }
+}
+
+.toast-notification {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: rgba(18, 29, 39, 0.96);
+  border: 1px solid var(--border);
+  color: #eaf1ff;
+  padding: 12px 20px;
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  z-index: 1000;
+  animation: slideIn 0.3s ease-out, fadeOut 0.3s ease-in 2.7s forwards;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+@keyframes slideIn {
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
 }

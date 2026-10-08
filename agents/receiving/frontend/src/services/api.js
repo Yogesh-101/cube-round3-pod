@@ -89,9 +89,29 @@ export async function overrideInspection(inspectionId, decision, reason) {
   return response.json();
 }
 
-// <img src> cannot send headers, so fetch the image with the key and hand back an object URL.
 export async function fetchInspectionImageUrl(inspectionId, imageId) {
   const response = await fetch(`${API_BASE_URL}/api/inspections/${inspectionId}/images/${imageId}`, { headers: authHeaders() });
   if (!response.ok) throw new Error('Image not available');
   return URL.createObjectURL(await response.blob());
+}
+
+export async function fetchFacilities() {
+  const response = await fetch(`${API_BASE_URL}/api/v1/facilities`, { headers: authHeaders() });
+  return response.json();
+}
+
+export async function fetchMetrics() {
+  const response = await fetch(`${API_BASE_URL}/api/v1/metrics`, { headers: authHeaders() });
+  return response.json();
+}
+
+export async function fetchPO(poId) {
+  const response = await fetch(`${API_BASE_URL}/api/v1/purchase-orders/${poId}`, { headers: authHeaders() });
+  if (!response.ok) throw new Error('PO not found');
+  return response.json();
+}
+
+export async function runBenchmark() {
+  const response = await fetch(`${API_BASE_URL}/api/v1/benchmark`, { method: 'POST', headers: authHeaders() });
+  return response.json();
 }
