@@ -19,6 +19,7 @@ import os
 import time
 from pathlib import Path
 
+from shared.utils.breeth_memory import record_workflow_episode
 from shared.utils.hashing import verify
 from shared.utils.log import get_logger
 from shared.utils.records import error_obj, pending_output, utcnow
@@ -67,7 +68,7 @@ def discover_inputs(subject_id: str, stage: str) -> list[dict]:
     folder = root / subject_id / stage
     if not folder.is_dir():
         return []
-    return [{"ref": str(p.relative_to(root)), "kind": KINDS.get(p.suffix.lower(), "other"),
+    return [{"ref": p.relative_to(root).as_posix(), "kind": KINDS.get(p.suffix.lower(), "other"),
              "sha256": hashlib.sha256(p.read_bytes()).hexdigest()}
             for p in sorted(folder.iterdir()) if p.is_file() and not p.name.startswith(".")]
 
@@ -223,6 +224,13 @@ def _finalize(wf: dict, store) -> dict:
     wf["final_outcome"] = derive_final_outcome(wf, evidence, status)
     wf["timestamps"]["completed_at"] = utcnow() if status == "COMPLETED" else None
     store.save_workflow(wf)
+    try:
+        mem = record_workflow_episode(wf, store)
+        if mem:
+            _log(wf, "breeth_memory_recorded", detail=f"episode={mem.get('episode_name')}")
+            store.save_workflow(wf)
+    except Exception as exc:
+        logger.debug("Breeth recording failed or skipped: %s", exc)
     return wf
 
 

@@ -414,6 +414,16 @@ def handle(request: dict) -> dict:
         },
     )
     out = build_output(record)
+    try:
+        from shared.utils.breeth_memory import record_agent_memory
+        record_agent_memory(
+            stage=STAGE,
+            org_id=s.get("org_id", "default"),
+            subject_id=s.get("subject_id", "default"),
+            content=f"Pack inspection: outcome={pack_out}, verdict={out.get('verdict')}, order={row.get('order_lines')}, observed={observed_map}",
+        )
+    except Exception:
+        pass
     logger.info(
         "handle_done",
         extra={"ctx": {

@@ -84,4 +84,21 @@ A contradiction between documents or data is a **finding**, not a failure. Open 
 - Why: keeps contract tests green, keeps production path real, refuses cross-tenant via sample lookup / foreign-org check, fail-open on model errors.
 - Consequences: custom subjects need `context.order_lines` (or sample row). Changing F-08 scope means editing one adapter field.
 
+### D-008 · Phase 1: 5-Agent End-to-End Orchestration & Contract Compliance
+- Date / Owner: 2026-10-08 / @Yogesh-101
+- Context: Phase 1 requires uniting Receiving, Prep, Pack, Returns, and Recovery into a single, executable workflow that strictly honors the evidence contract, handles cross-platform path differences, prevents socket timeouts on dead services from misreporting error classes, and enforces zero-data-loss failure handling.
+- Options considered: (A) Ad-hoc point-to-point calls between agents; (B) Unified central orchestrator owning workflow state, enforcing schema validation at every handoff, standardizing POSIX path normalization for content-addressed inputs, and recording degraded evidence upon stage errors.
+- Decision: **(B)** Enforce strict schema contract at orchestrator handoffs; normalize input references with `as_posix()`; map socket connection drops / timeouts on dead ports to `agent_unavailable`; pass accumulated upstream evidence into downstream stages (reaching Recovery for fee dispute evaluation); derive final outcomes using deterministic rollups.
+- Why: Guarantees full auditability and traceability without cross-record contamination or fabricated evidence.
+### D-009 · Breeth Intent Memory Layer Integration
+- Date / Owner: 2026-10-08 / @Yogesh-101
+- Context: In multi-agent autonomous commerce pipelines, individual agent runs and workflow executions benefit from an intent-aware persistent memory layer (https://www.thebreeth.com/app) to capture cross-stage context, historical packaging quirks, supplier discrepancy precedents, and recurring fee dispute patterns.
+- Options considered:
+  - (A) Require active Breeth live credentials and block execution on network errors.
+  - (B) Fail-open, multi-tenant memory adapter in `shared/utils/breeth_memory.py` integrated into orchestrator finalization and agent execution, backed by official Python SDK and MCP server configuration.
+- Decision: **(B)** Implement `shared/utils/breeth_memory.py` using `breeth>=0.1.0`. Isolate knowledge graphs per tenant via `group_id = f"cube-org-{org_id}"`. When `BREETH_ENABLED` is true, automatically synthesize natural-language workflow execution narratives and record them with intent extraction (`extract_intent=True`). Provide MCP server config (`.agents/mcp_config.json`) targeting `https://mcp.thebreeth.com/mcp`. Ensure 100% fail-open behavior: when disabled or in offline test environments, calls gracefully degrade to no-ops without throwing exceptions or blocking pipelines.
+- Why: Preserves absolute tenancy separation, unlocks intent-aware agent recall across runs, and protects production workflow stability against external network/auth latency.
+- Consequences: Pod agents can retrieve and write episodic context dynamically; test suite runs with 0 network dependencies while production pods leverage Breeth's memory layer.
+
 _Add further entries below._
+
