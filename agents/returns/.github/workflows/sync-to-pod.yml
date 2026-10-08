@@ -1,0 +1,36 @@
+name: Dual-Sync to Yogesh's Pod Repository
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Your Repository
+        uses: actions/checkout@v4
+        with:
+          path: my-repo
+
+      - name: Checkout Yogesh's Pod Repository
+        uses: actions/checkout@v4
+        with:
+          repository: 'Yogesh-101/cube-round3-pod'
+          token: ${{ secrets.POD_SYNC_TOKEN || github.token }}
+          path: pod-repo
+
+      - name: Sync files to agents/returns
+        run: |
+          mkdir -p pod-repo/agents/returns
+          rsync -av --exclude='.git' --exclude='node_modules' --exclude='.env' --exclude='venv' --exclude='*.db' my-repo/ pod-repo/agents/returns/
+          cd pod-repo
+          git config user.name "Returns Manager Sync"
+          git config user.email "2420030580@klh.edu.in"
+          git add agents/returns
+          if git diff --staged --quiet; then
+            echo "No changes to sync"
+          else
+            git commit -m "Auto-sync from HEMA RTN main: $(git rev-parse --short HEAD)"
+            git push origin main
+          fi
