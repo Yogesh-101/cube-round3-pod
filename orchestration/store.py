@@ -50,6 +50,30 @@ class FileStore(MemoryStore):
             (self.root / "workflows").mkdir(parents=True, exist_ok=True)
             (self.root / "evidence").mkdir(parents=True, exist_ok=True)
 
+        self._seed_default_workflows()
+
+    def _seed_default_workflows(self) -> None:
+        """Seed pre-computed demo workflows if the directory is empty on a fresh deployment."""
+        workflows_dir = self.root / "workflows"
+        if workflows_dir.exists() and any(workflows_dir.glob("*.json")):
+            return
+
+        candidates = [
+            Path(__file__).resolve().parent.parent / "web" / "src" / "data" / "embeddedWorkflows.json",
+            Path("web/src/data/embeddedWorkflows.json"),
+        ]
+        for candidate in candidates:
+            if candidate.is_file():
+                try:
+                    data = json.loads(candidate.read_text(encoding="utf-8"))
+                    for wf in data:
+                        wf_id = wf.get("workflow_id")
+                        if wf_id:
+                            (workflows_dir / f"{wf_id}.json").write_text(json.dumps(wf, indent=2))
+                    break
+                except Exception:
+                    pass
+
     def load_workflow(self, workflow_id: str) -> dict | None:
         p = self.root / "workflows" / f"{workflow_id}.json"
         return json.loads(p.read_text()) if p.exists() else None
