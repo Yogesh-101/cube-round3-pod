@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-import { 
-  ShieldCheck, Activity, Database, Network, 
+import {
+  ShieldCheck, Activity, Database, Network,
   ArrowRight, Box, PackageCheck, RefreshCcw, AlertTriangle, Play
 } from 'lucide-react';
 import Hero from './components/ui/animated-shader-hero';
@@ -12,8 +12,8 @@ import Hero from './components/ui/animated-shader-hero';
 // STAGE CARD
 // ------------------------------------------------------------------
 const StageCard = ({ icon: Icon, title, desc, color, delay }) => (
-  <div 
-    data-aos="fade-up" 
+  <div
+    data-aos="fade-up"
     data-aos-delay={delay}
     style={{
       background: 'rgba(15, 23, 42, 0.6)',
@@ -52,7 +52,7 @@ const StageCard = ({ icon: Icon, title, desc, color, delay }) => (
 // FEATURE ROW
 // ------------------------------------------------------------------
 const FeatureRow = ({ title, desc, icon: Icon, reversed }) => (
-  <div 
+  <div
     data-aos={reversed ? 'fade-left' : 'fade-right'}
     style={{
       display: 'flex',
@@ -65,9 +65,9 @@ const FeatureRow = ({ title, desc, icon: Icon, reversed }) => (
     }}
   >
     <div style={{ flex: '1 1 380px' }}>
-      <div style={{ 
+      <div style={{
         display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-        width: '64px', height: '64px', borderRadius: '16px', 
+        width: '64px', height: '64px', borderRadius: '16px',
         background: 'rgba(59, 130, 246, 0.1)', color: '#60a5fa', marginBottom: '24px'
       }}>
         <Icon size={32} />
@@ -101,16 +101,16 @@ export default function Landing() {
   }, []);
 
   return (
-    <div style={{ 
+    <div style={{
       width: '100vw', minHeight: '100vh',
       background: '#020617', color: '#f8fafc',
-      overflowX: 'hidden', 
+      overflowX: 'hidden',
       fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
     }}>
-      
+
       {/* ── NAVBAR ───────────────────────────────────────────── */}
       <div style={{ padding: '20px 24px', position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100 }}>
-        <nav style={{ 
+        <nav style={{
           maxWidth: '1300px', margin: '0 auto',
           background: 'rgba(2, 6, 23, 0.8)', backdropFilter: 'blur(20px)',
           border: '1px solid rgba(255,255,255,0.07)', borderBottom: '2px solid rgba(59, 130, 246, 0.4)',
@@ -118,11 +118,11 @@ export default function Landing() {
           padding: '8px 10px 8px 20px', boxShadow: '0 8px 32px -8px rgba(59, 130, 246, 0.2)'
         }}>
           {/* Brand */}
-          <div 
-            style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }} 
+          <div
+            style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }}
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           >
-            <div style={{ 
+            <div style={{
               width: '38px', height: '38px', borderRadius: '50%',
               background: 'rgba(59,130,246,0.15)',
               border: '1px solid rgba(59,130,246,0.4)',
@@ -139,11 +139,15 @@ export default function Landing() {
           <div style={{ display: 'flex', gap: '28px', alignItems: 'center' }}>
             {[
               { label: 'Home', href: '#' },
-              { label: 'Features', href: '#architecture' },
-              { label: 'Deep Dive', href: '#features' },
-              { label: 'About', href: '#' },
+              { label: 'Features', href: '#features' },
+              { label: 'Architecture', href: '#architecture' },
+              { label: 'Solutions', href: '#solutions' },
+              { label: 'Pricing', href: '#pricing' },
+              { label: 'Resources', href: '#resources' },
+              { label: 'Company', href: '#company' },
+              { label: 'Contact', href: '#contact' },
             ].map(({ label, href }) => (
-              <a 
+              <a
                 key={label} href={href}
                 style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '0.9rem', fontWeight: 500, transition: 'color 0.2s' }}
                 onMouseOver={e => e.currentTarget.style.color = '#fff'}
@@ -156,15 +160,15 @@ export default function Landing() {
 
           {/* CTA */}
           <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-            <a 
-              href="#" 
+            <a
+              href="#"
               style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '0.9rem', fontWeight: 500, transition: 'color 0.2s' }}
               onMouseOver={e => e.currentTarget.style.color = '#fff'}
               onMouseOut={e => e.currentTarget.style.color = '#94a3b8'}
             >
               Sign In
             </a>
-            <button 
+            <button
               onClick={() => navigate('/app')}
               style={{
                 display: 'flex', alignItems: 'center', gap: '8px',
@@ -184,7 +188,7 @@ export default function Landing() {
 
       {/* ── HERO (WebGL Shader) ───────────────────────────────── */}
       <Hero
-        trustBadge={{ text: 'Multi-Agent Orchestrator', icons: ['📦', '🛡️', '⚡'] }}
+        trustBadge={{ text: 'Multi-Agent Orchestrator' }}
         headline={{ line1: 'Sovereign Fulfillment.', line2: 'Cryptographic Trust.' }}
         subtitle="A deterministic orchestrator uniting 5 independent AI agents. From receiving docks to return flows — every stage produces auditable, cryptographic evidence."
         buttons={{
@@ -207,11 +211,11 @@ export default function Landing() {
           </div>
 
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '24px', justifyContent: 'center' }}>
-            <StageCard delay="0"   color="#3b82f6" icon={Box}          title="Receiving Agent"  desc="Verifies vendor shipments at the dock. Audits inbound POs, flags quantity mismatches, and issues first-mile evidence records." />
-            <StageCard delay="100" color="#10b981" icon={RefreshCcw}   title="Prep Agent"       desc="Ensures individual items are barcoded, poly-bagged, or bubble-wrapped according to strict warehouse routing requirements." />
-            <StageCard delay="200" color="#8b5cf6" icon={PackageCheck} title="Pack Manager"     desc="Order-blind VLM inspection of open cartons. Implements scene-coverage analysis and robust substitution detection before sealing." />
-            <StageCard delay="300" color="#f59e0b" icon={AlertTriangle} title="Returns Agent"   desc="Inspects customer returns. Determines grading condition, restock viability, and detects policy abuse or missing accessories." />
-            <StageCard delay="400" color="#06b6d4" icon={Network}      title="Recovery Agent"   desc="Deep conflict resolution. Investigates cross-stage discrepancies, checks missing items against scale weight, and proposes resolution actions." />
+            <StageCard delay="0" color="#3b82f6" icon={Box} title="Receiving Agent" desc="Verifies vendor shipments at the dock. Audits inbound POs, flags quantity mismatches, and issues first-mile evidence records." />
+            <StageCard delay="100" color="#10b981" icon={RefreshCcw} title="Prep Agent" desc="Ensures individual items are barcoded, poly-bagged, or bubble-wrapped according to strict warehouse routing requirements." />
+            <StageCard delay="200" color="#8b5cf6" icon={PackageCheck} title="Pack Manager" desc="Order-blind VLM inspection of open cartons. Implements scene-coverage analysis and robust substitution detection before sealing." />
+            <StageCard delay="300" color="#f59e0b" icon={AlertTriangle} title="Returns Agent" desc="Inspects customer returns. Determines grading condition, restock viability, and detects policy abuse or missing accessories." />
+            <StageCard delay="400" color="#06b6d4" icon={Network} title="Recovery Agent" desc="Deep conflict resolution. Investigates cross-stage discrepancies, checks missing items against scale weight, and proposes resolution actions." />
           </div>
         </div>
       </section>
@@ -231,6 +235,46 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* ── SOLUTIONS ────────────────────────────────────────── */}
+      <section id="solutions" style={{ padding: '80px 24px', background: '#0f172a' }}>
+        <div style={{ maxWidth: '1060px', margin: '0 auto', textAlign: 'center' }}>
+          <h2 style={{ fontSize: '2.5rem', fontWeight: 700, color: '#f8fafc', marginBottom: '20px' }}>Solutions</h2>
+          <p style={{ color: '#94a3b8', fontSize: '1.1rem' }}>Tailored fulfillment orchestration for enterprise use cases.</p>
+        </div>
+      </section>
+
+      {/* ── PRICING ──────────────────────────────────────────── */}
+      <section id="pricing" style={{ padding: '80px 24px', background: '#020617' }}>
+        <div style={{ maxWidth: '1060px', margin: '0 auto', textAlign: 'center' }}>
+          <h2 style={{ fontSize: '2.5rem', fontWeight: 700, color: '#f8fafc', marginBottom: '20px' }}>Pricing</h2>
+          <p style={{ color: '#94a3b8', fontSize: '1.1rem' }}>Transparent, usage-based pricing for high-volume operations.</p>
+        </div>
+      </section>
+
+      {/* ── RESOURCES ────────────────────────────────────────── */}
+      <section id="resources" style={{ padding: '80px 24px', background: '#0f172a' }}>
+        <div style={{ maxWidth: '1060px', margin: '0 auto', textAlign: 'center' }}>
+          <h2 style={{ fontSize: '2.5rem', fontWeight: 700, color: '#f8fafc', marginBottom: '20px' }}>Resources</h2>
+          <p style={{ color: '#94a3b8', fontSize: '1.1rem' }}>Documentation, API references, and case studies.</p>
+        </div>
+      </section>
+
+      {/* ── COMPANY ──────────────────────────────────────────── */}
+      <section id="company" style={{ padding: '80px 24px', background: '#020617' }}>
+        <div style={{ maxWidth: '1060px', margin: '0 auto', textAlign: 'center' }}>
+          <h2 style={{ fontSize: '2.5rem', fontWeight: 700, color: '#f8fafc', marginBottom: '20px' }}>Company</h2>
+          <p style={{ color: '#94a3b8', fontSize: '1.1rem' }}>Learn about our mission to revolutionize fulfillment operations.</p>
+        </div>
+      </section>
+
+      {/* ── CONTACT ──────────────────────────────────────────── */}
+      <section id="contact" style={{ padding: '80px 24px', background: '#0f172a' }}>
+        <div style={{ maxWidth: '1060px', margin: '0 auto', textAlign: 'center' }}>
+          <h2 style={{ fontSize: '2.5rem', fontWeight: 700, color: '#f8fafc', marginBottom: '20px' }}>Contact</h2>
+          <p style={{ color: '#94a3b8', fontSize: '1.1rem' }}>Get in touch with our enterprise sales team.</p>
+        </div>
+      </section>
+
       {/* ── CTA ──────────────────────────────────────────────── */}
       <section style={{ padding: '120px 24px', background: 'linear-gradient(180deg, #020617 0%, #0f172a 100%)', textAlign: 'center' }}>
         <div data-aos="zoom-in" style={{ maxWidth: '760px', margin: '0 auto', background: 'rgba(15,23,42,0.6)', border: '1px solid rgba(59,130,246,0.15)', padding: '72px 32px', borderRadius: '24px', backdropFilter: 'blur(12px)' }}>
@@ -241,7 +285,7 @@ export default function Landing() {
           <p style={{ fontSize: '1.1rem', color: '#94a3b8', margin: '0 0 40px 0', lineHeight: 1.65 }}>
             Enter the live dashboard to view workflow states, trace cryptographic evidence, and inspect multi-agent handoffs in real time.
           </p>
-          <button 
+          <button
             onClick={() => navigate('/app')}
             style={{
               display: 'inline-flex', alignItems: 'center', gap: '10px',
@@ -257,10 +301,10 @@ export default function Landing() {
         </div>
 
         {/* Footer */}
-        <footer style={{ 
-          marginTop: '100px', paddingTop: '32px', 
-          borderTop: '1px solid rgba(255,255,255,0.06)', 
-          display: 'flex', justifyContent: 'space-between', alignItems: 'center', 
+        <footer style={{
+          marginTop: '100px', paddingTop: '32px',
+          borderTop: '1px solid rgba(255,255,255,0.06)',
+          display: 'flex', justifyContent: 'space-between', alignItems: 'center',
           maxWidth: '1200px', margin: '100px auto 0 auto',
           flexWrap: 'wrap', gap: '16px'
         }}>
