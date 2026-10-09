@@ -93,7 +93,14 @@
 
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-        html { scroll-behavior: smooth; background: var(--ground); }
+        html { 
+            scroll-behavior: smooth; 
+            background: var(--ground); 
+            width: 100%;
+            overflow-x: hidden;
+            scrollbar-width: none !important;
+            -ms-overflow-style: none !important;
+        }
 
         body {
             position: relative;
@@ -105,8 +112,11 @@
             line-height: 1.6;
             font-size: 0.9375rem;
             min-height: 100vh;
+            width: 100%;
             -webkit-font-smoothing: antialiased;
             overflow-x: hidden;
+            scrollbar-width: none !important;
+            -ms-overflow-style: none !important;
         }
 
         /* Two-layer blue ambience over the near-black ground.

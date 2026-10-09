@@ -136,8 +136,10 @@ void main(){gl_Position=position;}`;
     if (!canvasRef.current) return;
     const canvas = canvasRef.current;
     const dpr = Math.max(1, 0.5 * window.devicePixelRatio);
-    canvas.width = window.innerWidth * dpr;
-    canvas.height = window.innerHeight * dpr;
+    const w = canvas.parentElement ? canvas.parentElement.clientWidth : window.innerWidth;
+    const h = canvas.parentElement ? canvas.parentElement.clientHeight : window.innerHeight;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
     if (rendererRef.current) rendererRef.current.updateScale(dpr);
   };
 
