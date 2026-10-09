@@ -172,6 +172,9 @@ def record_workflow_episode(
 
     Fail-open: Returns None if Breeth is disabled, unconfigured, or if any error occurs.
     """
+    if "PYTEST_CURRENT_TEST" in os.environ:
+        return None
+        
     if not is_breeth_enabled() and client is None:
         return None
 

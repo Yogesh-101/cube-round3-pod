@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "breeth": {
+      "url": "https://mcp.thebreeth.com/mcp",
+      "headers": {
+        "Authorization": "Bearer ${BREETH_API_KEY}"
+      }
+    }
+  }
+}

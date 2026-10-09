@@ -14,40 +14,61 @@ from shared.utils.stubs import STUB_MODEL, photos, verdict_from
 
 STAGE = "receiving"
 AGENT_ID = "receiving-stub@0"
-DAMAGE_OK, DAMAGE_BAD = {"none"}, {"crushing", "water", "tears"}
-
+from .backend.schemas import ReceivingInput
+from .backend.logic import process_receiving
 
 def handle(request: dict) -> dict:
     s = request["subject"]
     r = sample_data.row("receiving", s["subject_id"], s["org_id"])  # LookupError -> 404 (tenancy)
-    refs = [p["ref"] for p in photos(r)]
+    
+    # In a real backend, we would parse request.body into ReceivingInput
+    # For now, we adapt the sample data row to our schema
     flags = [f for f in r["quality_flags"].split(";") if f]
-    qo, qr = int(r["qty_ordered"]), int(r["qty_received"])
-    co, cr = int(r["cartons_ordered"]), int(r["cartons_received"])
-
-    checks = [
-        check("identity_match", verdict_from(r["identity_match"], {"yes"}, {"no"}), None,
-              expected=f"{r['sku']} ({r['product_title']})", observed=r["identity_match"],
-              evidence_refs=refs, uncertain_reason="poor_image"),
-        check("carton_count", "PASS" if co == cr else "FAIL", None, expected=co, observed=cr, evidence_refs=refs),
-        check("quantity", "PASS" if qo == qr else "FAIL", None, expected=qo, observed=qr, evidence_refs=refs),
-        check("carton_damage", verdict_from(r["carton_damage"], DAMAGE_OK, DAMAGE_BAD), None,
-              expected="none", observed=r["carton_damage"], evidence_refs=refs, uncertain_reason="poor_image"),
-        check("unit_damage", verdict_from(r["unit_damage"], DAMAGE_OK, DAMAGE_BAD), None,
-              expected="none", observed=r["unit_damage"], evidence_refs=refs, uncertain_reason="poor_image"),
-        check("quality_flags", "FAIL" if flags else "PASS", None, expected=[], observed=flags, evidence_refs=refs),
-    ]
-    verdict = "FAIL" if any(c["verdict"] == "FAIL" for c in checks) else (
-        "UNCERTAIN" if any(c["verdict"] == "UNCERTAIN" for c in checks) else "PASS")
-    outcome = {"PASS": "accept", "FAIL": "accept_with_exceptions", "UNCERTAIN": "pending_review"}[verdict]
-    record = build_record(
-        request, agent_id=AGENT_ID, record_id=r["record_id"], captured_at=r["captured_at"], operator_id=r["operator_id"],
-        unit_scope="po_line", refs={"po_number": r["po_number"], "po_line": r["po_line"], "sku": r["sku"], "asin": r["asin"]},
-        checks=checks, outcome=outcome, model=STUB_MODEL, inputs=photos(r),
-        reason=f"stub replay of sample row; {sum(c['verdict'] == 'FAIL' for c in checks)} failed check(s)",
-        payload={"supplier": r["supplier"], "qty_ordered": qo, "qty_received": qr, "shortfall_units": max(qo - qr, 0),
-                 "quality_flags": flags},
+    
+    input_data = ReceivingInput(
+        subject_id=s["subject_id"],
+        org_id=s["org_id"],
+        po_number=r["po_number"],
+        po_line=r["po_line"],
+        sku=r["sku"],
+        product_title=r["product_title"],
+        asin=r["asin"],
+        supplier=r["supplier"],
+        qty_ordered=int(r["qty_ordered"]),
+        qty_received=int(r["qty_received"]),
+        cartons_ordered=int(r["cartons_ordered"]),
+        cartons_received=int(r["cartons_received"]),
+        identity_match=r["identity_match"],
+        carton_damage=r["carton_damage"],
+        unit_damage=r["unit_damage"],
+        quality_flags=flags,
+        operator_id=r["operator_id"],
+        photo_refs=[p["ref"] for p in photos(r)],
+        captured_at=r["captured_at"]
     )
+    
+    decision = process_receiving(input_data)
+    
+    record = build_record(
+        request, agent_id=AGENT_ID, record_id=r["record_id"], captured_at=input_data.captured_at, operator_id=input_data.operator_id,
+        unit_scope="po_line", refs={"po_number": input_data.po_number, "po_line": input_data.po_line, "sku": input_data.sku, "asin": input_data.asin},
+        checks=decision.checks, outcome=decision.outcome, model=STUB_MODEL, inputs=photos(r),
+        reason=f"backend processed; {sum(c['verdict'] == 'FAIL' for c in decision.checks)} failed check(s)",
+        payload={"supplier": input_data.supplier, "qty_ordered": input_data.qty_ordered, "qty_received": input_data.qty_received, "shortfall_units": max(input_data.qty_ordered - input_data.qty_received, 0),
+                 "quality_flags": input_data.quality_flags},
+    )
+    
+    try:
+        from shared.utils.breeth_memory import record_agent_memory
+        record_agent_memory(
+            stage=STAGE,
+            org_id=s.get("org_id", "default"),
+            subject_id=s.get("subject_id", "default"),
+            content=f"Receiving inspection: outcome={decision.outcome}, qty_ordered={input_data.qty_ordered}, qty_received={input_data.qty_received}, supplier={input_data.supplier}"
+        )
+    except Exception:
+        pass
+        
     return build_output(record)
 
 

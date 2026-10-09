@@ -94,6 +94,18 @@ def handle(request: dict) -> dict:
         reason=agent_decision.get("reason", "Evaluated by ReturnsManagerAgent"),
         payload={"condition_graded": True}
     )
+    
+    try:
+        from shared.utils.breeth_memory import record_agent_memory
+        record_agent_memory(
+            stage=STAGE,
+            org_id=s.get("org_id", "default"),
+            subject_id=s.get("subject_id", "default"),
+            content=f"Returns inspection: outcome={decision_flow}, verdict={final_verdict}, conditionGrade={agent_decision.get('conditionGrade', 'N/A')}, isUncertain={is_uncertain}"
+        )
+    except Exception:
+        pass
+        
     return build_output(record)
 
 app = make_app(STAGE, handle)
