@@ -1,0 +1,4275 @@
+[
+  {
+    "schema_version": "1.0",
+    "workflow_id": "WF-org_demo_alpha-UNIT-0001",
+    "flow_id": "standard-v1",
+    "org_id": "org_demo_alpha",
+    "subject_id": "UNIT-0001",
+    "context": {
+      "route": "unknown",
+      "returned": false
+    },
+    "status": "COMPLETED",
+    "status_reason": "all required stages finished",
+    "current_stage": "recovery",
+    "previous_stage": "receiving",
+    "stage_results": [
+      {
+        "stage": "receiving",
+        "agent_id": "receiving-stub@0",
+        "state": "completed",
+        "skipped_reason": null,
+        "record_id": "RCV-0001",
+        "evidence_status": "completed",
+        "verdict": "PASS",
+        "outcome": "accept",
+        "needs_human": false,
+        "next_step_recommendation": {
+          "action": "continue",
+          "reason": "backend processed; 0 failed check(s)"
+        },
+        "runs": 1,
+        "attempts": 1,
+        "started_at": "2026-10-09T06:34:00Z",
+        "finished_at": "2026-10-09T06:34:11Z",
+        "duration_ms": 11090,
+        "error": null
+      },
+      {
+        "stage": "prep",
+        "agent_id": "prep-backend@1",
+        "state": "skipped",
+        "skipped_reason": "route='unknown' not in ['fba']",
+        "record_id": null,
+        "evidence_status": null,
+        "verdict": null,
+        "outcome": null,
+        "needs_human": null,
+        "next_step_recommendation": null,
+        "runs": 0,
+        "attempts": 0,
+        "started_at": null,
+        "finished_at": null,
+        "duration_ms": null,
+        "error": null
+      },
+      {
+        "stage": "pack",
+        "agent_id": "pack-manager@1",
+        "state": "skipped",
+        "skipped_reason": "route='unknown' not in ['mfn']",
+        "record_id": null,
+        "evidence_status": null,
+        "verdict": null,
+        "outcome": null,
+        "needs_human": null,
+        "next_step_recommendation": null,
+        "runs": 0,
+        "attempts": 0,
+        "started_at": null,
+        "finished_at": null,
+        "duration_ms": null,
+        "error": null
+      },
+      {
+        "stage": "returns",
+        "agent_id": "returns-manager@1",
+        "state": "skipped",
+        "skipped_reason": "returned=False not in [True]",
+        "record_id": null,
+        "evidence_status": null,
+        "verdict": null,
+        "outcome": null,
+        "needs_human": null,
+        "next_step_recommendation": null,
+        "runs": 0,
+        "attempts": 0,
+        "started_at": null,
+        "finished_at": null,
+        "duration_ms": null,
+        "error": null
+      },
+      {
+        "stage": "recovery",
+        "agent_id": "recovery-manager@2",
+        "state": "completed",
+        "skipped_reason": null,
+        "record_id": "RCY-UNIT-0001",
+        "evidence_status": "completed",
+        "verdict": "PASS",
+        "outcome": "no_claim",
+        "needs_human": false,
+        "next_step_recommendation": {
+          "action": "complete",
+          "reason": "intelligent investigation: 0 charge(s), 0 claim(s)"
+        },
+        "runs": 1,
+        "attempts": 1,
+        "started_at": "2026-10-09T06:34:11Z",
+        "finished_at": "2026-10-09T06:34:23Z",
+        "duration_ms": 11227,
+        "error": null
+      }
+    ],
+    "evidence_references": [
+      "RCV-0001",
+      "RCY-UNIT-0001"
+    ],
+    "timestamps": {
+      "created_at": "2026-10-09T06:34:00Z",
+      "updated_at": "2026-10-09T14:27:09Z",
+      "completed_at": "2026-10-09T14:27:09Z"
+    },
+    "errors": [],
+    "overrides": [],
+    "halted": null,
+    "final_outcome": {
+      "workflow_id": "WF-org_demo_alpha-UNIT-0001",
+      "outcome": "CLEAN",
+      "verdict": "PASS",
+      "reason": "All applicable stages passed.",
+      "needs_human": false,
+      "provisional": false,
+      "claimable_usd": null,
+      "contributing_records": [
+        "RCV-0001",
+        "RCY-UNIT-0001"
+      ],
+      "effective_verdicts": {
+        "receiving": "PASS",
+        "recovery": "PASS"
+      },
+      "decided_by": "orchestrator",
+      "decided_at": "2026-10-09T14:27:09Z"
+    },
+    "transitions": [
+      {
+        "at": "2026-10-09T06:34:00Z",
+        "event": "workflow_created",
+        "stage": null,
+        "detail": "flow=standard-v1"
+      },
+      {
+        "at": "2026-10-09T06:34:00Z",
+        "event": "stage_skipped",
+        "stage": "prep",
+        "detail": "route='unknown' not in ['fba']"
+      },
+      {
+        "at": "2026-10-09T06:34:00Z",
+        "event": "stage_skipped",
+        "stage": "pack",
+        "detail": "route='unknown' not in ['mfn']"
+      },
+      {
+        "at": "2026-10-09T06:34:00Z",
+        "event": "stage_skipped",
+        "stage": "returns",
+        "detail": "returned=False not in [True]"
+      },
+      {
+        "at": "2026-10-09T06:34:00Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "PENDING",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T06:34:11Z",
+        "event": "stage_completed",
+        "stage": "receiving",
+        "detail": "accept / PASS"
+      },
+      {
+        "at": "2026-10-09T06:34:23Z",
+        "event": "stage_completed",
+        "stage": "recovery",
+        "detail": "no_claim / PASS"
+      },
+      {
+        "at": "2026-10-09T06:34:23Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      },
+      {
+        "at": "2026-10-09T06:49:25Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "COMPLETED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T06:49:25Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      },
+      {
+        "at": "2026-10-09T06:49:26Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "COMPLETED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T06:49:26Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      },
+      {
+        "at": "2026-10-09T06:49:26Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "COMPLETED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T06:49:26Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      },
+      {
+        "at": "2026-10-09T06:55:04Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "COMPLETED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T06:55:04Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      },
+      {
+        "at": "2026-10-09T06:55:06Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "COMPLETED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T06:55:06Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      },
+      {
+        "at": "2026-10-09T06:55:07Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "COMPLETED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T06:55:07Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      },
+      {
+        "at": "2026-10-09T06:55:07Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "COMPLETED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T06:55:07Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      },
+      {
+        "at": "2026-10-09T06:55:07Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "COMPLETED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T06:55:07Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      },
+      {
+        "at": "2026-10-09T06:55:07Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "COMPLETED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T06:55:07Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      },
+      {
+        "at": "2026-10-09T06:55:16Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "COMPLETED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T06:55:16Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      },
+      {
+        "at": "2026-10-09T06:55:17Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "COMPLETED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T06:55:17Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      },
+      {
+        "at": "2026-10-09T06:55:19Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "COMPLETED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T06:55:19Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      },
+      {
+        "at": "2026-10-09T06:55:19Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "COMPLETED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T06:55:19Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      },
+      {
+        "at": "2026-10-09T06:55:19Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "COMPLETED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T06:55:19Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      },
+      {
+        "at": "2026-10-09T06:55:19Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "COMPLETED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T06:55:19Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      },
+      {
+        "at": "2026-10-09T06:55:27Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "COMPLETED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T06:55:27Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      },
+      {
+        "at": "2026-10-09T06:55:28Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "COMPLETED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T06:55:28Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      },
+      {
+        "at": "2026-10-09T06:55:30Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "COMPLETED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T06:55:30Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      },
+      {
+        "at": "2026-10-09T06:55:30Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "COMPLETED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T06:55:30Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      },
+      {
+        "at": "2026-10-09T06:55:30Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "COMPLETED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T06:55:30Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      },
+      {
+        "at": "2026-10-09T06:55:30Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "COMPLETED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T06:55:30Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      },
+      {
+        "at": "2026-10-09T06:55:38Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "COMPLETED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T06:55:38Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      },
+      {
+        "at": "2026-10-09T06:55:39Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "COMPLETED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T06:55:39Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      },
+      {
+        "at": "2026-10-09T06:55:40Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "COMPLETED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T06:55:40Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      },
+      {
+        "at": "2026-10-09T06:56:52Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "COMPLETED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T06:56:52Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      },
+      {
+        "at": "2026-10-09T06:56:52Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "COMPLETED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T06:56:52Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      },
+      {
+        "at": "2026-10-09T06:56:53Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "COMPLETED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T06:56:53Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      },
+      {
+        "at": "2026-10-09T06:58:04Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "COMPLETED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T06:58:04Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      },
+      {
+        "at": "2026-10-09T07:34:25Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "COMPLETED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T07:34:25Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      },
+      {
+        "at": "2026-10-09T09:03:53Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "COMPLETED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T09:03:53Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      },
+      {
+        "at": "2026-10-09T09:14:21Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "COMPLETED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T09:14:21Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      },
+      {
+        "at": "2026-10-09T09:18:23Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "COMPLETED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T09:18:23Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      },
+      {
+        "at": "2026-10-09T09:20:06Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "COMPLETED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T09:20:06Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      },
+      {
+        "at": "2026-10-09T09:20:32Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "COMPLETED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T09:20:32Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      },
+      {
+        "at": "2026-10-09T09:22:07Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "COMPLETED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T09:22:07Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      },
+      {
+        "at": "2026-10-09T09:23:26Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "COMPLETED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T09:23:26Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      },
+      {
+        "at": "2026-10-09T09:32:57Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "COMPLETED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T09:32:57Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      },
+      {
+        "at": "2026-10-09T09:34:52Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "COMPLETED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T09:34:52Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      },
+      {
+        "at": "2026-10-09T09:37:43Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "COMPLETED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T09:37:43Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      },
+      {
+        "at": "2026-10-09T09:41:22Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "COMPLETED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T09:41:22Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      },
+      {
+        "at": "2026-10-09T09:42:02Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "COMPLETED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T09:42:02Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      },
+      {
+        "at": "2026-10-09T09:43:38Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "COMPLETED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T09:43:38Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      },
+      {
+        "at": "2026-10-09T09:45:06Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "COMPLETED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T09:45:06Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      },
+      {
+        "at": "2026-10-09T10:11:52Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "COMPLETED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T10:11:52Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      },
+      {
+        "at": "2026-10-09T10:12:03Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "COMPLETED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T10:12:03Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      },
+      {
+        "at": "2026-10-09T10:52:07Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "COMPLETED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T10:52:07Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      },
+      {
+        "at": "2026-10-09T10:52:29Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "COMPLETED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T10:52:29Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      },
+      {
+        "at": "2026-10-09T10:52:43Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "COMPLETED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T10:52:43Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      },
+      {
+        "at": "2026-10-09T10:53:30Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "COMPLETED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T10:53:30Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      },
+      {
+        "at": "2026-10-09T10:53:53Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "COMPLETED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T10:53:53Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      },
+      {
+        "at": "2026-10-09T14:19:56Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "COMPLETED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T14:19:56Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      },
+      {
+        "at": "2026-10-09T14:27:09Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "COMPLETED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T14:27:09Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      }
+    ]
+  },
+  {
+    "schema_version": "1.0",
+    "workflow_id": "WF-org_demo_alpha-UNIT-0002",
+    "flow_id": "standard-v1",
+    "org_id": "org_demo_alpha",
+    "subject_id": "UNIT-0002",
+    "context": {
+      "route": "fba",
+      "returned": false
+    },
+    "status": "COMPLETED",
+    "status_reason": "all required stages finished",
+    "current_stage": "recovery",
+    "previous_stage": "prep",
+    "stage_results": [
+      {
+        "stage": "receiving",
+        "agent_id": "receiving-stub@0",
+        "state": "completed",
+        "skipped_reason": null,
+        "record_id": "RCV-0002",
+        "evidence_status": "completed",
+        "verdict": "PASS",
+        "outcome": "accept",
+        "needs_human": false,
+        "next_step_recommendation": {
+          "action": "continue",
+          "reason": "backend processed; 0 failed check(s)"
+        },
+        "runs": 1,
+        "attempts": 1,
+        "started_at": "2026-10-09T06:34:33Z",
+        "finished_at": "2026-10-09T06:34:44Z",
+        "duration_ms": 10805,
+        "error": null
+      },
+      {
+        "stage": "prep",
+        "agent_id": "prep-stub@0",
+        "state": "completed",
+        "skipped_reason": null,
+        "record_id": "PRP-0002",
+        "evidence_status": "completed",
+        "verdict": "FAIL",
+        "outcome": "non_compliant",
+        "needs_human": false,
+        "next_step_recommendation": {
+          "action": "route_to_recovery",
+          "reason": "backend processed; 1 failed check(s)"
+        },
+        "runs": 1,
+        "attempts": 1,
+        "started_at": "2026-10-09T06:34:44Z",
+        "finished_at": "2026-10-09T06:34:55Z",
+        "duration_ms": 11025,
+        "error": null
+      },
+      {
+        "stage": "pack",
+        "agent_id": "pack-manager@1",
+        "state": "skipped",
+        "skipped_reason": "route='fba' not in ['mfn']",
+        "record_id": null,
+        "evidence_status": null,
+        "verdict": null,
+        "outcome": null,
+        "needs_human": null,
+        "next_step_recommendation": null,
+        "runs": 0,
+        "attempts": 0,
+        "started_at": null,
+        "finished_at": null,
+        "duration_ms": null,
+        "error": null
+      },
+      {
+        "stage": "returns",
+        "agent_id": "returns-manager@1",
+        "state": "skipped",
+        "skipped_reason": "returned=False not in [True]",
+        "record_id": null,
+        "evidence_status": null,
+        "verdict": null,
+        "outcome": null,
+        "needs_human": null,
+        "next_step_recommendation": null,
+        "runs": 0,
+        "attempts": 0,
+        "started_at": null,
+        "finished_at": null,
+        "duration_ms": null,
+        "error": null
+      },
+      {
+        "stage": "recovery",
+        "agent_id": "recovery-manager@2",
+        "state": "completed",
+        "skipped_reason": null,
+        "record_id": "RCY-UNIT-0002",
+        "evidence_status": "completed",
+        "verdict": "UNCERTAIN",
+        "outcome": "insufficient_evidence",
+        "needs_human": false,
+        "next_step_recommendation": {
+          "action": "complete",
+          "reason": "intelligent investigation: 1 charge(s), 0 claim(s)"
+        },
+        "runs": 1,
+        "attempts": 1,
+        "started_at": "2026-10-09T06:34:55Z",
+        "finished_at": "2026-10-09T06:35:06Z",
+        "duration_ms": 10793,
+        "error": null
+      }
+    ],
+    "evidence_references": [
+      "RCV-0002",
+      "PRP-0002",
+      "RCY-UNIT-0002"
+    ],
+    "timestamps": {
+      "created_at": "2026-10-09T06:34:33Z",
+      "updated_at": "2026-10-09T10:17:43Z",
+      "completed_at": "2026-10-09T10:17:43Z"
+    },
+    "errors": [],
+    "overrides": [],
+    "halted": null,
+    "final_outcome": {
+      "workflow_id": "WF-org_demo_alpha-UNIT-0002",
+      "outcome": "EXCEPTION",
+      "verdict": "FAIL",
+      "reason": "Failed verdict from: prep; no claim recommended.",
+      "needs_human": false,
+      "provisional": false,
+      "claimable_usd": null,
+      "contributing_records": [
+        "RCV-0002",
+        "PRP-0002",
+        "RCY-UNIT-0002"
+      ],
+      "effective_verdicts": {
+        "receiving": "PASS",
+        "prep": "FAIL",
+        "recovery": "UNCERTAIN"
+      },
+      "decided_by": "orchestrator",
+      "decided_at": "2026-10-09T10:17:43Z"
+    },
+    "transitions": [
+      {
+        "at": "2026-10-09T06:34:33Z",
+        "event": "workflow_created",
+        "stage": null,
+        "detail": "flow=standard-v1"
+      },
+      {
+        "at": "2026-10-09T06:34:33Z",
+        "event": "stage_skipped",
+        "stage": "pack",
+        "detail": "route='fba' not in ['mfn']"
+      },
+      {
+        "at": "2026-10-09T06:34:33Z",
+        "event": "stage_skipped",
+        "stage": "returns",
+        "detail": "returned=False not in [True]"
+      },
+      {
+        "at": "2026-10-09T06:34:33Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "PENDING",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T06:34:44Z",
+        "event": "stage_completed",
+        "stage": "receiving",
+        "detail": "accept / PASS"
+      },
+      {
+        "at": "2026-10-09T06:34:55Z",
+        "event": "stage_completed",
+        "stage": "prep",
+        "detail": "non_compliant / FAIL"
+      },
+      {
+        "at": "2026-10-09T06:35:06Z",
+        "event": "stage_completed",
+        "stage": "recovery",
+        "detail": "insufficient_evidence / UNCERTAIN"
+      },
+      {
+        "at": "2026-10-09T06:35:06Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      },
+      {
+        "at": "2026-10-09T09:37:58Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "COMPLETED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T09:37:58Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      },
+      {
+        "at": "2026-10-09T10:17:43Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "COMPLETED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T10:17:43Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      }
+    ]
+  },
+  {
+    "schema_version": "1.0",
+    "workflow_id": "WF-org_demo_alpha-UNIT-0003",
+    "flow_id": "standard-v1",
+    "org_id": "org_demo_alpha",
+    "subject_id": "UNIT-0003",
+    "context": {
+      "route": "unknown",
+      "returned": false
+    },
+    "status": "FAILED",
+    "status_reason": "stage did not complete: receiving, recovery",
+    "current_stage": "recovery",
+    "previous_stage": "receiving",
+    "stage_results": [
+      {
+        "stage": "receiving",
+        "agent_id": "receiving-backend@1",
+        "state": "error",
+        "skipped_reason": null,
+        "record_id": "RCV-PENDING-WF-org_demo_alpha-UNIT-0003-receiving",
+        "evidence_status": "error",
+        "verdict": "UNCERTAIN",
+        "outcome": "pending_review",
+        "needs_human": true,
+        "next_step_recommendation": {
+          "action": "review",
+          "reason": "no receiving record for UNIT-0003 in org_demo_alpha"
+        },
+        "runs": 1,
+        "attempts": 1,
+        "started_at": "2026-10-09T09:38:14Z",
+        "finished_at": "2026-10-09T09:38:14Z",
+        "duration_ms": 9,
+        "error": {
+          "code": "agent_rejected",
+          "message": "no receiving record for UNIT-0003 in org_demo_alpha",
+          "retryable": false,
+          "stage": "receiving",
+          "agent_id": "receiving-backend@1",
+          "at": "2026-10-09T09:38:14Z",
+          "detail": null
+        }
+      },
+      {
+        "stage": "prep",
+        "agent_id": "prep-backend@1",
+        "state": "skipped",
+        "skipped_reason": "route='unknown' not in ['fba']",
+        "record_id": null,
+        "evidence_status": null,
+        "verdict": null,
+        "outcome": null,
+        "needs_human": null,
+        "next_step_recommendation": null,
+        "runs": 0,
+        "attempts": 0,
+        "started_at": null,
+        "finished_at": null,
+        "duration_ms": null,
+        "error": null
+      },
+      {
+        "stage": "pack",
+        "agent_id": "pack-manager@1",
+        "state": "skipped",
+        "skipped_reason": "route='unknown' not in ['mfn']",
+        "record_id": null,
+        "evidence_status": null,
+        "verdict": null,
+        "outcome": null,
+        "needs_human": null,
+        "next_step_recommendation": null,
+        "runs": 0,
+        "attempts": 0,
+        "started_at": null,
+        "finished_at": null,
+        "duration_ms": null,
+        "error": null
+      },
+      {
+        "stage": "returns",
+        "agent_id": "returns-manager@1",
+        "state": "skipped",
+        "skipped_reason": "returned=False not in [True]",
+        "record_id": null,
+        "evidence_status": null,
+        "verdict": null,
+        "outcome": null,
+        "needs_human": null,
+        "next_step_recommendation": null,
+        "runs": 0,
+        "attempts": 0,
+        "started_at": null,
+        "finished_at": null,
+        "duration_ms": null,
+        "error": null
+      },
+      {
+        "stage": "recovery",
+        "agent_id": "recovery-stub@0",
+        "state": "error",
+        "skipped_reason": null,
+        "record_id": "RCY-PENDING-WF-org_demo_alpha-UNIT-0003-recovery",
+        "evidence_status": "error",
+        "verdict": "UNCERTAIN",
+        "outcome": "pending_review",
+        "needs_human": true,
+        "next_step_recommendation": {
+          "action": "review",
+          "reason": "unknown subject UNIT-0003 in org_demo_alpha"
+        },
+        "runs": 1,
+        "attempts": 1,
+        "started_at": "2026-10-09T09:38:14Z",
+        "finished_at": "2026-10-09T09:38:14Z",
+        "duration_ms": 2,
+        "error": {
+          "code": "agent_rejected",
+          "message": "unknown subject UNIT-0003 in org_demo_alpha",
+          "retryable": false,
+          "stage": "recovery",
+          "agent_id": "recovery-stub@0",
+          "at": "2026-10-09T09:38:14Z",
+          "detail": null
+        }
+      }
+    ],
+    "evidence_references": [
+      "RCV-PENDING-WF-org_demo_alpha-UNIT-0003-receiving",
+      "RCY-PENDING-WF-org_demo_alpha-UNIT-0003-recovery"
+    ],
+    "timestamps": {
+      "created_at": "2026-10-09T09:38:14Z",
+      "updated_at": "2026-10-09T09:38:14Z",
+      "completed_at": null
+    },
+    "errors": [
+      {
+        "code": "agent_rejected",
+        "message": "no receiving record for UNIT-0003 in org_demo_alpha",
+        "retryable": false,
+        "stage": "receiving",
+        "agent_id": "receiving-backend@1",
+        "at": "2026-10-09T09:38:14Z",
+        "detail": null
+      },
+      {
+        "code": "agent_rejected",
+        "message": "unknown subject UNIT-0003 in org_demo_alpha",
+        "retryable": false,
+        "stage": "recovery",
+        "agent_id": "recovery-stub@0",
+        "at": "2026-10-09T09:38:14Z",
+        "detail": null
+      }
+    ],
+    "overrides": [],
+    "halted": null,
+    "final_outcome": {
+      "workflow_id": "WF-org_demo_alpha-UNIT-0003",
+      "outcome": "INCOMPLETE",
+      "verdict": "UNCERTAIN",
+      "reason": "Stage did not complete: receiving, recovery.",
+      "needs_human": true,
+      "provisional": true,
+      "claimable_usd": null,
+      "contributing_records": [
+        "RCV-PENDING-WF-org_demo_alpha-UNIT-0003-receiving",
+        "RCY-PENDING-WF-org_demo_alpha-UNIT-0003-recovery"
+      ],
+      "effective_verdicts": {
+        "receiving": "UNCERTAIN",
+        "recovery": "UNCERTAIN"
+      },
+      "decided_by": "orchestrator",
+      "decided_at": "2026-10-09T09:38:14Z"
+    },
+    "transitions": [
+      {
+        "at": "2026-10-09T09:38:14Z",
+        "event": "workflow_created",
+        "stage": null,
+        "detail": "flow=standard-v1"
+      },
+      {
+        "at": "2026-10-09T09:38:14Z",
+        "event": "stage_skipped",
+        "stage": "prep",
+        "detail": "route='unknown' not in ['fba']"
+      },
+      {
+        "at": "2026-10-09T09:38:14Z",
+        "event": "stage_skipped",
+        "stage": "pack",
+        "detail": "route='unknown' not in ['mfn']"
+      },
+      {
+        "at": "2026-10-09T09:38:14Z",
+        "event": "stage_skipped",
+        "stage": "returns",
+        "detail": "returned=False not in [True]"
+      },
+      {
+        "at": "2026-10-09T09:38:14Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "PENDING",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T09:38:14Z",
+        "event": "stage_degraded",
+        "stage": "receiving",
+        "detail": "agent_rejected: recorded as error; flow policy decides what next"
+      },
+      {
+        "at": "2026-10-09T09:38:14Z",
+        "event": "stage_error",
+        "stage": "receiving",
+        "detail": "pending_review / UNCERTAIN"
+      },
+      {
+        "at": "2026-10-09T09:38:14Z",
+        "event": "stage_degraded",
+        "stage": "recovery",
+        "detail": "agent_rejected: recorded as error; flow policy decides what next"
+      },
+      {
+        "at": "2026-10-09T09:38:14Z",
+        "event": "stage_error",
+        "stage": "recovery",
+        "detail": "pending_review / UNCERTAIN"
+      },
+      {
+        "at": "2026-10-09T09:38:14Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "stage did not complete: receiving, recovery",
+        "from_status": "IN_PROGRESS",
+        "to_status": "FAILED"
+      }
+    ]
+  },
+  {
+    "schema_version": "1.0",
+    "workflow_id": "WF-org_demo_alpha-UNIT-0004",
+    "flow_id": "standard-v1",
+    "org_id": "org_demo_alpha",
+    "subject_id": "UNIT-0004",
+    "context": {
+      "route": "fba",
+      "returned": false
+    },
+    "status": "COMPLETED",
+    "status_reason": "all required stages finished",
+    "current_stage": "recovery",
+    "previous_stage": "prep",
+    "stage_results": [
+      {
+        "stage": "receiving",
+        "agent_id": "receiving-stub@0",
+        "state": "completed",
+        "skipped_reason": null,
+        "record_id": "RCV-0004",
+        "evidence_status": "completed",
+        "verdict": "FAIL",
+        "outcome": "accept_with_exceptions",
+        "needs_human": false,
+        "next_step_recommendation": {
+          "action": "route_to_recovery",
+          "reason": "backend processed; 1 failed check(s)"
+        },
+        "runs": 1,
+        "attempts": 1,
+        "started_at": "2026-10-09T06:36:11Z",
+        "finished_at": "2026-10-09T06:36:19Z",
+        "duration_ms": 7890,
+        "error": null
+      },
+      {
+        "stage": "prep",
+        "agent_id": "prep-stub@0",
+        "state": "completed",
+        "skipped_reason": null,
+        "record_id": "PRP-0004",
+        "evidence_status": "completed",
+        "verdict": "FAIL",
+        "outcome": "non_compliant",
+        "needs_human": false,
+        "next_step_recommendation": {
+          "action": "route_to_recovery",
+          "reason": "backend processed; 1 failed check(s)"
+        },
+        "runs": 1,
+        "attempts": 1,
+        "started_at": "2026-10-09T06:36:19Z",
+        "finished_at": "2026-10-09T06:36:30Z",
+        "duration_ms": 10863,
+        "error": null
+      },
+      {
+        "stage": "pack",
+        "agent_id": "pack-manager@1",
+        "state": "skipped",
+        "skipped_reason": "route='fba' not in ['mfn']",
+        "record_id": null,
+        "evidence_status": null,
+        "verdict": null,
+        "outcome": null,
+        "needs_human": null,
+        "next_step_recommendation": null,
+        "runs": 0,
+        "attempts": 0,
+        "started_at": null,
+        "finished_at": null,
+        "duration_ms": null,
+        "error": null
+      },
+      {
+        "stage": "returns",
+        "agent_id": "returns-manager@1",
+        "state": "skipped",
+        "skipped_reason": "returned=False not in [True]",
+        "record_id": null,
+        "evidence_status": null,
+        "verdict": null,
+        "outcome": null,
+        "needs_human": null,
+        "next_step_recommendation": null,
+        "runs": 0,
+        "attempts": 0,
+        "started_at": null,
+        "finished_at": null,
+        "duration_ms": null,
+        "error": null
+      },
+      {
+        "stage": "recovery",
+        "agent_id": "recovery-manager@2",
+        "state": "completed",
+        "skipped_reason": null,
+        "record_id": "RCY-UNIT-0004",
+        "evidence_status": "completed",
+        "verdict": "PASS",
+        "outcome": "no_claim",
+        "needs_human": false,
+        "next_step_recommendation": {
+          "action": "complete",
+          "reason": "intelligent investigation: 0 charge(s), 0 claim(s)"
+        },
+        "runs": 1,
+        "attempts": 1,
+        "started_at": "2026-10-09T06:36:30Z",
+        "finished_at": "2026-10-09T06:36:41Z",
+        "duration_ms": 10897,
+        "error": null
+      }
+    ],
+    "evidence_references": [
+      "RCV-0004",
+      "PRP-0004",
+      "RCY-UNIT-0004"
+    ],
+    "timestamps": {
+      "created_at": "2026-10-09T06:36:11Z",
+      "updated_at": "2026-10-09T09:44:39Z",
+      "completed_at": "2026-10-09T09:44:39Z"
+    },
+    "errors": [],
+    "overrides": [],
+    "halted": null,
+    "final_outcome": {
+      "workflow_id": "WF-org_demo_alpha-UNIT-0004",
+      "outcome": "EXCEPTION",
+      "verdict": "FAIL",
+      "reason": "Failed verdict from: receiving, prep; no claim recommended.",
+      "needs_human": false,
+      "provisional": false,
+      "claimable_usd": null,
+      "contributing_records": [
+        "RCV-0004",
+        "PRP-0004",
+        "RCY-UNIT-0004"
+      ],
+      "effective_verdicts": {
+        "receiving": "FAIL",
+        "prep": "FAIL",
+        "recovery": "PASS"
+      },
+      "decided_by": "orchestrator",
+      "decided_at": "2026-10-09T09:44:39Z"
+    },
+    "transitions": [
+      {
+        "at": "2026-10-09T06:36:11Z",
+        "event": "workflow_created",
+        "stage": null,
+        "detail": "flow=standard-v1"
+      },
+      {
+        "at": "2026-10-09T06:36:11Z",
+        "event": "stage_skipped",
+        "stage": "pack",
+        "detail": "route='fba' not in ['mfn']"
+      },
+      {
+        "at": "2026-10-09T06:36:11Z",
+        "event": "stage_skipped",
+        "stage": "returns",
+        "detail": "returned=False not in [True]"
+      },
+      {
+        "at": "2026-10-09T06:36:11Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "PENDING",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T06:36:19Z",
+        "event": "stage_completed",
+        "stage": "receiving",
+        "detail": "accept_with_exceptions / FAIL"
+      },
+      {
+        "at": "2026-10-09T06:36:30Z",
+        "event": "stage_completed",
+        "stage": "prep",
+        "detail": "non_compliant / FAIL"
+      },
+      {
+        "at": "2026-10-09T06:36:41Z",
+        "event": "stage_completed",
+        "stage": "recovery",
+        "detail": "no_claim / PASS"
+      },
+      {
+        "at": "2026-10-09T06:36:41Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      },
+      {
+        "at": "2026-10-09T09:44:39Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "COMPLETED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T09:44:39Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      }
+    ]
+  },
+  {
+    "schema_version": "1.0",
+    "workflow_id": "WF-org_demo_alpha-UNIT-0006",
+    "flow_id": "standard-v1",
+    "org_id": "org_demo_alpha",
+    "subject_id": "UNIT-0006",
+    "context": {
+      "route": "unknown",
+      "returned": false
+    },
+    "status": "FAILED",
+    "status_reason": "stage did not complete: receiving, recovery",
+    "current_stage": "recovery",
+    "previous_stage": "receiving",
+    "stage_results": [
+      {
+        "stage": "receiving",
+        "agent_id": "receiving-backend@1",
+        "state": "error",
+        "skipped_reason": null,
+        "record_id": "RCV-PENDING-WF-org_demo_alpha-UNIT-0006-receiving",
+        "evidence_status": "error",
+        "verdict": "UNCERTAIN",
+        "outcome": "pending_review",
+        "needs_human": true,
+        "next_step_recommendation": {
+          "action": "review",
+          "reason": "no receiving record for UNIT-0006 in org_demo_alpha"
+        },
+        "runs": 1,
+        "attempts": 1,
+        "started_at": "2026-10-09T09:45:34Z",
+        "finished_at": "2026-10-09T09:45:34Z",
+        "duration_ms": 8,
+        "error": {
+          "code": "agent_rejected",
+          "message": "no receiving record for UNIT-0006 in org_demo_alpha",
+          "retryable": false,
+          "stage": "receiving",
+          "agent_id": "receiving-backend@1",
+          "at": "2026-10-09T09:45:34Z",
+          "detail": null
+        }
+      },
+      {
+        "stage": "prep",
+        "agent_id": "prep-backend@1",
+        "state": "skipped",
+        "skipped_reason": "route='unknown' not in ['fba']",
+        "record_id": null,
+        "evidence_status": null,
+        "verdict": null,
+        "outcome": null,
+        "needs_human": null,
+        "next_step_recommendation": null,
+        "runs": 0,
+        "attempts": 0,
+        "started_at": null,
+        "finished_at": null,
+        "duration_ms": null,
+        "error": null
+      },
+      {
+        "stage": "pack",
+        "agent_id": "pack-manager@1",
+        "state": "skipped",
+        "skipped_reason": "route='unknown' not in ['mfn']",
+        "record_id": null,
+        "evidence_status": null,
+        "verdict": null,
+        "outcome": null,
+        "needs_human": null,
+        "next_step_recommendation": null,
+        "runs": 0,
+        "attempts": 0,
+        "started_at": null,
+        "finished_at": null,
+        "duration_ms": null,
+        "error": null
+      },
+      {
+        "stage": "returns",
+        "agent_id": "returns-manager@1",
+        "state": "skipped",
+        "skipped_reason": "returned=False not in [True]",
+        "record_id": null,
+        "evidence_status": null,
+        "verdict": null,
+        "outcome": null,
+        "needs_human": null,
+        "next_step_recommendation": null,
+        "runs": 0,
+        "attempts": 0,
+        "started_at": null,
+        "finished_at": null,
+        "duration_ms": null,
+        "error": null
+      },
+      {
+        "stage": "recovery",
+        "agent_id": "recovery-stub@0",
+        "state": "error",
+        "skipped_reason": null,
+        "record_id": "RCY-PENDING-WF-org_demo_alpha-UNIT-0006-recovery",
+        "evidence_status": "error",
+        "verdict": "UNCERTAIN",
+        "outcome": "pending_review",
+        "needs_human": true,
+        "next_step_recommendation": {
+          "action": "review",
+          "reason": "unknown subject UNIT-0006 in org_demo_alpha"
+        },
+        "runs": 1,
+        "attempts": 1,
+        "started_at": "2026-10-09T09:45:34Z",
+        "finished_at": "2026-10-09T09:45:34Z",
+        "duration_ms": 3,
+        "error": {
+          "code": "agent_rejected",
+          "message": "unknown subject UNIT-0006 in org_demo_alpha",
+          "retryable": false,
+          "stage": "recovery",
+          "agent_id": "recovery-stub@0",
+          "at": "2026-10-09T09:45:34Z",
+          "detail": null
+        }
+      }
+    ],
+    "evidence_references": [
+      "RCV-PENDING-WF-org_demo_alpha-UNIT-0006-receiving",
+      "RCY-PENDING-WF-org_demo_alpha-UNIT-0006-recovery"
+    ],
+    "timestamps": {
+      "created_at": "2026-10-09T09:45:34Z",
+      "updated_at": "2026-10-09T09:45:34Z",
+      "completed_at": null
+    },
+    "errors": [
+      {
+        "code": "agent_rejected",
+        "message": "no receiving record for UNIT-0006 in org_demo_alpha",
+        "retryable": false,
+        "stage": "receiving",
+        "agent_id": "receiving-backend@1",
+        "at": "2026-10-09T09:45:34Z",
+        "detail": null
+      },
+      {
+        "code": "agent_rejected",
+        "message": "unknown subject UNIT-0006 in org_demo_alpha",
+        "retryable": false,
+        "stage": "recovery",
+        "agent_id": "recovery-stub@0",
+        "at": "2026-10-09T09:45:34Z",
+        "detail": null
+      }
+    ],
+    "overrides": [],
+    "halted": null,
+    "final_outcome": {
+      "workflow_id": "WF-org_demo_alpha-UNIT-0006",
+      "outcome": "INCOMPLETE",
+      "verdict": "UNCERTAIN",
+      "reason": "Stage did not complete: receiving, recovery.",
+      "needs_human": true,
+      "provisional": true,
+      "claimable_usd": null,
+      "contributing_records": [
+        "RCV-PENDING-WF-org_demo_alpha-UNIT-0006-receiving",
+        "RCY-PENDING-WF-org_demo_alpha-UNIT-0006-recovery"
+      ],
+      "effective_verdicts": {
+        "receiving": "UNCERTAIN",
+        "recovery": "UNCERTAIN"
+      },
+      "decided_by": "orchestrator",
+      "decided_at": "2026-10-09T09:45:34Z"
+    },
+    "transitions": [
+      {
+        "at": "2026-10-09T09:45:34Z",
+        "event": "workflow_created",
+        "stage": null,
+        "detail": "flow=standard-v1"
+      },
+      {
+        "at": "2026-10-09T09:45:34Z",
+        "event": "stage_skipped",
+        "stage": "prep",
+        "detail": "route='unknown' not in ['fba']"
+      },
+      {
+        "at": "2026-10-09T09:45:34Z",
+        "event": "stage_skipped",
+        "stage": "pack",
+        "detail": "route='unknown' not in ['mfn']"
+      },
+      {
+        "at": "2026-10-09T09:45:34Z",
+        "event": "stage_skipped",
+        "stage": "returns",
+        "detail": "returned=False not in [True]"
+      },
+      {
+        "at": "2026-10-09T09:45:34Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "PENDING",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T09:45:34Z",
+        "event": "stage_degraded",
+        "stage": "receiving",
+        "detail": "agent_rejected: recorded as error; flow policy decides what next"
+      },
+      {
+        "at": "2026-10-09T09:45:34Z",
+        "event": "stage_error",
+        "stage": "receiving",
+        "detail": "pending_review / UNCERTAIN"
+      },
+      {
+        "at": "2026-10-09T09:45:34Z",
+        "event": "stage_degraded",
+        "stage": "recovery",
+        "detail": "agent_rejected: recorded as error; flow policy decides what next"
+      },
+      {
+        "at": "2026-10-09T09:45:34Z",
+        "event": "stage_error",
+        "stage": "recovery",
+        "detail": "pending_review / UNCERTAIN"
+      },
+      {
+        "at": "2026-10-09T09:45:34Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "stage did not complete: receiving, recovery",
+        "from_status": "IN_PROGRESS",
+        "to_status": "FAILED"
+      }
+    ]
+  },
+  {
+    "schema_version": "1.0",
+    "workflow_id": "WF-org_demo_alpha-UNIT-0008",
+    "flow_id": "standard-v1",
+    "org_id": "org_demo_alpha",
+    "subject_id": "UNIT-0008",
+    "context": {
+      "route": "mfn",
+      "returned": false
+    },
+    "status": "COMPLETED",
+    "status_reason": "all required stages finished",
+    "current_stage": "recovery",
+    "previous_stage": "pack",
+    "stage_results": [
+      {
+        "stage": "receiving",
+        "agent_id": "receiving-stub@0",
+        "state": "completed",
+        "skipped_reason": null,
+        "record_id": "RCV-0008",
+        "evidence_status": "completed",
+        "verdict": "PASS",
+        "outcome": "accept",
+        "needs_human": false,
+        "next_step_recommendation": {
+          "action": "continue",
+          "reason": "backend processed; 0 failed check(s)"
+        },
+        "runs": 1,
+        "attempts": 1,
+        "started_at": "2026-10-09T06:39:00Z",
+        "finished_at": "2026-10-09T06:39:11Z",
+        "duration_ms": 10997,
+        "error": null
+      },
+      {
+        "stage": "prep",
+        "agent_id": "prep-backend@1",
+        "state": "skipped",
+        "skipped_reason": "route='mfn' not in ['fba']",
+        "record_id": null,
+        "evidence_status": null,
+        "verdict": null,
+        "outcome": null,
+        "needs_human": null,
+        "next_step_recommendation": null,
+        "runs": 0,
+        "attempts": 0,
+        "started_at": null,
+        "finished_at": null,
+        "duration_ms": null,
+        "error": null
+      },
+      {
+        "stage": "pack",
+        "agent_id": "pack-manager@1",
+        "state": "completed",
+        "skipped_reason": null,
+        "record_id": "PCK-WF-org_demo_alpha-UNIT-0008-pack",
+        "evidence_status": "completed",
+        "verdict": "PASS",
+        "outcome": "seal",
+        "needs_human": false,
+        "next_step_recommendation": {
+          "action": "continue",
+          "reason": "pack-manager seal; checks=5"
+        },
+        "runs": 1,
+        "attempts": 1,
+        "started_at": "2026-10-09T06:39:11Z",
+        "finished_at": "2026-10-09T06:39:22Z",
+        "duration_ms": 10784,
+        "error": null
+      },
+      {
+        "stage": "returns",
+        "agent_id": "returns-manager@1",
+        "state": "skipped",
+        "skipped_reason": "returned=False not in [True]",
+        "record_id": null,
+        "evidence_status": null,
+        "verdict": null,
+        "outcome": null,
+        "needs_human": null,
+        "next_step_recommendation": null,
+        "runs": 0,
+        "attempts": 0,
+        "started_at": null,
+        "finished_at": null,
+        "duration_ms": null,
+        "error": null
+      },
+      {
+        "stage": "recovery",
+        "agent_id": "recovery-manager@2",
+        "state": "completed",
+        "skipped_reason": null,
+        "record_id": "RCY-UNIT-0008",
+        "evidence_status": "completed",
+        "verdict": "PASS",
+        "outcome": "no_claim",
+        "needs_human": false,
+        "next_step_recommendation": {
+          "action": "complete",
+          "reason": "intelligent investigation: 0 charge(s), 0 claim(s)"
+        },
+        "runs": 1,
+        "attempts": 1,
+        "started_at": "2026-10-09T06:39:22Z",
+        "finished_at": "2026-10-09T06:39:33Z",
+        "duration_ms": 10831,
+        "error": null
+      }
+    ],
+    "evidence_references": [
+      "RCV-0008",
+      "PCK-WF-org_demo_alpha-UNIT-0008-pack",
+      "RCY-UNIT-0008"
+    ],
+    "timestamps": {
+      "created_at": "2026-10-09T06:39:00Z",
+      "updated_at": "2026-10-09T06:39:33Z",
+      "completed_at": "2026-10-09T06:39:33Z"
+    },
+    "errors": [],
+    "overrides": [],
+    "halted": null,
+    "final_outcome": {
+      "workflow_id": "WF-org_demo_alpha-UNIT-0008",
+      "outcome": "CLEAN",
+      "verdict": "PASS",
+      "reason": "All applicable stages passed.",
+      "needs_human": false,
+      "provisional": false,
+      "claimable_usd": null,
+      "contributing_records": [
+        "RCV-0008",
+        "PCK-WF-org_demo_alpha-UNIT-0008-pack",
+        "RCY-UNIT-0008"
+      ],
+      "effective_verdicts": {
+        "receiving": "PASS",
+        "pack": "PASS",
+        "recovery": "PASS"
+      },
+      "decided_by": "orchestrator",
+      "decided_at": "2026-10-09T06:39:33Z"
+    },
+    "transitions": [
+      {
+        "at": "2026-10-09T06:39:00Z",
+        "event": "workflow_created",
+        "stage": null,
+        "detail": "flow=standard-v1"
+      },
+      {
+        "at": "2026-10-09T06:39:00Z",
+        "event": "stage_skipped",
+        "stage": "prep",
+        "detail": "route='mfn' not in ['fba']"
+      },
+      {
+        "at": "2026-10-09T06:39:00Z",
+        "event": "stage_skipped",
+        "stage": "returns",
+        "detail": "returned=False not in [True]"
+      },
+      {
+        "at": "2026-10-09T06:39:00Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "PENDING",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T06:39:11Z",
+        "event": "stage_completed",
+        "stage": "receiving",
+        "detail": "accept / PASS"
+      },
+      {
+        "at": "2026-10-09T06:39:22Z",
+        "event": "stage_completed",
+        "stage": "pack",
+        "detail": "seal / PASS"
+      },
+      {
+        "at": "2026-10-09T06:39:33Z",
+        "event": "stage_completed",
+        "stage": "recovery",
+        "detail": "no_claim / PASS"
+      },
+      {
+        "at": "2026-10-09T06:39:33Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      }
+    ]
+  },
+  {
+    "schema_version": "1.0",
+    "workflow_id": "WF-org_demo_alpha-UNIT-0010",
+    "flow_id": "standard-v1",
+    "org_id": "org_demo_alpha",
+    "subject_id": "UNIT-0010",
+    "context": {
+      "route": "fba",
+      "returned": false
+    },
+    "status": "COMPLETED",
+    "status_reason": "all required stages finished",
+    "current_stage": "recovery",
+    "previous_stage": "prep",
+    "stage_results": [
+      {
+        "stage": "receiving",
+        "agent_id": "receiving-stub@0",
+        "state": "completed",
+        "skipped_reason": null,
+        "record_id": "RCV-0010",
+        "evidence_status": "completed",
+        "verdict": "PASS",
+        "outcome": "accept",
+        "needs_human": false,
+        "next_step_recommendation": {
+          "action": "continue",
+          "reason": "backend processed; 0 failed check(s)"
+        },
+        "runs": 1,
+        "attempts": 1,
+        "started_at": "2026-10-09T06:40:26Z",
+        "finished_at": "2026-10-09T06:40:37Z",
+        "duration_ms": 11064,
+        "error": null
+      },
+      {
+        "stage": "prep",
+        "agent_id": "prep-stub@0",
+        "state": "completed",
+        "skipped_reason": null,
+        "record_id": "PRP-0010",
+        "evidence_status": "completed",
+        "verdict": "FAIL",
+        "outcome": "non_compliant",
+        "needs_human": false,
+        "next_step_recommendation": {
+          "action": "route_to_recovery",
+          "reason": "backend processed; 1 failed check(s)"
+        },
+        "runs": 1,
+        "attempts": 1,
+        "started_at": "2026-10-09T06:40:37Z",
+        "finished_at": "2026-10-09T06:40:46Z",
+        "duration_ms": 9038,
+        "error": null
+      },
+      {
+        "stage": "pack",
+        "agent_id": "pack-manager@1",
+        "state": "skipped",
+        "skipped_reason": "route='fba' not in ['mfn']",
+        "record_id": null,
+        "evidence_status": null,
+        "verdict": null,
+        "outcome": null,
+        "needs_human": null,
+        "next_step_recommendation": null,
+        "runs": 0,
+        "attempts": 0,
+        "started_at": null,
+        "finished_at": null,
+        "duration_ms": null,
+        "error": null
+      },
+      {
+        "stage": "returns",
+        "agent_id": "returns-manager@1",
+        "state": "skipped",
+        "skipped_reason": "returned=False not in [True]",
+        "record_id": null,
+        "evidence_status": null,
+        "verdict": null,
+        "outcome": null,
+        "needs_human": null,
+        "next_step_recommendation": null,
+        "runs": 0,
+        "attempts": 0,
+        "started_at": null,
+        "finished_at": null,
+        "duration_ms": null,
+        "error": null
+      },
+      {
+        "stage": "recovery",
+        "agent_id": "recovery-manager@2",
+        "state": "completed",
+        "skipped_reason": null,
+        "record_id": "RCY-UNIT-0010",
+        "evidence_status": "completed",
+        "verdict": "PASS",
+        "outcome": "no_claim",
+        "needs_human": false,
+        "next_step_recommendation": {
+          "action": "complete",
+          "reason": "intelligent investigation: 0 charge(s), 0 claim(s)"
+        },
+        "runs": 1,
+        "attempts": 1,
+        "started_at": "2026-10-09T06:40:46Z",
+        "finished_at": "2026-10-09T06:40:55Z",
+        "duration_ms": 8811,
+        "error": null
+      }
+    ],
+    "evidence_references": [
+      "RCV-0010",
+      "PRP-0010",
+      "RCY-UNIT-0010"
+    ],
+    "timestamps": {
+      "created_at": "2026-10-09T06:40:26Z",
+      "updated_at": "2026-10-09T06:40:55Z",
+      "completed_at": "2026-10-09T06:40:55Z"
+    },
+    "errors": [],
+    "overrides": [],
+    "halted": null,
+    "final_outcome": {
+      "workflow_id": "WF-org_demo_alpha-UNIT-0010",
+      "outcome": "EXCEPTION",
+      "verdict": "FAIL",
+      "reason": "Failed verdict from: prep; no claim recommended.",
+      "needs_human": false,
+      "provisional": false,
+      "claimable_usd": null,
+      "contributing_records": [
+        "RCV-0010",
+        "PRP-0010",
+        "RCY-UNIT-0010"
+      ],
+      "effective_verdicts": {
+        "receiving": "PASS",
+        "prep": "FAIL",
+        "recovery": "PASS"
+      },
+      "decided_by": "orchestrator",
+      "decided_at": "2026-10-09T06:40:55Z"
+    },
+    "transitions": [
+      {
+        "at": "2026-10-09T06:40:26Z",
+        "event": "workflow_created",
+        "stage": null,
+        "detail": "flow=standard-v1"
+      },
+      {
+        "at": "2026-10-09T06:40:26Z",
+        "event": "stage_skipped",
+        "stage": "pack",
+        "detail": "route='fba' not in ['mfn']"
+      },
+      {
+        "at": "2026-10-09T06:40:26Z",
+        "event": "stage_skipped",
+        "stage": "returns",
+        "detail": "returned=False not in [True]"
+      },
+      {
+        "at": "2026-10-09T06:40:26Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "PENDING",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T06:40:37Z",
+        "event": "stage_completed",
+        "stage": "receiving",
+        "detail": "accept / PASS"
+      },
+      {
+        "at": "2026-10-09T06:40:46Z",
+        "event": "stage_completed",
+        "stage": "prep",
+        "detail": "non_compliant / FAIL"
+      },
+      {
+        "at": "2026-10-09T06:40:55Z",
+        "event": "stage_completed",
+        "stage": "recovery",
+        "detail": "no_claim / PASS"
+      },
+      {
+        "at": "2026-10-09T06:40:55Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      }
+    ]
+  },
+  {
+    "schema_version": "1.0",
+    "workflow_id": "WF-org_demo_alpha-UNIT-0014",
+    "flow_id": "standard-v1",
+    "org_id": "org_demo_alpha",
+    "subject_id": "UNIT-0014",
+    "context": {
+      "route": "fba",
+      "returned": true
+    },
+    "status": "FAILED",
+    "status_reason": "stage did not complete: returns",
+    "current_stage": "recovery",
+    "previous_stage": "returns",
+    "stage_results": [
+      {
+        "stage": "receiving",
+        "agent_id": "receiving-stub@0",
+        "state": "completed",
+        "skipped_reason": null,
+        "record_id": "RCV-0014",
+        "evidence_status": "completed",
+        "verdict": "PASS",
+        "outcome": "accept",
+        "needs_human": false,
+        "next_step_recommendation": {
+          "action": "continue",
+          "reason": "backend processed; 0 failed check(s)"
+        },
+        "runs": 1,
+        "attempts": 1,
+        "started_at": "2026-10-09T06:43:10Z",
+        "finished_at": "2026-10-09T06:43:15Z",
+        "duration_ms": 5008,
+        "error": null
+      },
+      {
+        "stage": "prep",
+        "agent_id": "prep-stub@0",
+        "state": "completed",
+        "skipped_reason": null,
+        "record_id": "PRP-0014",
+        "evidence_status": "completed",
+        "verdict": "PASS",
+        "outcome": "compliant",
+        "needs_human": false,
+        "next_step_recommendation": {
+          "action": "continue",
+          "reason": "backend processed; 0 failed check(s)"
+        },
+        "runs": 1,
+        "attempts": 1,
+        "started_at": "2026-10-09T06:43:15Z",
+        "finished_at": "2026-10-09T06:43:26Z",
+        "duration_ms": 10940,
+        "error": null
+      },
+      {
+        "stage": "pack",
+        "agent_id": "pack-manager@1",
+        "state": "skipped",
+        "skipped_reason": "route='fba' not in ['mfn']",
+        "record_id": null,
+        "evidence_status": null,
+        "verdict": null,
+        "outcome": null,
+        "needs_human": null,
+        "next_step_recommendation": null,
+        "runs": 0,
+        "attempts": 0,
+        "started_at": null,
+        "finished_at": null,
+        "duration_ms": null,
+        "error": null
+      },
+      {
+        "stage": "returns",
+        "agent_id": "returns-manager@1",
+        "state": "error",
+        "skipped_reason": null,
+        "record_id": "RTN-PENDING-WF-org_demo_alpha-UNIT-0014-returns",
+        "evidence_status": "pending",
+        "verdict": "UNCERTAIN",
+        "outcome": "pending_review",
+        "needs_human": true,
+        "next_step_recommendation": {
+          "action": "retry",
+          "reason": "ConnectError: [WinError 10061] No connection could be made because the target machine actively refused it"
+        },
+        "runs": 1,
+        "attempts": 2,
+        "started_at": "2026-10-09T06:43:26Z",
+        "finished_at": "2026-10-09T06:43:35Z",
+        "duration_ms": 8619,
+        "error": {
+          "code": "agent_unavailable",
+          "message": "ConnectError: [WinError 10061] No connection could be made because the target machine actively refused it",
+          "retryable": true,
+          "stage": "returns",
+          "agent_id": "returns-manager@1",
+          "at": "2026-10-09T06:43:35Z",
+          "detail": null
+        }
+      },
+      {
+        "stage": "recovery",
+        "agent_id": "recovery-manager@2",
+        "state": "completed",
+        "skipped_reason": null,
+        "record_id": "RCY-UNIT-0014",
+        "evidence_status": "completed",
+        "verdict": "FAIL",
+        "outcome": "claim_recommended",
+        "needs_human": false,
+        "next_step_recommendation": {
+          "action": "complete",
+          "reason": "intelligent investigation: 4 charge(s), 1 claim(s)"
+        },
+        "runs": 1,
+        "attempts": 1,
+        "started_at": "2026-10-09T06:43:35Z",
+        "finished_at": "2026-10-09T06:43:50Z",
+        "duration_ms": 14893,
+        "error": null
+      }
+    ],
+    "evidence_references": [
+      "RCV-0014",
+      "PRP-0014",
+      "RTN-PENDING-WF-org_demo_alpha-UNIT-0014-returns",
+      "RCY-UNIT-0014"
+    ],
+    "timestamps": {
+      "created_at": "2026-10-09T06:43:10Z",
+      "updated_at": "2026-10-09T06:43:50Z",
+      "completed_at": null
+    },
+    "errors": [
+      {
+        "code": "agent_unavailable",
+        "message": "ConnectError: [WinError 10061] No connection could be made because the target machine actively refused it",
+        "retryable": true,
+        "stage": "returns",
+        "agent_id": "returns-manager@1",
+        "at": "2026-10-09T06:43:35Z",
+        "detail": null
+      }
+    ],
+    "overrides": [],
+    "halted": null,
+    "final_outcome": {
+      "workflow_id": "WF-org_demo_alpha-UNIT-0014",
+      "outcome": "CLAIM_RECOMMENDED",
+      "verdict": "FAIL",
+      "reason": "Recovery contradicted at least one charge (claimable $2.00). Flagged for review: returns, returns.",
+      "needs_human": true,
+      "provisional": true,
+      "claimable_usd": 2.0,
+      "contributing_records": [
+        "RCV-0014",
+        "PRP-0014",
+        "RTN-PENDING-WF-org_demo_alpha-UNIT-0014-returns",
+        "RCY-UNIT-0014"
+      ],
+      "effective_verdicts": {
+        "receiving": "PASS",
+        "prep": "PASS",
+        "returns": "UNCERTAIN",
+        "recovery": "FAIL"
+      },
+      "decided_by": "orchestrator",
+      "decided_at": "2026-10-09T06:43:50Z"
+    },
+    "transitions": [
+      {
+        "at": "2026-10-09T06:43:10Z",
+        "event": "workflow_created",
+        "stage": null,
+        "detail": "flow=standard-v1"
+      },
+      {
+        "at": "2026-10-09T06:43:10Z",
+        "event": "stage_skipped",
+        "stage": "pack",
+        "detail": "route='fba' not in ['mfn']"
+      },
+      {
+        "at": "2026-10-09T06:43:10Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "PENDING",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T06:43:15Z",
+        "event": "stage_completed",
+        "stage": "receiving",
+        "detail": "accept / PASS"
+      },
+      {
+        "at": "2026-10-09T06:43:26Z",
+        "event": "stage_completed",
+        "stage": "prep",
+        "detail": "compliant / PASS"
+      },
+      {
+        "at": "2026-10-09T06:43:31Z",
+        "event": "retry",
+        "stage": "returns",
+        "detail": "ConnectError: [WinError 10061] No connection could be made because the target machine actively refused it"
+      },
+      {
+        "at": "2026-10-09T06:43:35Z",
+        "event": "stage_degraded",
+        "stage": "returns",
+        "detail": "agent_unavailable: recorded as pending; flow policy decides what next"
+      },
+      {
+        "at": "2026-10-09T06:43:35Z",
+        "event": "stage_error",
+        "stage": "returns",
+        "detail": "pending_review / UNCERTAIN"
+      },
+      {
+        "at": "2026-10-09T06:43:50Z",
+        "event": "stage_completed",
+        "stage": "recovery",
+        "detail": "claim_recommended / FAIL"
+      },
+      {
+        "at": "2026-10-09T06:43:50Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "stage did not complete: returns",
+        "from_status": "IN_PROGRESS",
+        "to_status": "FAILED"
+      }
+    ]
+  },
+  {
+    "schema_version": "1.0",
+    "workflow_id": "WF-org_demo_bravo-UNIT-0018",
+    "flow_id": "standard-v1",
+    "org_id": "org_demo_bravo",
+    "subject_id": "UNIT-0018",
+    "context": {
+      "route": "fba",
+      "returned": true
+    },
+    "status": "FAILED",
+    "status_reason": "stage did not complete: returns",
+    "current_stage": "recovery",
+    "previous_stage": "returns",
+    "stage_results": [
+      {
+        "stage": "receiving",
+        "agent_id": "receiving-stub@0",
+        "state": "completed",
+        "skipped_reason": null,
+        "record_id": "RCV-0018",
+        "evidence_status": "completed",
+        "verdict": "FAIL",
+        "outcome": "accept_with_exceptions",
+        "needs_human": false,
+        "next_step_recommendation": {
+          "action": "route_to_recovery",
+          "reason": "backend processed; 1 failed check(s)"
+        },
+        "runs": 1,
+        "attempts": 1,
+        "started_at": "2026-10-09T06:46:00Z",
+        "finished_at": "2026-10-09T06:46:08Z",
+        "duration_ms": 7779,
+        "error": null
+      },
+      {
+        "stage": "prep",
+        "agent_id": "prep-stub@0",
+        "state": "completed",
+        "skipped_reason": null,
+        "record_id": "PRP-0018",
+        "evidence_status": "completed",
+        "verdict": "PASS",
+        "outcome": "compliant",
+        "needs_human": false,
+        "next_step_recommendation": {
+          "action": "continue",
+          "reason": "backend processed; 0 failed check(s)"
+        },
+        "runs": 1,
+        "attempts": 1,
+        "started_at": "2026-10-09T06:46:08Z",
+        "finished_at": "2026-10-09T06:46:12Z",
+        "duration_ms": 4857,
+        "error": null
+      },
+      {
+        "stage": "pack",
+        "agent_id": "pack-manager@1",
+        "state": "skipped",
+        "skipped_reason": "route='fba' not in ['mfn']",
+        "record_id": null,
+        "evidence_status": null,
+        "verdict": null,
+        "outcome": null,
+        "needs_human": null,
+        "next_step_recommendation": null,
+        "runs": 0,
+        "attempts": 0,
+        "started_at": null,
+        "finished_at": null,
+        "duration_ms": null,
+        "error": null
+      },
+      {
+        "stage": "returns",
+        "agent_id": "returns-manager@1",
+        "state": "error",
+        "skipped_reason": null,
+        "record_id": "RTN-PENDING-WF-org_demo_bravo-UNIT-0018-returns",
+        "evidence_status": "pending",
+        "verdict": "UNCERTAIN",
+        "outcome": "pending_review",
+        "needs_human": true,
+        "next_step_recommendation": {
+          "action": "retry",
+          "reason": "ConnectError: [WinError 10061] No connection could be made because the target machine actively refused it"
+        },
+        "runs": 1,
+        "attempts": 2,
+        "started_at": "2026-10-09T06:46:12Z",
+        "finished_at": "2026-10-09T06:46:21Z",
+        "duration_ms": 8660,
+        "error": {
+          "code": "agent_unavailable",
+          "message": "ConnectError: [WinError 10061] No connection could be made because the target machine actively refused it",
+          "retryable": true,
+          "stage": "returns",
+          "agent_id": "returns-manager@1",
+          "at": "2026-10-09T06:46:21Z",
+          "detail": null
+        }
+      },
+      {
+        "stage": "recovery",
+        "agent_id": "recovery-manager@2",
+        "state": "completed",
+        "skipped_reason": null,
+        "record_id": "RCY-UNIT-0018",
+        "evidence_status": "completed",
+        "verdict": "FAIL",
+        "outcome": "claim_recommended",
+        "needs_human": false,
+        "next_step_recommendation": {
+          "action": "complete",
+          "reason": "intelligent investigation: 2 charge(s), 1 claim(s)"
+        },
+        "runs": 1,
+        "attempts": 1,
+        "started_at": "2026-10-09T06:46:21Z",
+        "finished_at": "2026-10-09T06:46:35Z",
+        "duration_ms": 13541,
+        "error": null
+      }
+    ],
+    "evidence_references": [
+      "RCV-0018",
+      "PRP-0018",
+      "RTN-PENDING-WF-org_demo_bravo-UNIT-0018-returns",
+      "RCY-UNIT-0018"
+    ],
+    "timestamps": {
+      "created_at": "2026-10-09T06:46:00Z",
+      "updated_at": "2026-10-09T06:46:35Z",
+      "completed_at": null
+    },
+    "errors": [
+      {
+        "code": "agent_unavailable",
+        "message": "ConnectError: [WinError 10061] No connection could be made because the target machine actively refused it",
+        "retryable": true,
+        "stage": "returns",
+        "agent_id": "returns-manager@1",
+        "at": "2026-10-09T06:46:21Z",
+        "detail": null
+      }
+    ],
+    "overrides": [],
+    "halted": null,
+    "final_outcome": {
+      "workflow_id": "WF-org_demo_bravo-UNIT-0018",
+      "outcome": "CLAIM_RECOMMENDED",
+      "verdict": "FAIL",
+      "reason": "Recovery contradicted at least one charge (claimable $1.00). Flagged for review: returns, returns.",
+      "needs_human": true,
+      "provisional": true,
+      "claimable_usd": 1.0,
+      "contributing_records": [
+        "RCV-0018",
+        "PRP-0018",
+        "RTN-PENDING-WF-org_demo_bravo-UNIT-0018-returns",
+        "RCY-UNIT-0018"
+      ],
+      "effective_verdicts": {
+        "receiving": "FAIL",
+        "prep": "PASS",
+        "returns": "UNCERTAIN",
+        "recovery": "FAIL"
+      },
+      "decided_by": "orchestrator",
+      "decided_at": "2026-10-09T06:46:35Z"
+    },
+    "transitions": [
+      {
+        "at": "2026-10-09T06:46:00Z",
+        "event": "workflow_created",
+        "stage": null,
+        "detail": "flow=standard-v1"
+      },
+      {
+        "at": "2026-10-09T06:46:00Z",
+        "event": "stage_skipped",
+        "stage": "pack",
+        "detail": "route='fba' not in ['mfn']"
+      },
+      {
+        "at": "2026-10-09T06:46:00Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "PENDING",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T06:46:08Z",
+        "event": "stage_completed",
+        "stage": "receiving",
+        "detail": "accept_with_exceptions / FAIL"
+      },
+      {
+        "at": "2026-10-09T06:46:12Z",
+        "event": "stage_completed",
+        "stage": "prep",
+        "detail": "compliant / PASS"
+      },
+      {
+        "at": "2026-10-09T06:46:17Z",
+        "event": "retry",
+        "stage": "returns",
+        "detail": "ConnectError: [WinError 10061] No connection could be made because the target machine actively refused it"
+      },
+      {
+        "at": "2026-10-09T06:46:21Z",
+        "event": "stage_degraded",
+        "stage": "returns",
+        "detail": "agent_unavailable: recorded as pending; flow policy decides what next"
+      },
+      {
+        "at": "2026-10-09T06:46:21Z",
+        "event": "stage_error",
+        "stage": "returns",
+        "detail": "pending_review / UNCERTAIN"
+      },
+      {
+        "at": "2026-10-09T06:46:35Z",
+        "event": "stage_completed",
+        "stage": "recovery",
+        "detail": "claim_recommended / FAIL"
+      },
+      {
+        "at": "2026-10-09T06:46:35Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "stage did not complete: returns",
+        "from_status": "IN_PROGRESS",
+        "to_status": "FAILED"
+      }
+    ]
+  },
+  {
+    "schema_version": "1.0",
+    "workflow_id": "WF-org_demo_alpha-UNIT-0023",
+    "flow_id": "standard-v1",
+    "org_id": "org_demo_alpha",
+    "subject_id": "UNIT-0023",
+    "context": {
+      "route": "mfn",
+      "returned": true
+    },
+    "status": "FAILED",
+    "status_reason": "stage did not complete: returns",
+    "current_stage": "recovery",
+    "previous_stage": "returns",
+    "stage_results": [
+      {
+        "stage": "receiving",
+        "agent_id": "receiving-stub@0",
+        "state": "completed",
+        "skipped_reason": null,
+        "record_id": "RCV-0023",
+        "evidence_status": "completed",
+        "verdict": "PASS",
+        "outcome": "accept",
+        "needs_human": false,
+        "next_step_recommendation": {
+          "action": "continue",
+          "reason": "backend processed; 0 failed check(s)"
+        },
+        "runs": 1,
+        "attempts": 1,
+        "started_at": "2026-10-09T06:49:41Z",
+        "finished_at": "2026-10-09T06:49:52Z",
+        "duration_ms": 10883,
+        "error": null
+      },
+      {
+        "stage": "prep",
+        "agent_id": "prep-backend@1",
+        "state": "skipped",
+        "skipped_reason": "route='mfn' not in ['fba']",
+        "record_id": null,
+        "evidence_status": null,
+        "verdict": null,
+        "outcome": null,
+        "needs_human": null,
+        "next_step_recommendation": null,
+        "runs": 0,
+        "attempts": 0,
+        "started_at": null,
+        "finished_at": null,
+        "duration_ms": null,
+        "error": null
+      },
+      {
+        "stage": "pack",
+        "agent_id": "pack-manager@1",
+        "state": "completed",
+        "skipped_reason": null,
+        "record_id": "PCK-WF-org_demo_alpha-UNIT-0023-pack",
+        "evidence_status": "completed",
+        "verdict": "PASS",
+        "outcome": "seal",
+        "needs_human": false,
+        "next_step_recommendation": {
+          "action": "continue",
+          "reason": "pack-manager seal; checks=5"
+        },
+        "runs": 1,
+        "attempts": 1,
+        "started_at": "2026-10-09T06:49:52Z",
+        "finished_at": "2026-10-09T06:50:03Z",
+        "duration_ms": 10859,
+        "error": null
+      },
+      {
+        "stage": "returns",
+        "agent_id": "returns-manager@1",
+        "state": "error",
+        "skipped_reason": null,
+        "record_id": "RTN-PENDING-WF-org_demo_alpha-UNIT-0023-returns",
+        "evidence_status": "pending",
+        "verdict": "UNCERTAIN",
+        "outcome": "pending_review",
+        "needs_human": true,
+        "next_step_recommendation": {
+          "action": "retry",
+          "reason": "ConnectError: [WinError 10061] No connection could be made because the target machine actively refused it"
+        },
+        "runs": 1,
+        "attempts": 2,
+        "started_at": "2026-10-09T06:50:03Z",
+        "finished_at": "2026-10-09T06:50:12Z",
+        "duration_ms": 8781,
+        "error": {
+          "code": "agent_unavailable",
+          "message": "ConnectError: [WinError 10061] No connection could be made because the target machine actively refused it",
+          "retryable": true,
+          "stage": "returns",
+          "agent_id": "returns-manager@1",
+          "at": "2026-10-09T06:50:12Z",
+          "detail": null
+        }
+      },
+      {
+        "stage": "recovery",
+        "agent_id": "recovery-manager@2",
+        "state": "completed",
+        "skipped_reason": null,
+        "record_id": "RCY-UNIT-0023",
+        "evidence_status": "completed",
+        "verdict": "PASS",
+        "outcome": "no_claim",
+        "needs_human": false,
+        "next_step_recommendation": {
+          "action": "complete",
+          "reason": "intelligent investigation: 0 charge(s), 0 claim(s)"
+        },
+        "runs": 1,
+        "attempts": 1,
+        "started_at": "2026-10-09T06:50:12Z",
+        "finished_at": "2026-10-09T06:50:23Z",
+        "duration_ms": 10990,
+        "error": null
+      }
+    ],
+    "evidence_references": [
+      "RCV-0023",
+      "PCK-WF-org_demo_alpha-UNIT-0023-pack",
+      "RTN-PENDING-WF-org_demo_alpha-UNIT-0023-returns",
+      "RCY-UNIT-0023"
+    ],
+    "timestamps": {
+      "created_at": "2026-10-09T06:49:41Z",
+      "updated_at": "2026-10-09T06:50:23Z",
+      "completed_at": null
+    },
+    "errors": [
+      {
+        "code": "agent_unavailable",
+        "message": "ConnectError: [WinError 10061] No connection could be made because the target machine actively refused it",
+        "retryable": true,
+        "stage": "returns",
+        "agent_id": "returns-manager@1",
+        "at": "2026-10-09T06:50:12Z",
+        "detail": null
+      }
+    ],
+    "overrides": [],
+    "halted": null,
+    "final_outcome": {
+      "workflow_id": "WF-org_demo_alpha-UNIT-0023",
+      "outcome": "INCOMPLETE",
+      "verdict": "UNCERTAIN",
+      "reason": "Stage did not complete: returns.",
+      "needs_human": true,
+      "provisional": true,
+      "claimable_usd": null,
+      "contributing_records": [
+        "RCV-0023",
+        "PCK-WF-org_demo_alpha-UNIT-0023-pack",
+        "RTN-PENDING-WF-org_demo_alpha-UNIT-0023-returns",
+        "RCY-UNIT-0023"
+      ],
+      "effective_verdicts": {
+        "receiving": "PASS",
+        "pack": "PASS",
+        "returns": "UNCERTAIN",
+        "recovery": "PASS"
+      },
+      "decided_by": "orchestrator",
+      "decided_at": "2026-10-09T06:50:23Z"
+    },
+    "transitions": [
+      {
+        "at": "2026-10-09T06:49:41Z",
+        "event": "workflow_created",
+        "stage": null,
+        "detail": "flow=standard-v1"
+      },
+      {
+        "at": "2026-10-09T06:49:41Z",
+        "event": "stage_skipped",
+        "stage": "prep",
+        "detail": "route='mfn' not in ['fba']"
+      },
+      {
+        "at": "2026-10-09T06:49:41Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "PENDING",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T06:49:52Z",
+        "event": "stage_completed",
+        "stage": "receiving",
+        "detail": "accept / PASS"
+      },
+      {
+        "at": "2026-10-09T06:50:03Z",
+        "event": "stage_completed",
+        "stage": "pack",
+        "detail": "seal / PASS"
+      },
+      {
+        "at": "2026-10-09T06:50:07Z",
+        "event": "retry",
+        "stage": "returns",
+        "detail": "ConnectError: [WinError 10061] No connection could be made because the target machine actively refused it"
+      },
+      {
+        "at": "2026-10-09T06:50:12Z",
+        "event": "stage_degraded",
+        "stage": "returns",
+        "detail": "agent_unavailable: recorded as pending; flow policy decides what next"
+      },
+      {
+        "at": "2026-10-09T06:50:12Z",
+        "event": "stage_error",
+        "stage": "returns",
+        "detail": "pending_review / UNCERTAIN"
+      },
+      {
+        "at": "2026-10-09T06:50:23Z",
+        "event": "stage_completed",
+        "stage": "recovery",
+        "detail": "no_claim / PASS"
+      },
+      {
+        "at": "2026-10-09T06:50:23Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "stage did not complete: returns",
+        "from_status": "IN_PROGRESS",
+        "to_status": "FAILED"
+      }
+    ]
+  },
+  {
+    "schema_version": "1.0",
+    "workflow_id": "WF-org_demo_alpha-UNIT-0025",
+    "flow_id": "standard-v1",
+    "org_id": "org_demo_alpha",
+    "subject_id": "UNIT-0025",
+    "context": {
+      "route": "fba",
+      "returned": false
+    },
+    "status": "COMPLETED",
+    "status_reason": "all required stages finished",
+    "current_stage": "recovery",
+    "previous_stage": "prep",
+    "stage_results": [
+      {
+        "stage": "receiving",
+        "agent_id": "receiving-stub@0",
+        "state": "completed",
+        "skipped_reason": null,
+        "record_id": "RCV-0025",
+        "evidence_status": "completed",
+        "verdict": "FAIL",
+        "outcome": "accept_with_exceptions",
+        "needs_human": false,
+        "next_step_recommendation": {
+          "action": "route_to_recovery",
+          "reason": "backend processed; 2 failed check(s)"
+        },
+        "runs": 1,
+        "attempts": 1,
+        "started_at": "2026-10-09T06:51:19Z",
+        "finished_at": "2026-10-09T06:51:30Z",
+        "duration_ms": 11171,
+        "error": null
+      },
+      {
+        "stage": "prep",
+        "agent_id": "prep-stub@0",
+        "state": "completed",
+        "skipped_reason": null,
+        "record_id": "PRP-0025",
+        "evidence_status": "completed",
+        "verdict": "PASS",
+        "outcome": "compliant",
+        "needs_human": false,
+        "next_step_recommendation": {
+          "action": "continue",
+          "reason": "backend processed; 0 failed check(s)"
+        },
+        "runs": 1,
+        "attempts": 1,
+        "started_at": "2026-10-09T06:51:30Z",
+        "finished_at": "2026-10-09T06:51:41Z",
+        "duration_ms": 10865,
+        "error": null
+      },
+      {
+        "stage": "pack",
+        "agent_id": "pack-manager@1",
+        "state": "skipped",
+        "skipped_reason": "route='fba' not in ['mfn']",
+        "record_id": null,
+        "evidence_status": null,
+        "verdict": null,
+        "outcome": null,
+        "needs_human": null,
+        "next_step_recommendation": null,
+        "runs": 0,
+        "attempts": 0,
+        "started_at": null,
+        "finished_at": null,
+        "duration_ms": null,
+        "error": null
+      },
+      {
+        "stage": "returns",
+        "agent_id": "returns-manager@1",
+        "state": "skipped",
+        "skipped_reason": "returned=False not in [True]",
+        "record_id": null,
+        "evidence_status": null,
+        "verdict": null,
+        "outcome": null,
+        "needs_human": null,
+        "next_step_recommendation": null,
+        "runs": 0,
+        "attempts": 0,
+        "started_at": null,
+        "finished_at": null,
+        "duration_ms": null,
+        "error": null
+      },
+      {
+        "stage": "recovery",
+        "agent_id": "recovery-manager@2",
+        "state": "completed",
+        "skipped_reason": null,
+        "record_id": "RCY-UNIT-0025",
+        "evidence_status": "completed",
+        "verdict": "UNCERTAIN",
+        "outcome": "insufficient_evidence",
+        "needs_human": false,
+        "next_step_recommendation": {
+          "action": "complete",
+          "reason": "intelligent investigation: 1 charge(s), 0 claim(s)"
+        },
+        "runs": 1,
+        "attempts": 1,
+        "started_at": "2026-10-09T06:51:41Z",
+        "finished_at": "2026-10-09T06:51:53Z",
+        "duration_ms": 11941,
+        "error": null
+      }
+    ],
+    "evidence_references": [
+      "RCV-0025",
+      "PRP-0025",
+      "RCY-UNIT-0025"
+    ],
+    "timestamps": {
+      "created_at": "2026-10-09T06:51:19Z",
+      "updated_at": "2026-10-09T06:51:53Z",
+      "completed_at": "2026-10-09T06:51:53Z"
+    },
+    "errors": [],
+    "overrides": [],
+    "halted": null,
+    "final_outcome": {
+      "workflow_id": "WF-org_demo_alpha-UNIT-0025",
+      "outcome": "EXCEPTION",
+      "verdict": "FAIL",
+      "reason": "Failed verdict from: receiving; no claim recommended.",
+      "needs_human": false,
+      "provisional": false,
+      "claimable_usd": null,
+      "contributing_records": [
+        "RCV-0025",
+        "PRP-0025",
+        "RCY-UNIT-0025"
+      ],
+      "effective_verdicts": {
+        "receiving": "FAIL",
+        "prep": "PASS",
+        "recovery": "UNCERTAIN"
+      },
+      "decided_by": "orchestrator",
+      "decided_at": "2026-10-09T06:51:53Z"
+    },
+    "transitions": [
+      {
+        "at": "2026-10-09T06:51:19Z",
+        "event": "workflow_created",
+        "stage": null,
+        "detail": "flow=standard-v1"
+      },
+      {
+        "at": "2026-10-09T06:51:19Z",
+        "event": "stage_skipped",
+        "stage": "pack",
+        "detail": "route='fba' not in ['mfn']"
+      },
+      {
+        "at": "2026-10-09T06:51:19Z",
+        "event": "stage_skipped",
+        "stage": "returns",
+        "detail": "returned=False not in [True]"
+      },
+      {
+        "at": "2026-10-09T06:51:19Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "PENDING",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T06:51:30Z",
+        "event": "stage_completed",
+        "stage": "receiving",
+        "detail": "accept_with_exceptions / FAIL"
+      },
+      {
+        "at": "2026-10-09T06:51:41Z",
+        "event": "stage_completed",
+        "stage": "prep",
+        "detail": "compliant / PASS"
+      },
+      {
+        "at": "2026-10-09T06:51:53Z",
+        "event": "stage_completed",
+        "stage": "recovery",
+        "detail": "insufficient_evidence / UNCERTAIN"
+      },
+      {
+        "at": "2026-10-09T06:51:53Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      }
+    ]
+  },
+  {
+    "schema_version": "1.0",
+    "workflow_id": "WF-org_demo_bravo-UNIT-0030",
+    "flow_id": "standard-v1",
+    "org_id": "org_demo_bravo",
+    "subject_id": "UNIT-0030",
+    "context": {
+      "route": "fba",
+      "returned": true
+    },
+    "status": "COMPLETED",
+    "status_reason": "all required stages finished",
+    "current_stage": "recovery",
+    "previous_stage": "returns",
+    "stage_results": [
+      {
+        "stage": "receiving",
+        "agent_id": "receiving-stub@0",
+        "state": "completed",
+        "skipped_reason": null,
+        "record_id": "RCV-0030",
+        "evidence_status": "completed",
+        "verdict": "PASS",
+        "outcome": "accept",
+        "needs_human": false,
+        "next_step_recommendation": {
+          "action": "continue",
+          "reason": "backend processed; 0 failed check(s)"
+        },
+        "runs": 1,
+        "attempts": 1,
+        "started_at": "2026-10-09T06:55:46Z",
+        "finished_at": "2026-10-09T06:55:57Z",
+        "duration_ms": 11020,
+        "error": null
+      },
+      {
+        "stage": "prep",
+        "agent_id": "prep-stub@0",
+        "state": "completed",
+        "skipped_reason": null,
+        "record_id": "PRP-0030",
+        "evidence_status": "completed",
+        "verdict": "FAIL",
+        "outcome": "non_compliant",
+        "needs_human": false,
+        "next_step_recommendation": {
+          "action": "route_to_recovery",
+          "reason": "backend processed; 2 failed check(s)"
+        },
+        "runs": 1,
+        "attempts": 1,
+        "started_at": "2026-10-09T06:55:57Z",
+        "finished_at": "2026-10-09T06:56:08Z",
+        "duration_ms": 10812,
+        "error": null
+      },
+      {
+        "stage": "pack",
+        "agent_id": "pack-manager@1",
+        "state": "skipped",
+        "skipped_reason": "route='fba' not in ['mfn']",
+        "record_id": null,
+        "evidence_status": null,
+        "verdict": null,
+        "outcome": null,
+        "needs_human": null,
+        "next_step_recommendation": null,
+        "runs": 0,
+        "attempts": 0,
+        "started_at": null,
+        "finished_at": null,
+        "duration_ms": null,
+        "error": null
+      },
+      {
+        "stage": "returns",
+        "agent_id": "returns-manager@1",
+        "state": "completed",
+        "skipped_reason": null,
+        "record_id": "RTN-0030",
+        "evidence_status": "completed",
+        "verdict": "PASS",
+        "outcome": "restock",
+        "needs_human": false,
+        "next_step_recommendation": {
+          "action": "continue",
+          "reason": "All 5 condition checks passed with high confidence. Item classified as GRADE_A (PRISTINE). Safe for restock/re-inventory."
+        },
+        "runs": 1,
+        "attempts": 1,
+        "started_at": "2026-10-09T06:56:08Z",
+        "finished_at": "2026-10-09T06:56:14Z",
+        "duration_ms": 5756,
+        "error": null
+      },
+      {
+        "stage": "recovery",
+        "agent_id": "recovery-manager@2",
+        "state": "completed",
+        "skipped_reason": null,
+        "record_id": "RCY-UNIT-0030",
+        "evidence_status": "completed",
+        "verdict": "UNCERTAIN",
+        "outcome": "insufficient_evidence",
+        "needs_human": false,
+        "next_step_recommendation": {
+          "action": "complete",
+          "reason": "intelligent investigation: 1 charge(s), 0 claim(s)"
+        },
+        "runs": 1,
+        "attempts": 1,
+        "started_at": "2026-10-09T06:56:14Z",
+        "finished_at": "2026-10-09T06:56:26Z",
+        "duration_ms": 12109,
+        "error": null
+      }
+    ],
+    "evidence_references": [
+      "RCV-0030",
+      "PRP-0030",
+      "RTN-0030",
+      "RCY-UNIT-0030"
+    ],
+    "timestamps": {
+      "created_at": "2026-10-09T06:55:46Z",
+      "updated_at": "2026-10-09T06:56:26Z",
+      "completed_at": "2026-10-09T06:56:26Z"
+    },
+    "errors": [],
+    "overrides": [],
+    "halted": null,
+    "final_outcome": {
+      "workflow_id": "WF-org_demo_bravo-UNIT-0030",
+      "outcome": "EXCEPTION",
+      "verdict": "FAIL",
+      "reason": "Failed verdict from: prep; no claim recommended.",
+      "needs_human": false,
+      "provisional": false,
+      "claimable_usd": null,
+      "contributing_records": [
+        "RCV-0030",
+        "PRP-0030",
+        "RTN-0030",
+        "RCY-UNIT-0030"
+      ],
+      "effective_verdicts": {
+        "receiving": "PASS",
+        "prep": "FAIL",
+        "returns": "PASS",
+        "recovery": "UNCERTAIN"
+      },
+      "decided_by": "orchestrator",
+      "decided_at": "2026-10-09T06:56:26Z"
+    },
+    "transitions": [
+      {
+        "at": "2026-10-09T06:55:46Z",
+        "event": "workflow_created",
+        "stage": null,
+        "detail": "flow=standard-v1"
+      },
+      {
+        "at": "2026-10-09T06:55:46Z",
+        "event": "stage_skipped",
+        "stage": "pack",
+        "detail": "route='fba' not in ['mfn']"
+      },
+      {
+        "at": "2026-10-09T06:55:46Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "PENDING",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T06:55:57Z",
+        "event": "stage_completed",
+        "stage": "receiving",
+        "detail": "accept / PASS"
+      },
+      {
+        "at": "2026-10-09T06:56:08Z",
+        "event": "stage_completed",
+        "stage": "prep",
+        "detail": "non_compliant / FAIL"
+      },
+      {
+        "at": "2026-10-09T06:56:14Z",
+        "event": "stage_completed",
+        "stage": "returns",
+        "detail": "restock / PASS"
+      },
+      {
+        "at": "2026-10-09T06:56:26Z",
+        "event": "stage_completed",
+        "stage": "recovery",
+        "detail": "insufficient_evidence / UNCERTAIN"
+      },
+      {
+        "at": "2026-10-09T06:56:26Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "all required stages finished",
+        "from_status": "IN_PROGRESS",
+        "to_status": "COMPLETED"
+      }
+    ]
+  },
+  {
+    "schema_version": "1.0",
+    "workflow_id": "WF-org_demo_alpha-UNIT-0050",
+    "flow_id": "standard-v1",
+    "org_id": "org_demo_alpha",
+    "subject_id": "UNIT-0050",
+    "context": {
+      "route": "fba",
+      "returned": true
+    },
+    "status": "BLOCKED",
+    "status_reason": "a person must decide: prep, recovery",
+    "current_stage": "recovery",
+    "previous_stage": "returns",
+    "stage_results": [
+      {
+        "stage": "receiving",
+        "agent_id": "receiving-stub@0",
+        "state": "completed",
+        "skipped_reason": null,
+        "record_id": "RCV-0050",
+        "evidence_status": "completed",
+        "verdict": "FAIL",
+        "outcome": "accept_with_exceptions",
+        "needs_human": false,
+        "next_step_recommendation": {
+          "action": "route_to_recovery",
+          "reason": "backend processed; 2 failed check(s)"
+        },
+        "runs": 1,
+        "attempts": 1,
+        "started_at": "2026-10-09T07:33:48Z",
+        "finished_at": "2026-10-09T07:33:59Z",
+        "duration_ms": 11123,
+        "error": null
+      },
+      {
+        "stage": "prep",
+        "agent_id": "prep-stub@0",
+        "state": "completed",
+        "skipped_reason": null,
+        "record_id": "PRP-0050",
+        "evidence_status": "completed",
+        "verdict": "UNCERTAIN",
+        "outcome": "pending_review",
+        "needs_human": true,
+        "next_step_recommendation": {
+          "action": "review",
+          "reason": "backend processed; 0 failed check(s)"
+        },
+        "runs": 1,
+        "attempts": 1,
+        "started_at": "2026-10-09T07:33:59Z",
+        "finished_at": "2026-10-09T07:34:10Z",
+        "duration_ms": 11074,
+        "error": null
+      },
+      {
+        "stage": "pack",
+        "agent_id": "pack-manager@1",
+        "state": "skipped",
+        "skipped_reason": "route='fba' not in ['mfn']",
+        "record_id": null,
+        "evidence_status": null,
+        "verdict": null,
+        "outcome": null,
+        "needs_human": null,
+        "next_step_recommendation": null,
+        "runs": 0,
+        "attempts": 0,
+        "started_at": null,
+        "finished_at": null,
+        "duration_ms": null,
+        "error": null
+      },
+      {
+        "stage": "returns",
+        "agent_id": "returns-manager@1",
+        "state": "completed",
+        "skipped_reason": null,
+        "record_id": "RTN-0050",
+        "evidence_status": "completed",
+        "verdict": "FAIL",
+        "outcome": "refurbish",
+        "needs_human": false,
+        "next_step_recommendation": {
+          "action": "route_to_recovery",
+          "reason": "Missing accessories require supervisor approval / partial refund deduction."
+        },
+        "runs": 1,
+        "attempts": 1,
+        "started_at": "2026-10-09T07:34:10Z",
+        "finished_at": "2026-10-09T07:34:21Z",
+        "duration_ms": 10988,
+        "error": null
+      },
+      {
+        "stage": "recovery",
+        "agent_id": "recovery-manager@2",
+        "state": "completed",
+        "skipped_reason": null,
+        "record_id": "RCY-UNIT-0050",
+        "evidence_status": "completed",
+        "verdict": "UNCERTAIN",
+        "outcome": "insufficient_evidence",
+        "needs_human": true,
+        "next_step_recommendation": {
+          "action": "complete",
+          "reason": "intelligent investigation: 1 charge(s), 0 claim(s)"
+        },
+        "runs": 1,
+        "attempts": 1,
+        "started_at": "2026-10-09T07:34:21Z",
+        "finished_at": "2026-10-09T07:34:41Z",
+        "duration_ms": 20617,
+        "error": null
+      }
+    ],
+    "evidence_references": [
+      "RCV-0050",
+      "PRP-0050",
+      "RTN-0050",
+      "RCY-UNIT-0050"
+    ],
+    "timestamps": {
+      "created_at": "2026-10-09T07:33:48Z",
+      "updated_at": "2026-10-09T07:34:41Z",
+      "completed_at": null
+    },
+    "errors": [],
+    "overrides": [],
+    "halted": null,
+    "final_outcome": {
+      "workflow_id": "WF-org_demo_alpha-UNIT-0050",
+      "outcome": "EXCEPTION",
+      "verdict": "FAIL",
+      "reason": "Failed verdict from: receiving, returns; no claim recommended. Flagged for review: prep, recovery.",
+      "needs_human": true,
+      "provisional": true,
+      "claimable_usd": null,
+      "contributing_records": [
+        "RCV-0050",
+        "PRP-0050",
+        "RTN-0050",
+        "RCY-UNIT-0050"
+      ],
+      "effective_verdicts": {
+        "receiving": "FAIL",
+        "prep": "UNCERTAIN",
+        "returns": "FAIL",
+        "recovery": "UNCERTAIN"
+      },
+      "decided_by": "orchestrator",
+      "decided_at": "2026-10-09T07:34:41Z"
+    },
+    "transitions": [
+      {
+        "at": "2026-10-09T07:33:48Z",
+        "event": "workflow_created",
+        "stage": null,
+        "detail": "flow=standard-v1"
+      },
+      {
+        "at": "2026-10-09T07:33:48Z",
+        "event": "stage_skipped",
+        "stage": "pack",
+        "detail": "route='fba' not in ['mfn']"
+      },
+      {
+        "at": "2026-10-09T07:33:48Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "PENDING",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T07:33:59Z",
+        "event": "stage_completed",
+        "stage": "receiving",
+        "detail": "accept_with_exceptions / FAIL"
+      },
+      {
+        "at": "2026-10-09T07:34:10Z",
+        "event": "stage_completed",
+        "stage": "prep",
+        "detail": "pending_review / UNCERTAIN"
+      },
+      {
+        "at": "2026-10-09T07:34:21Z",
+        "event": "stage_completed",
+        "stage": "returns",
+        "detail": "refurbish / FAIL"
+      },
+      {
+        "at": "2026-10-09T07:34:41Z",
+        "event": "stage_completed",
+        "stage": "recovery",
+        "detail": "insufficient_evidence / UNCERTAIN"
+      },
+      {
+        "at": "2026-10-09T07:34:41Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "a person must decide: prep, recovery",
+        "from_status": "IN_PROGRESS",
+        "to_status": "BLOCKED"
+      }
+    ]
+  },
+  {
+    "schema_version": "1.0",
+    "workflow_id": "WF-org_demo_alpha-UNIT-0101",
+    "flow_id": "standard-v1",
+    "org_id": "org_demo_alpha",
+    "subject_id": "UNIT-0101",
+    "context": {
+      "route": "unknown",
+      "returned": false
+    },
+    "status": "FAILED",
+    "status_reason": "stage did not complete: receiving, recovery",
+    "current_stage": "recovery",
+    "previous_stage": "receiving",
+    "stage_results": [
+      {
+        "stage": "receiving",
+        "agent_id": "receiving-backend@1",
+        "state": "error",
+        "skipped_reason": null,
+        "record_id": "RCV-PENDING-WF-org_demo_alpha-UNIT-0101-receiving-r6",
+        "evidence_status": "error",
+        "verdict": "UNCERTAIN",
+        "outcome": "pending_review",
+        "needs_human": true,
+        "next_step_recommendation": {
+          "action": "review",
+          "reason": "no receiving record for UNIT-0101 in org_demo_alpha"
+        },
+        "runs": 6,
+        "attempts": 1,
+        "started_at": "2026-10-09T10:09:19Z",
+        "finished_at": "2026-10-09T10:09:19Z",
+        "duration_ms": 13,
+        "error": {
+          "code": "agent_rejected",
+          "message": "no receiving record for UNIT-0101 in org_demo_alpha",
+          "retryable": false,
+          "stage": "receiving",
+          "agent_id": "receiving-backend@1",
+          "at": "2026-10-09T10:09:19Z",
+          "detail": null
+        }
+      },
+      {
+        "stage": "prep",
+        "agent_id": "prep-backend@1",
+        "state": "skipped",
+        "skipped_reason": "route='unknown' not in ['fba']",
+        "record_id": null,
+        "evidence_status": null,
+        "verdict": null,
+        "outcome": null,
+        "needs_human": null,
+        "next_step_recommendation": null,
+        "runs": 0,
+        "attempts": 0,
+        "started_at": null,
+        "finished_at": null,
+        "duration_ms": null,
+        "error": null
+      },
+      {
+        "stage": "pack",
+        "agent_id": "pack-manager@1",
+        "state": "skipped",
+        "skipped_reason": "route='unknown' not in ['mfn']",
+        "record_id": null,
+        "evidence_status": null,
+        "verdict": null,
+        "outcome": null,
+        "needs_human": null,
+        "next_step_recommendation": null,
+        "runs": 0,
+        "attempts": 0,
+        "started_at": null,
+        "finished_at": null,
+        "duration_ms": null,
+        "error": null
+      },
+      {
+        "stage": "returns",
+        "agent_id": "returns-manager@1",
+        "state": "skipped",
+        "skipped_reason": "returned=False not in [True]",
+        "record_id": null,
+        "evidence_status": null,
+        "verdict": null,
+        "outcome": null,
+        "needs_human": null,
+        "next_step_recommendation": null,
+        "runs": 0,
+        "attempts": 0,
+        "started_at": null,
+        "finished_at": null,
+        "duration_ms": null,
+        "error": null
+      },
+      {
+        "stage": "recovery",
+        "agent_id": "recovery-stub@0",
+        "state": "error",
+        "skipped_reason": null,
+        "record_id": "RCY-PENDING-WF-org_demo_alpha-UNIT-0101-recovery-r6",
+        "evidence_status": "error",
+        "verdict": "UNCERTAIN",
+        "outcome": "pending_review",
+        "needs_human": true,
+        "next_step_recommendation": {
+          "action": "review",
+          "reason": "unknown subject UNIT-0101 in org_demo_alpha"
+        },
+        "runs": 6,
+        "attempts": 1,
+        "started_at": "2026-10-09T10:09:19Z",
+        "finished_at": "2026-10-09T10:09:19Z",
+        "duration_ms": 14,
+        "error": {
+          "code": "agent_rejected",
+          "message": "unknown subject UNIT-0101 in org_demo_alpha",
+          "retryable": false,
+          "stage": "recovery",
+          "agent_id": "recovery-stub@0",
+          "at": "2026-10-09T10:09:19Z",
+          "detail": null
+        }
+      }
+    ],
+    "evidence_references": [
+      "RCV-PENDING-WF-org_demo_alpha-UNIT-0101-receiving",
+      "RCY-PENDING-WF-org_demo_alpha-UNIT-0101-recovery",
+      "RCV-PENDING-WF-org_demo_alpha-UNIT-0101-receiving-r2",
+      "RCY-PENDING-WF-org_demo_alpha-UNIT-0101-recovery-r2",
+      "RCV-PENDING-WF-org_demo_alpha-UNIT-0101-receiving-r3",
+      "RCY-PENDING-WF-org_demo_alpha-UNIT-0101-recovery-r3",
+      "RCV-PENDING-WF-org_demo_alpha-UNIT-0101-receiving-r4",
+      "RCY-PENDING-WF-org_demo_alpha-UNIT-0101-recovery-r4",
+      "RCV-PENDING-WF-org_demo_alpha-UNIT-0101-receiving-r5",
+      "RCY-PENDING-WF-org_demo_alpha-UNIT-0101-recovery-r5",
+      "RCV-PENDING-WF-org_demo_alpha-UNIT-0101-receiving-r6",
+      "RCY-PENDING-WF-org_demo_alpha-UNIT-0101-recovery-r6"
+    ],
+    "timestamps": {
+      "created_at": "2026-10-09T06:48:55Z",
+      "updated_at": "2026-10-09T10:09:19Z",
+      "completed_at": null
+    },
+    "errors": [
+      {
+        "code": "agent_rejected",
+        "message": "no receiving record for UNIT-0101 in org_demo_alpha",
+        "retryable": false,
+        "stage": "receiving",
+        "agent_id": "receiving-backend@1",
+        "at": "2026-10-09T06:48:55Z",
+        "detail": null
+      },
+      {
+        "code": "agent_rejected",
+        "message": "unknown subject UNIT-0101 in org_demo_alpha",
+        "retryable": false,
+        "stage": "recovery",
+        "agent_id": "recovery-stub@0",
+        "at": "2026-10-09T06:48:55Z",
+        "detail": null
+      },
+      {
+        "code": "agent_rejected",
+        "message": "no receiving record for UNIT-0101 in org_demo_alpha",
+        "retryable": false,
+        "stage": "receiving",
+        "agent_id": "receiving-backend@1",
+        "at": "2026-10-09T06:48:56Z",
+        "detail": null
+      },
+      {
+        "code": "agent_rejected",
+        "message": "unknown subject UNIT-0101 in org_demo_alpha",
+        "retryable": false,
+        "stage": "recovery",
+        "agent_id": "recovery-stub@0",
+        "at": "2026-10-09T06:48:56Z",
+        "detail": null
+      },
+      {
+        "code": "agent_rejected",
+        "message": "no receiving record for UNIT-0101 in org_demo_alpha",
+        "retryable": false,
+        "stage": "receiving",
+        "agent_id": "receiving-backend@1",
+        "at": "2026-10-09T06:49:04Z",
+        "detail": null
+      },
+      {
+        "code": "agent_rejected",
+        "message": "unknown subject UNIT-0101 in org_demo_alpha",
+        "retryable": false,
+        "stage": "recovery",
+        "agent_id": "recovery-stub@0",
+        "at": "2026-10-09T06:49:04Z",
+        "detail": null
+      },
+      {
+        "code": "agent_rejected",
+        "message": "no receiving record for UNIT-0101 in org_demo_alpha",
+        "retryable": false,
+        "stage": "receiving",
+        "agent_id": "receiving-backend@1",
+        "at": "2026-10-09T06:49:04Z",
+        "detail": null
+      },
+      {
+        "code": "agent_rejected",
+        "message": "unknown subject UNIT-0101 in org_demo_alpha",
+        "retryable": false,
+        "stage": "recovery",
+        "agent_id": "recovery-stub@0",
+        "at": "2026-10-09T06:49:04Z",
+        "detail": null
+      },
+      {
+        "code": "agent_rejected",
+        "message": "no receiving record for UNIT-0101 in org_demo_alpha",
+        "retryable": false,
+        "stage": "receiving",
+        "agent_id": "receiving-backend@1",
+        "at": "2026-10-09T06:49:05Z",
+        "detail": null
+      },
+      {
+        "code": "agent_rejected",
+        "message": "unknown subject UNIT-0101 in org_demo_alpha",
+        "retryable": false,
+        "stage": "recovery",
+        "agent_id": "recovery-stub@0",
+        "at": "2026-10-09T06:49:05Z",
+        "detail": null
+      },
+      {
+        "code": "agent_rejected",
+        "message": "no receiving record for UNIT-0101 in org_demo_alpha",
+        "retryable": false,
+        "stage": "receiving",
+        "agent_id": "receiving-backend@1",
+        "at": "2026-10-09T10:09:19Z",
+        "detail": null
+      },
+      {
+        "code": "agent_rejected",
+        "message": "unknown subject UNIT-0101 in org_demo_alpha",
+        "retryable": false,
+        "stage": "recovery",
+        "agent_id": "recovery-stub@0",
+        "at": "2026-10-09T10:09:19Z",
+        "detail": null
+      }
+    ],
+    "overrides": [],
+    "halted": null,
+    "final_outcome": {
+      "workflow_id": "WF-org_demo_alpha-UNIT-0101",
+      "outcome": "INCOMPLETE",
+      "verdict": "UNCERTAIN",
+      "reason": "Stage did not complete: receiving, recovery.",
+      "needs_human": true,
+      "provisional": true,
+      "claimable_usd": null,
+      "contributing_records": [
+        "RCV-PENDING-WF-org_demo_alpha-UNIT-0101-receiving-r6",
+        "RCY-PENDING-WF-org_demo_alpha-UNIT-0101-recovery-r6"
+      ],
+      "effective_verdicts": {
+        "receiving": "UNCERTAIN",
+        "recovery": "UNCERTAIN"
+      },
+      "decided_by": "orchestrator",
+      "decided_at": "2026-10-09T10:09:19Z"
+    },
+    "transitions": [
+      {
+        "at": "2026-10-09T06:48:55Z",
+        "event": "workflow_created",
+        "stage": null,
+        "detail": "flow=standard-v1"
+      },
+      {
+        "at": "2026-10-09T06:48:55Z",
+        "event": "stage_skipped",
+        "stage": "prep",
+        "detail": "route='unknown' not in ['fba']"
+      },
+      {
+        "at": "2026-10-09T06:48:55Z",
+        "event": "stage_skipped",
+        "stage": "pack",
+        "detail": "route='unknown' not in ['mfn']"
+      },
+      {
+        "at": "2026-10-09T06:48:55Z",
+        "event": "stage_skipped",
+        "stage": "returns",
+        "detail": "returned=False not in [True]"
+      },
+      {
+        "at": "2026-10-09T06:48:55Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "PENDING",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T06:48:55Z",
+        "event": "stage_degraded",
+        "stage": "receiving",
+        "detail": "agent_rejected: recorded as error; flow policy decides what next"
+      },
+      {
+        "at": "2026-10-09T06:48:55Z",
+        "event": "stage_error",
+        "stage": "receiving",
+        "detail": "pending_review / UNCERTAIN"
+      },
+      {
+        "at": "2026-10-09T06:48:55Z",
+        "event": "stage_degraded",
+        "stage": "recovery",
+        "detail": "agent_rejected: recorded as error; flow policy decides what next"
+      },
+      {
+        "at": "2026-10-09T06:48:55Z",
+        "event": "stage_error",
+        "stage": "recovery",
+        "detail": "pending_review / UNCERTAIN"
+      },
+      {
+        "at": "2026-10-09T06:48:55Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "stage did not complete: receiving, recovery",
+        "from_status": "IN_PROGRESS",
+        "to_status": "FAILED"
+      },
+      {
+        "at": "2026-10-09T06:48:56Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "FAILED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T06:48:56Z",
+        "event": "stage_degraded",
+        "stage": "receiving",
+        "detail": "agent_rejected: recorded as error; flow policy decides what next"
+      },
+      {
+        "at": "2026-10-09T06:48:56Z",
+        "event": "stage_error",
+        "stage": "receiving",
+        "detail": "pending_review / UNCERTAIN"
+      },
+      {
+        "at": "2026-10-09T06:48:56Z",
+        "event": "stage_degraded",
+        "stage": "recovery",
+        "detail": "agent_rejected: recorded as error; flow policy decides what next"
+      },
+      {
+        "at": "2026-10-09T06:48:56Z",
+        "event": "stage_error",
+        "stage": "recovery",
+        "detail": "pending_review / UNCERTAIN"
+      },
+      {
+        "at": "2026-10-09T06:48:56Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "stage did not complete: receiving, recovery",
+        "from_status": "IN_PROGRESS",
+        "to_status": "FAILED"
+      },
+      {
+        "at": "2026-10-09T06:49:04Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "FAILED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T06:49:04Z",
+        "event": "stage_degraded",
+        "stage": "receiving",
+        "detail": "agent_rejected: recorded as error; flow policy decides what next"
+      },
+      {
+        "at": "2026-10-09T06:49:04Z",
+        "event": "stage_error",
+        "stage": "receiving",
+        "detail": "pending_review / UNCERTAIN"
+      },
+      {
+        "at": "2026-10-09T06:49:04Z",
+        "event": "stage_degraded",
+        "stage": "recovery",
+        "detail": "agent_rejected: recorded as error; flow policy decides what next"
+      },
+      {
+        "at": "2026-10-09T06:49:04Z",
+        "event": "stage_error",
+        "stage": "recovery",
+        "detail": "pending_review / UNCERTAIN"
+      },
+      {
+        "at": "2026-10-09T06:49:04Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "stage did not complete: receiving, recovery",
+        "from_status": "IN_PROGRESS",
+        "to_status": "FAILED"
+      },
+      {
+        "at": "2026-10-09T06:49:04Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "FAILED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T06:49:04Z",
+        "event": "stage_degraded",
+        "stage": "receiving",
+        "detail": "agent_rejected: recorded as error; flow policy decides what next"
+      },
+      {
+        "at": "2026-10-09T06:49:04Z",
+        "event": "stage_error",
+        "stage": "receiving",
+        "detail": "pending_review / UNCERTAIN"
+      },
+      {
+        "at": "2026-10-09T06:49:04Z",
+        "event": "stage_degraded",
+        "stage": "recovery",
+        "detail": "agent_rejected: recorded as error; flow policy decides what next"
+      },
+      {
+        "at": "2026-10-09T06:49:04Z",
+        "event": "stage_error",
+        "stage": "recovery",
+        "detail": "pending_review / UNCERTAIN"
+      },
+      {
+        "at": "2026-10-09T06:49:04Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "stage did not complete: receiving, recovery",
+        "from_status": "IN_PROGRESS",
+        "to_status": "FAILED"
+      },
+      {
+        "at": "2026-10-09T06:49:05Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "FAILED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T06:49:05Z",
+        "event": "stage_degraded",
+        "stage": "receiving",
+        "detail": "agent_rejected: recorded as error; flow policy decides what next"
+      },
+      {
+        "at": "2026-10-09T06:49:05Z",
+        "event": "stage_error",
+        "stage": "receiving",
+        "detail": "pending_review / UNCERTAIN"
+      },
+      {
+        "at": "2026-10-09T06:49:05Z",
+        "event": "stage_degraded",
+        "stage": "recovery",
+        "detail": "agent_rejected: recorded as error; flow policy decides what next"
+      },
+      {
+        "at": "2026-10-09T06:49:05Z",
+        "event": "stage_error",
+        "stage": "recovery",
+        "detail": "pending_review / UNCERTAIN"
+      },
+      {
+        "at": "2026-10-09T06:49:05Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "stage did not complete: receiving, recovery",
+        "from_status": "IN_PROGRESS",
+        "to_status": "FAILED"
+      },
+      {
+        "at": "2026-10-09T10:09:19Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "advancing",
+        "from_status": "FAILED",
+        "to_status": "IN_PROGRESS"
+      },
+      {
+        "at": "2026-10-09T10:09:19Z",
+        "event": "stage_degraded",
+        "stage": "receiving",
+        "detail": "agent_rejected: recorded as error; flow policy decides what next"
+      },
+      {
+        "at": "2026-10-09T10:09:19Z",
+        "event": "stage_error",
+        "stage": "receiving",
+        "detail": "pending_review / UNCERTAIN"
+      },
+      {
+        "at": "2026-10-09T10:09:19Z",
+        "event": "stage_degraded",
+        "stage": "recovery",
+        "detail": "agent_rejected: recorded as error; flow policy decides what next"
+      },
+      {
+        "at": "2026-10-09T10:09:19Z",
+        "event": "stage_error",
+        "stage": "recovery",
+        "detail": "pending_review / UNCERTAIN"
+      },
+      {
+        "at": "2026-10-09T10:09:19Z",
+        "event": "status_changed",
+        "stage": null,
+        "detail": "stage did not complete: receiving, recovery",
+        "from_status": "IN_PROGRESS",
+        "to_status": "FAILED"
+      }
+    ]
+  }
+]

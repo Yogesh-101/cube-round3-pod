@@ -1,0 +1,4471 @@
+{
+  "WF-org_demo_alpha-UNIT-0001": {
+    "workflow_id": "WF-org_demo_alpha-UNIT-0001",
+    "subject_id": "UNIT-0001",
+    "org_id": "org_demo_alpha",
+    "charge_investigations": [],
+    "overall_decision": "NO_CLAIM",
+    "total_claimable_usd": 0.0,
+    "investigation_graph": {
+      "workflow_id": "WF-org_demo_alpha-UNIT-0001",
+      "nodes": [
+        {
+          "node_id": "subject:UNIT-0001",
+          "node_type": "subject",
+          "label": "UNIT-0001",
+          "entity_id": "UNIT-0001",
+          "data": {
+            "org_id": "org_demo_alpha"
+          },
+          "timestamp": null
+        },
+        {
+          "node_id": "evidence:RCV-0001",
+          "node_type": "evidence",
+          "label": "receiving evidence (PASS)",
+          "entity_id": "RCV-0001",
+          "data": {
+            "stage": "receiving",
+            "verdict": "PASS",
+            "outcome": "accept",
+            "status": "completed",
+            "agent_id": "receiving-stub@0"
+          },
+          "timestamp": "2026-10-09T06:34:00Z"
+        },
+        {
+          "node_id": "sku:SKU-TOWEL-BLU",
+          "node_type": "sku",
+          "label": "SKU-TOWEL-BLU",
+          "entity_id": "SKU-TOWEL-BLU",
+          "data": {},
+          "timestamp": null
+        },
+        {
+          "node_id": "evidence:RCY-UNIT-0001",
+          "node_type": "evidence",
+          "label": "recovery evidence (PASS)",
+          "entity_id": "RCY-UNIT-0001",
+          "data": {
+            "stage": "recovery",
+            "verdict": "PASS",
+            "outcome": "no_claim",
+            "status": "completed",
+            "agent_id": "recovery-manager@2"
+          },
+          "timestamp": "2026-10-09T06:34:11Z"
+        }
+      ],
+      "edges": [
+        {
+          "source": "evidence:RCV-0001",
+          "target": "subject:UNIT-0001",
+          "relationship": "about",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "evidence:RCV-0001",
+          "target": "sku:SKU-TOWEL-BLU",
+          "relationship": "references",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "evidence:RCY-UNIT-0001",
+          "target": "subject:UNIT-0001",
+          "relationship": "about",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "evidence:RCY-UNIT-0001",
+          "target": "evidence:RCV-0001",
+          "relationship": "consumes",
+          "verified": true,
+          "data": {}
+        }
+      ]
+    },
+    "investigation_timeline": {
+      "workflow_id": "WF-org_demo_alpha-UNIT-0001",
+      "events": [
+        {
+          "timestamp": "2026-06-04T17:32:00Z",
+          "event_type": "evidence_captured",
+          "stage": "receiving",
+          "entity_id": "RCV-0001",
+          "description": "receiving observation captured",
+          "evidence_id": "RCV-0001",
+          "data": {
+            "agent_id": "receiving-stub@0",
+            "verdict": "PASS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:34:00Z",
+          "event_type": "evidence_produced",
+          "stage": "receiving",
+          "entity_id": "RCV-0001",
+          "description": "receiving evidence: PASS",
+          "evidence_id": "RCV-0001",
+          "data": {
+            "agent_id": "receiving-stub@0",
+            "verdict": "PASS",
+            "outcome": "accept"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:34:00Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "workflow_created: flow=standard-v1",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:34:00Z",
+            "event": "workflow_created",
+            "stage": null,
+            "detail": "flow=standard-v1"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:34:00Z",
+          "event_type": "workflow_transition",
+          "stage": "prep",
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "stage_skipped: route='unknown' not in ['fba']",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:34:00Z",
+            "event": "stage_skipped",
+            "stage": "prep",
+            "detail": "route='unknown' not in ['fba']"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:34:00Z",
+          "event_type": "workflow_transition",
+          "stage": "pack",
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "stage_skipped: route='unknown' not in ['mfn']",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:34:00Z",
+            "event": "stage_skipped",
+            "stage": "pack",
+            "detail": "route='unknown' not in ['mfn']"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:34:00Z",
+          "event_type": "workflow_transition",
+          "stage": "returns",
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "stage_skipped: returned=False not in [True]",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:34:00Z",
+            "event": "stage_skipped",
+            "stage": "returns",
+            "detail": "returned=False not in [True]"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:34:00Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:34:00Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "PENDING",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:34:11Z",
+          "event_type": "evidence_captured",
+          "stage": "recovery",
+          "entity_id": "RCY-UNIT-0001",
+          "description": "recovery observation captured",
+          "evidence_id": "RCY-UNIT-0001",
+          "data": {
+            "agent_id": "recovery-manager@2",
+            "verdict": "PASS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:34:11Z",
+          "event_type": "evidence_produced",
+          "stage": "recovery",
+          "entity_id": "RCY-UNIT-0001",
+          "description": "recovery evidence: PASS",
+          "evidence_id": "RCY-UNIT-0001",
+          "data": {
+            "agent_id": "recovery-manager@2",
+            "verdict": "PASS",
+            "outcome": "no_claim"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:34:11Z",
+          "event_type": "workflow_transition",
+          "stage": "receiving",
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "stage_completed: accept / PASS",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:34:11Z",
+            "event": "stage_completed",
+            "stage": "receiving",
+            "detail": "accept / PASS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:34:23Z",
+          "event_type": "workflow_transition",
+          "stage": "recovery",
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "stage_completed: no_claim / PASS",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:34:23Z",
+            "event": "stage_completed",
+            "stage": "recovery",
+            "detail": "no_claim / PASS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:34:23Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: all required stages finished",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:34:23Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "all required stages finished",
+            "from_status": "IN_PROGRESS",
+            "to_status": "COMPLETED"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:49:25Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:49:25Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "COMPLETED",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:49:25Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: all required stages finished",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:49:25Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "all required stages finished",
+            "from_status": "IN_PROGRESS",
+            "to_status": "COMPLETED"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:49:26Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:49:26Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "COMPLETED",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:49:26Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: all required stages finished",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:49:26Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "all required stages finished",
+            "from_status": "IN_PROGRESS",
+            "to_status": "COMPLETED"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:49:26Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:49:26Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "COMPLETED",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:49:26Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: all required stages finished",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:49:26Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "all required stages finished",
+            "from_status": "IN_PROGRESS",
+            "to_status": "COMPLETED"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:55:04Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:55:04Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "COMPLETED",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:55:04Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: all required stages finished",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:55:04Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "all required stages finished",
+            "from_status": "IN_PROGRESS",
+            "to_status": "COMPLETED"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:55:06Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:55:06Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "COMPLETED",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:55:06Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: all required stages finished",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:55:06Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "all required stages finished",
+            "from_status": "IN_PROGRESS",
+            "to_status": "COMPLETED"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:55:07Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:55:07Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "COMPLETED",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:55:07Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: all required stages finished",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:55:07Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "all required stages finished",
+            "from_status": "IN_PROGRESS",
+            "to_status": "COMPLETED"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:55:07Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:55:07Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "COMPLETED",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:55:07Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: all required stages finished",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:55:07Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "all required stages finished",
+            "from_status": "IN_PROGRESS",
+            "to_status": "COMPLETED"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:55:07Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:55:07Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "COMPLETED",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:55:07Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: all required stages finished",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:55:07Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "all required stages finished",
+            "from_status": "IN_PROGRESS",
+            "to_status": "COMPLETED"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:55:07Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:55:07Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "COMPLETED",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:55:07Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: all required stages finished",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:55:07Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "all required stages finished",
+            "from_status": "IN_PROGRESS",
+            "to_status": "COMPLETED"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:55:16Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:55:16Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "COMPLETED",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:55:16Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: all required stages finished",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:55:16Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "all required stages finished",
+            "from_status": "IN_PROGRESS",
+            "to_status": "COMPLETED"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:55:17Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:55:17Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "COMPLETED",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:55:17Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: all required stages finished",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:55:17Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "all required stages finished",
+            "from_status": "IN_PROGRESS",
+            "to_status": "COMPLETED"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:55:19Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:55:19Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "COMPLETED",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:55:19Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: all required stages finished",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:55:19Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "all required stages finished",
+            "from_status": "IN_PROGRESS",
+            "to_status": "COMPLETED"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:55:19Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:55:19Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "COMPLETED",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:55:19Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: all required stages finished",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:55:19Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "all required stages finished",
+            "from_status": "IN_PROGRESS",
+            "to_status": "COMPLETED"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:55:19Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:55:19Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "COMPLETED",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:55:19Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: all required stages finished",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:55:19Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "all required stages finished",
+            "from_status": "IN_PROGRESS",
+            "to_status": "COMPLETED"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:55:19Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:55:19Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "COMPLETED",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:55:19Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: all required stages finished",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:55:19Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "all required stages finished",
+            "from_status": "IN_PROGRESS",
+            "to_status": "COMPLETED"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:55:27Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:55:27Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "COMPLETED",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:55:27Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: all required stages finished",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:55:27Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "all required stages finished",
+            "from_status": "IN_PROGRESS",
+            "to_status": "COMPLETED"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:55:28Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:55:28Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "COMPLETED",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:55:28Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: all required stages finished",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:55:28Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "all required stages finished",
+            "from_status": "IN_PROGRESS",
+            "to_status": "COMPLETED"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:55:30Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:55:30Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "COMPLETED",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:55:30Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: all required stages finished",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:55:30Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "all required stages finished",
+            "from_status": "IN_PROGRESS",
+            "to_status": "COMPLETED"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:55:30Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:55:30Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "COMPLETED",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:55:30Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: all required stages finished",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:55:30Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "all required stages finished",
+            "from_status": "IN_PROGRESS",
+            "to_status": "COMPLETED"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:55:30Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:55:30Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "COMPLETED",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:55:30Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: all required stages finished",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:55:30Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "all required stages finished",
+            "from_status": "IN_PROGRESS",
+            "to_status": "COMPLETED"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:55:30Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:55:30Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "COMPLETED",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:55:30Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: all required stages finished",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:55:30Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "all required stages finished",
+            "from_status": "IN_PROGRESS",
+            "to_status": "COMPLETED"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:55:38Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:55:38Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "COMPLETED",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:55:38Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: all required stages finished",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:55:38Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "all required stages finished",
+            "from_status": "IN_PROGRESS",
+            "to_status": "COMPLETED"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:55:39Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:55:39Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "COMPLETED",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:55:39Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: all required stages finished",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:55:39Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "all required stages finished",
+            "from_status": "IN_PROGRESS",
+            "to_status": "COMPLETED"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:55:40Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:55:40Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "COMPLETED",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:55:40Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: all required stages finished",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:55:40Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "all required stages finished",
+            "from_status": "IN_PROGRESS",
+            "to_status": "COMPLETED"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:56:52Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:56:52Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "COMPLETED",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:56:52Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: all required stages finished",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:56:52Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "all required stages finished",
+            "from_status": "IN_PROGRESS",
+            "to_status": "COMPLETED"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:56:52Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:56:52Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "COMPLETED",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:56:52Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: all required stages finished",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:56:52Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "all required stages finished",
+            "from_status": "IN_PROGRESS",
+            "to_status": "COMPLETED"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:56:53Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:56:53Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "COMPLETED",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:56:53Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: all required stages finished",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:56:53Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "all required stages finished",
+            "from_status": "IN_PROGRESS",
+            "to_status": "COMPLETED"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:58:04Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:58:04Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "COMPLETED",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:58:04Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: all required stages finished",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:58:04Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "all required stages finished",
+            "from_status": "IN_PROGRESS",
+            "to_status": "COMPLETED"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T07:34:25Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T07:34:25Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "COMPLETED",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T07:34:25Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: all required stages finished",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T07:34:25Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "all required stages finished",
+            "from_status": "IN_PROGRESS",
+            "to_status": "COMPLETED"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T09:03:53Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T09:03:53Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "COMPLETED",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T09:03:53Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: all required stages finished",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T09:03:53Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "all required stages finished",
+            "from_status": "IN_PROGRESS",
+            "to_status": "COMPLETED"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T09:14:21Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T09:14:21Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "COMPLETED",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T09:14:21Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: all required stages finished",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T09:14:21Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "all required stages finished",
+            "from_status": "IN_PROGRESS",
+            "to_status": "COMPLETED"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T09:18:23Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T09:18:23Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "COMPLETED",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T09:18:23Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: all required stages finished",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T09:18:23Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "all required stages finished",
+            "from_status": "IN_PROGRESS",
+            "to_status": "COMPLETED"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T09:20:06Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T09:20:06Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "COMPLETED",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T09:20:06Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: all required stages finished",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T09:20:06Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "all required stages finished",
+            "from_status": "IN_PROGRESS",
+            "to_status": "COMPLETED"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T09:20:32Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T09:20:32Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "COMPLETED",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T09:20:32Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: all required stages finished",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T09:20:32Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "all required stages finished",
+            "from_status": "IN_PROGRESS",
+            "to_status": "COMPLETED"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T09:22:07Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T09:22:07Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "COMPLETED",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T09:22:07Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: all required stages finished",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T09:22:07Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "all required stages finished",
+            "from_status": "IN_PROGRESS",
+            "to_status": "COMPLETED"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T09:23:26Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T09:23:26Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "COMPLETED",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T09:23:26Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: all required stages finished",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T09:23:26Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "all required stages finished",
+            "from_status": "IN_PROGRESS",
+            "to_status": "COMPLETED"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T09:32:57Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T09:32:57Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "COMPLETED",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T09:32:57Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: all required stages finished",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T09:32:57Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "all required stages finished",
+            "from_status": "IN_PROGRESS",
+            "to_status": "COMPLETED"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T09:34:52Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T09:34:52Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "COMPLETED",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T09:34:52Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: all required stages finished",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T09:34:52Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "all required stages finished",
+            "from_status": "IN_PROGRESS",
+            "to_status": "COMPLETED"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T09:37:43Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T09:37:43Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "COMPLETED",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T09:37:43Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: all required stages finished",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T09:37:43Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "all required stages finished",
+            "from_status": "IN_PROGRESS",
+            "to_status": "COMPLETED"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T09:41:22Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T09:41:22Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "COMPLETED",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T09:41:22Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: all required stages finished",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T09:41:22Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "all required stages finished",
+            "from_status": "IN_PROGRESS",
+            "to_status": "COMPLETED"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T09:42:02Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T09:42:02Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "COMPLETED",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T09:42:02Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: all required stages finished",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T09:42:02Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "all required stages finished",
+            "from_status": "IN_PROGRESS",
+            "to_status": "COMPLETED"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T09:43:38Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T09:43:38Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "COMPLETED",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T09:43:38Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: all required stages finished",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T09:43:38Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "all required stages finished",
+            "from_status": "IN_PROGRESS",
+            "to_status": "COMPLETED"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T09:45:06Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T09:45:06Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "COMPLETED",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T09:45:06Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: all required stages finished",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T09:45:06Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "all required stages finished",
+            "from_status": "IN_PROGRESS",
+            "to_status": "COMPLETED"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T10:11:52Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T10:11:52Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "COMPLETED",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T10:11:52Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: all required stages finished",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T10:11:52Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "all required stages finished",
+            "from_status": "IN_PROGRESS",
+            "to_status": "COMPLETED"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T10:12:03Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T10:12:03Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "COMPLETED",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T10:12:03Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: all required stages finished",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T10:12:03Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "all required stages finished",
+            "from_status": "IN_PROGRESS",
+            "to_status": "COMPLETED"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T10:52:07Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T10:52:07Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "COMPLETED",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T10:52:07Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: all required stages finished",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T10:52:07Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "all required stages finished",
+            "from_status": "IN_PROGRESS",
+            "to_status": "COMPLETED"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T10:52:29Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T10:52:29Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "COMPLETED",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T10:52:29Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: all required stages finished",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T10:52:29Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "all required stages finished",
+            "from_status": "IN_PROGRESS",
+            "to_status": "COMPLETED"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T10:52:43Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T10:52:43Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "COMPLETED",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T10:52:43Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: all required stages finished",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T10:52:43Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "all required stages finished",
+            "from_status": "IN_PROGRESS",
+            "to_status": "COMPLETED"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T10:53:30Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T10:53:30Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "COMPLETED",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T10:53:30Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: all required stages finished",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T10:53:30Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "all required stages finished",
+            "from_status": "IN_PROGRESS",
+            "to_status": "COMPLETED"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T10:53:53Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T10:53:53Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "COMPLETED",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T10:53:53Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: all required stages finished",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T10:53:53Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "all required stages finished",
+            "from_status": "IN_PROGRESS",
+            "to_status": "COMPLETED"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T14:19:56Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T14:19:56Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "COMPLETED",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T14:19:56Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: all required stages finished",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T14:19:56Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "all required stages finished",
+            "from_status": "IN_PROGRESS",
+            "to_status": "COMPLETED"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T14:27:09Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T14:27:09Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "COMPLETED",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T14:27:09Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0001",
+          "description": "status_changed: all required stages finished",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T14:27:09Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "all required stages finished",
+            "from_status": "IN_PROGRESS",
+            "to_status": "COMPLETED"
+          }
+        }
+      ]
+    },
+    "claim_dossiers": [],
+    "overall_evidence_health": "UNKNOWN",
+    "evidence_gaps": [],
+    "ai_used": false,
+    "ai_status": "UNAVAILABLE",
+    "deterministic_fallback_used": true,
+    "investigated_at": "2026-10-09T14:37:44Z"
+  },
+  "WF-org_demo_alpha-UNIT-0002": {
+    "workflow_id": "WF-org_demo_alpha-UNIT-0002",
+    "subject_id": "UNIT-0002",
+    "org_id": "org_demo_alpha",
+    "charge_investigations": [
+      {
+        "charge_id": "FEE-0002-1",
+        "charge_type": "fulfilment_fee_weight_tier",
+        "amount_usd": 4.25,
+        "subject_id": "UNIT-0002",
+        "workflow_id": "WF-org_demo_alpha-UNIT-0002",
+        "order_id": "ORD-DUMMY-50002",
+        "shipment_id": "FBA-DUMMY-100",
+        "sku": "SKU-CANDLE-3",
+        "retrieved_evidence_ids": [
+          "PRP-0002",
+          "RCV-0002",
+          "RCY-UNIT-0002"
+        ],
+        "evidence_health": {
+          "charge_id": "FEE-0002-1",
+          "charge_type": "fulfilment_fee_weight_tier",
+          "status": "SUFFICIENT",
+          "expected_evidence": [
+            "prep_evidence"
+          ],
+          "available_evidence": [
+            "prep_evidence"
+          ],
+          "missing_evidence": [],
+          "conflicting_evidence": [],
+          "coverage_ratio": 1.0,
+          "details": "All required evidence available"
+        },
+        "ai_reasoning": null,
+        "deterministic_verdict": "SILENT",
+        "deterministic_reason": "no measured weight/dimensions upstream (finding F-07)",
+        "deterministic_evidence_ids": [],
+        "final_verdict": "SILENT",
+        "final_confidence": 1.0,
+        "final_reason": "no measured weight/dimensions upstream (finding F-07)",
+        "decision": "NO_CLAIM",
+        "gaps": []
+      }
+    ],
+    "overall_decision": "NO_CLAIM",
+    "total_claimable_usd": 0.0,
+    "investigation_graph": {
+      "workflow_id": "WF-org_demo_alpha-UNIT-0002",
+      "nodes": [
+        {
+          "node_id": "subject:UNIT-0002",
+          "node_type": "subject",
+          "label": "UNIT-0002",
+          "entity_id": "UNIT-0002",
+          "data": {
+            "org_id": "org_demo_alpha"
+          },
+          "timestamp": null
+        },
+        {
+          "node_id": "charge:FEE-0002-1",
+          "node_type": "charge",
+          "label": "fulfilment_fee_weight_tier ($4.25)",
+          "entity_id": "FEE-0002-1",
+          "data": {
+            "charge_type": "fulfilment_fee_weight_tier",
+            "amount_usd": 4.25,
+            "posted_date": "2026-06-24"
+          },
+          "timestamp": "2026-06-24"
+        },
+        {
+          "node_id": "order:ORD-DUMMY-50002",
+          "node_type": "order",
+          "label": "ORD-DUMMY-50002",
+          "entity_id": "ORD-DUMMY-50002",
+          "data": {},
+          "timestamp": null
+        },
+        {
+          "node_id": "shipment:FBA-DUMMY-100",
+          "node_type": "shipment",
+          "label": "FBA-DUMMY-100",
+          "entity_id": "FBA-DUMMY-100",
+          "data": {},
+          "timestamp": null
+        },
+        {
+          "node_id": "sku:SKU-CANDLE-3",
+          "node_type": "sku",
+          "label": "SKU-CANDLE-3",
+          "entity_id": "SKU-CANDLE-3",
+          "data": {},
+          "timestamp": null
+        },
+        {
+          "node_id": "evidence:RCV-0002",
+          "node_type": "evidence",
+          "label": "receiving evidence (PASS)",
+          "entity_id": "RCV-0002",
+          "data": {
+            "stage": "receiving",
+            "verdict": "PASS",
+            "outcome": "accept",
+            "status": "completed",
+            "agent_id": "receiving-stub@0"
+          },
+          "timestamp": "2026-10-09T06:34:33Z"
+        },
+        {
+          "node_id": "evidence:PRP-0002",
+          "node_type": "evidence",
+          "label": "prep evidence (FAIL)",
+          "entity_id": "PRP-0002",
+          "data": {
+            "stage": "prep",
+            "verdict": "FAIL",
+            "outcome": "non_compliant",
+            "status": "completed",
+            "agent_id": "prep-stub@0"
+          },
+          "timestamp": "2026-10-09T06:34:44Z"
+        },
+        {
+          "node_id": "evidence:RCY-UNIT-0002",
+          "node_type": "evidence",
+          "label": "recovery evidence (UNCERTAIN)",
+          "entity_id": "RCY-UNIT-0002",
+          "data": {
+            "stage": "recovery",
+            "verdict": "UNCERTAIN",
+            "outcome": "insufficient_evidence",
+            "status": "completed",
+            "agent_id": "recovery-manager@2"
+          },
+          "timestamp": "2026-10-09T06:34:57Z"
+        },
+        {
+          "node_id": "assessment:FEE-0002-1",
+          "node_type": "assessment",
+          "label": "Assessment: SILENT",
+          "entity_id": "FEE-0002-1",
+          "data": {
+            "verdict": "SILENT",
+            "confidence": 1.0,
+            "evidence_health": "SUFFICIENT"
+          },
+          "timestamp": null
+        },
+        {
+          "node_id": "decision:FEE-0002-1",
+          "node_type": "decision",
+          "label": "Decision: NO_CLAIM",
+          "entity_id": "FEE-0002-1",
+          "data": {
+            "decision": "NO_CLAIM",
+            "amount_usd": 4.25,
+            "reason": "no measured weight/dimensions upstream (finding F-07)"
+          },
+          "timestamp": null
+        }
+      ],
+      "edges": [
+        {
+          "source": "charge:FEE-0002-1",
+          "target": "subject:UNIT-0002",
+          "relationship": "belongs_to",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "charge:FEE-0002-1",
+          "target": "order:ORD-DUMMY-50002",
+          "relationship": "belongs_to",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "charge:FEE-0002-1",
+          "target": "shipment:FBA-DUMMY-100",
+          "relationship": "belongs_to",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "charge:FEE-0002-1",
+          "target": "sku:SKU-CANDLE-3",
+          "relationship": "references",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "evidence:RCV-0002",
+          "target": "subject:UNIT-0002",
+          "relationship": "about",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "evidence:RCV-0002",
+          "target": "sku:SKU-CANDLE-3",
+          "relationship": "references",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "evidence:PRP-0002",
+          "target": "subject:UNIT-0002",
+          "relationship": "about",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "evidence:PRP-0002",
+          "target": "evidence:RCV-0002",
+          "relationship": "consumes",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "evidence:PRP-0002",
+          "target": "sku:SKU-CANDLE-3",
+          "relationship": "references",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "evidence:RCY-UNIT-0002",
+          "target": "subject:UNIT-0002",
+          "relationship": "about",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "evidence:RCY-UNIT-0002",
+          "target": "evidence:RCV-0002",
+          "relationship": "consumes",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "evidence:RCY-UNIT-0002",
+          "target": "evidence:PRP-0002",
+          "relationship": "consumes",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "assessment:FEE-0002-1",
+          "target": "charge:FEE-0002-1",
+          "relationship": "assesses",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "assessment:FEE-0002-1",
+          "target": "evidence:PRP-0002",
+          "relationship": "uses_evidence",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "assessment:FEE-0002-1",
+          "target": "evidence:RCV-0002",
+          "relationship": "uses_evidence",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "assessment:FEE-0002-1",
+          "target": "evidence:RCY-UNIT-0002",
+          "relationship": "uses_evidence",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "decision:FEE-0002-1",
+          "target": "assessment:FEE-0002-1",
+          "relationship": "based_on",
+          "verified": true,
+          "data": {}
+        }
+      ]
+    },
+    "investigation_timeline": {
+      "workflow_id": "WF-org_demo_alpha-UNIT-0002",
+      "events": [
+        {
+          "timestamp": "2026-06-03T13:25:00Z",
+          "event_type": "evidence_captured",
+          "stage": "receiving",
+          "entity_id": "RCV-0002",
+          "description": "receiving observation captured",
+          "evidence_id": "RCV-0002",
+          "data": {
+            "agent_id": "receiving-stub@0",
+            "verdict": "PASS"
+          }
+        },
+        {
+          "timestamp": "2026-06-04T12:25:00Z",
+          "event_type": "evidence_captured",
+          "stage": "prep",
+          "entity_id": "PRP-0002",
+          "description": "prep observation captured",
+          "evidence_id": "PRP-0002",
+          "data": {
+            "agent_id": "prep-stub@0",
+            "verdict": "FAIL"
+          }
+        },
+        {
+          "timestamp": "2026-06-24T00:00:00Z",
+          "event_type": "charge_posted",
+          "stage": null,
+          "entity_id": "FEE-0002-1",
+          "description": "Charge fulfilment_fee_weight_tier: $4.25",
+          "evidence_id": null,
+          "data": {
+            "charge_type": "fulfilment_fee_weight_tier",
+            "amount_usd": 4.25,
+            "line_id": "FEE-0002-1"
+          }
+        },
+        {
+          "timestamp": "2026-06-24T00:00:00Z",
+          "event_type": "evidence_captured",
+          "stage": "recovery",
+          "entity_id": "RCY-UNIT-0002",
+          "description": "recovery observation captured",
+          "evidence_id": "RCY-UNIT-0002",
+          "data": {
+            "agent_id": "recovery-manager@2",
+            "verdict": "UNCERTAIN"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:34:33Z",
+          "event_type": "evidence_produced",
+          "stage": "receiving",
+          "entity_id": "RCV-0002",
+          "description": "receiving evidence: PASS",
+          "evidence_id": "RCV-0002",
+          "data": {
+            "agent_id": "receiving-stub@0",
+            "verdict": "PASS",
+            "outcome": "accept"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:34:33Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0002",
+          "description": "workflow_created: flow=standard-v1",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:34:33Z",
+            "event": "workflow_created",
+            "stage": null,
+            "detail": "flow=standard-v1"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:34:33Z",
+          "event_type": "workflow_transition",
+          "stage": "pack",
+          "entity_id": "WF-org_demo_alpha-UNIT-0002",
+          "description": "stage_skipped: route='fba' not in ['mfn']",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:34:33Z",
+            "event": "stage_skipped",
+            "stage": "pack",
+            "detail": "route='fba' not in ['mfn']"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:34:33Z",
+          "event_type": "workflow_transition",
+          "stage": "returns",
+          "entity_id": "WF-org_demo_alpha-UNIT-0002",
+          "description": "stage_skipped: returned=False not in [True]",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:34:33Z",
+            "event": "stage_skipped",
+            "stage": "returns",
+            "detail": "returned=False not in [True]"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:34:33Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0002",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:34:33Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "PENDING",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:34:44Z",
+          "event_type": "evidence_produced",
+          "stage": "prep",
+          "entity_id": "PRP-0002",
+          "description": "prep evidence: FAIL",
+          "evidence_id": "PRP-0002",
+          "data": {
+            "agent_id": "prep-stub@0",
+            "verdict": "FAIL",
+            "outcome": "non_compliant"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:34:44Z",
+          "event_type": "workflow_transition",
+          "stage": "receiving",
+          "entity_id": "WF-org_demo_alpha-UNIT-0002",
+          "description": "stage_completed: accept / PASS",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:34:44Z",
+            "event": "stage_completed",
+            "stage": "receiving",
+            "detail": "accept / PASS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:34:55Z",
+          "event_type": "workflow_transition",
+          "stage": "prep",
+          "entity_id": "WF-org_demo_alpha-UNIT-0002",
+          "description": "stage_completed: non_compliant / FAIL",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:34:55Z",
+            "event": "stage_completed",
+            "stage": "prep",
+            "detail": "non_compliant / FAIL"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:34:57Z",
+          "event_type": "evidence_produced",
+          "stage": "recovery",
+          "entity_id": "RCY-UNIT-0002",
+          "description": "recovery evidence: UNCERTAIN",
+          "evidence_id": "RCY-UNIT-0002",
+          "data": {
+            "agent_id": "recovery-manager@2",
+            "verdict": "UNCERTAIN",
+            "outcome": "insufficient_evidence"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:35:06Z",
+          "event_type": "workflow_transition",
+          "stage": "recovery",
+          "entity_id": "WF-org_demo_alpha-UNIT-0002",
+          "description": "stage_completed: insufficient_evidence / UNCERTAIN",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:35:06Z",
+            "event": "stage_completed",
+            "stage": "recovery",
+            "detail": "insufficient_evidence / UNCERTAIN"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:35:06Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0002",
+          "description": "status_changed: all required stages finished",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:35:06Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "all required stages finished",
+            "from_status": "IN_PROGRESS",
+            "to_status": "COMPLETED"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T09:37:58Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0002",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T09:37:58Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "COMPLETED",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T09:37:58Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0002",
+          "description": "status_changed: all required stages finished",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T09:37:58Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "all required stages finished",
+            "from_status": "IN_PROGRESS",
+            "to_status": "COMPLETED"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T10:17:43Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0002",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T10:17:43Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "COMPLETED",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T10:17:43Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0002",
+          "description": "status_changed: all required stages finished",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T10:17:43Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "all required stages finished",
+            "from_status": "IN_PROGRESS",
+            "to_status": "COMPLETED"
+          }
+        },
+        {
+          "timestamp": "All required evidence available",
+          "event_type": "investigation",
+          "stage": null,
+          "entity_id": "FEE-0002-1",
+          "description": "Investigation: SILENT \u2192 NO_CLAIM",
+          "evidence_id": null,
+          "data": {
+            "verdict": "SILENT",
+            "decision": "NO_CLAIM",
+            "confidence": 1.0
+          }
+        }
+      ]
+    },
+    "claim_dossiers": [],
+    "overall_evidence_health": "SUFFICIENT",
+    "evidence_gaps": [],
+    "ai_used": false,
+    "ai_status": "UNAVAILABLE",
+    "deterministic_fallback_used": true,
+    "investigated_at": "2026-10-09T14:37:44Z"
+  },
+  "WF-org_demo_alpha-UNIT-0014": {
+    "workflow_id": "WF-org_demo_alpha-UNIT-0014",
+    "subject_id": "UNIT-0014",
+    "org_id": "org_demo_alpha",
+    "charge_investigations": [
+      {
+        "charge_id": "FEE-0014-1",
+        "charge_type": "inbound_defect_fee",
+        "amount_usd": 2.0,
+        "subject_id": "UNIT-0014",
+        "workflow_id": "WF-org_demo_alpha-UNIT-0014",
+        "order_id": "",
+        "shipment_id": "FBA-DUMMY-101",
+        "sku": "SKU-LAMP-LED",
+        "retrieved_evidence_ids": [
+          "PRP-0014",
+          "RCV-0014",
+          "RCY-UNIT-0014"
+        ],
+        "evidence_health": {
+          "charge_id": "FEE-0014-1",
+          "charge_type": "inbound_defect_fee",
+          "status": "SUFFICIENT",
+          "expected_evidence": [
+            "prep_evidence"
+          ],
+          "available_evidence": [
+            "prep_evidence"
+          ],
+          "missing_evidence": [],
+          "conflicting_evidence": [],
+          "coverage_ratio": 1.0,
+          "details": "All required evidence available"
+        },
+        "ai_reasoning": null,
+        "deterministic_verdict": "CONTRADICTS",
+        "deterministic_reason": "Prep evidence shows the unit compliant",
+        "deterministic_evidence_ids": [
+          "PRP-0014"
+        ],
+        "final_verdict": "CONTRADICTS",
+        "final_confidence": 1.0,
+        "final_reason": "Prep evidence shows the unit compliant",
+        "decision": "CLAIM",
+        "gaps": []
+      },
+      {
+        "charge_id": "FEE-0014-2",
+        "charge_type": "lost_inbound",
+        "amount_usd": 0.0,
+        "subject_id": "UNIT-0014",
+        "workflow_id": "WF-org_demo_alpha-UNIT-0014",
+        "order_id": "",
+        "shipment_id": "FBA-DUMMY-101",
+        "sku": "SKU-LAMP-LED",
+        "retrieved_evidence_ids": [
+          "RCV-0014",
+          "PRP-0014",
+          "RCY-UNIT-0014"
+        ],
+        "evidence_health": {
+          "charge_id": "FEE-0014-2",
+          "charge_type": "lost_inbound",
+          "status": "SUFFICIENT",
+          "expected_evidence": [
+            "receiving_evidence",
+            "receiving.quantity",
+            "receiving.carton_count"
+          ],
+          "available_evidence": [
+            "receiving_evidence",
+            "receiving.quantity",
+            "receiving.carton_count"
+          ],
+          "missing_evidence": [],
+          "conflicting_evidence": [],
+          "coverage_ratio": 1.0,
+          "details": "All required evidence available"
+        },
+        "ai_reasoning": null,
+        "deterministic_verdict": "SILENT",
+        "deterministic_reason": "receiving shortfall is supplier-side, not channel-side loss (finding F-10)",
+        "deterministic_evidence_ids": [],
+        "final_verdict": "SILENT",
+        "final_confidence": 1.0,
+        "final_reason": "receiving shortfall is supplier-side, not channel-side loss (finding F-10)",
+        "decision": "NO_CLAIM",
+        "gaps": []
+      },
+      {
+        "charge_id": "FEE-0014-3",
+        "charge_type": "fulfilment_fee_weight_tier",
+        "amount_usd": 4.75,
+        "subject_id": "UNIT-0014",
+        "workflow_id": "WF-org_demo_alpha-UNIT-0014",
+        "order_id": "ORD-DUMMY-50014",
+        "shipment_id": "FBA-DUMMY-101",
+        "sku": "SKU-LAMP-LED",
+        "retrieved_evidence_ids": [
+          "PRP-0014",
+          "RCV-0014",
+          "RCY-UNIT-0014"
+        ],
+        "evidence_health": {
+          "charge_id": "FEE-0014-3",
+          "charge_type": "fulfilment_fee_weight_tier",
+          "status": "SUFFICIENT",
+          "expected_evidence": [
+            "prep_evidence"
+          ],
+          "available_evidence": [
+            "prep_evidence"
+          ],
+          "missing_evidence": [],
+          "conflicting_evidence": [],
+          "coverage_ratio": 1.0,
+          "details": "All required evidence available"
+        },
+        "ai_reasoning": null,
+        "deterministic_verdict": "SILENT",
+        "deterministic_reason": "no measured weight/dimensions upstream (finding F-07)",
+        "deterministic_evidence_ids": [],
+        "final_verdict": "SILENT",
+        "final_confidence": 1.0,
+        "final_reason": "no measured weight/dimensions upstream (finding F-07)",
+        "decision": "NO_CLAIM",
+        "gaps": []
+      },
+      {
+        "charge_id": "FEE-0014-4",
+        "charge_type": "refund_issued_item_not_returned",
+        "amount_usd": 0.0,
+        "subject_id": "UNIT-0014",
+        "workflow_id": "WF-org_demo_alpha-UNIT-0014",
+        "order_id": "ORD-DUMMY-50014",
+        "shipment_id": "FBA-DUMMY-101",
+        "sku": "SKU-LAMP-LED",
+        "retrieved_evidence_ids": [
+          "RCV-0014",
+          "PRP-0014",
+          "RCY-UNIT-0014"
+        ],
+        "evidence_health": {
+          "charge_id": "FEE-0014-4",
+          "charge_type": "refund_issued_item_not_returned",
+          "status": "INSUFFICIENT",
+          "expected_evidence": [
+            "returns_evidence",
+            "returns.identity_match",
+            "returns.completeness"
+          ],
+          "available_evidence": [],
+          "missing_evidence": [
+            "returns_evidence",
+            "returns.identity_match",
+            "returns.completeness"
+          ],
+          "conflicting_evidence": [],
+          "coverage_ratio": 0.0,
+          "details": "Missing evidence: returns_evidence, returns.identity_match, returns.completeness"
+        },
+        "ai_reasoning": null,
+        "deterministic_verdict": "SILENT",
+        "deterministic_reason": "Insufficient evidence to support or contradict the charge.",
+        "deterministic_evidence_ids": [],
+        "final_verdict": "SILENT",
+        "final_confidence": 1.0,
+        "final_reason": "Insufficient evidence to support or contradict the charge.",
+        "decision": "NO_CLAIM",
+        "gaps": [
+          {
+            "gap_id": "GAP-47bcc644",
+            "charge_id": "FEE-0014-4",
+            "order_id": "ORD-DUMMY-50014",
+            "shipment_id": "FBA-DUMMY-101",
+            "sku": "SKU-LAMP-LED",
+            "subject_id": "UNIT-0014",
+            "missing_stage": "returns",
+            "missing_check_keys": [
+              "identity_match",
+              "completeness"
+            ],
+            "responsible_agent": "returns",
+            "status": "OPEN",
+            "correlation_id": "WF-org_demo_alpha-UNIT-0014:FEE-0014-4",
+            "created_at": "2026-10-09T14:37:44Z",
+            "resolved_at": null,
+            "resolution_evidence_id": null
+          }
+        ]
+      }
+    ],
+    "overall_decision": "CLAIM",
+    "total_claimable_usd": 2.0,
+    "investigation_graph": {
+      "workflow_id": "WF-org_demo_alpha-UNIT-0014",
+      "nodes": [
+        {
+          "node_id": "subject:UNIT-0014",
+          "node_type": "subject",
+          "label": "UNIT-0014",
+          "entity_id": "UNIT-0014",
+          "data": {
+            "org_id": "org_demo_alpha"
+          },
+          "timestamp": null
+        },
+        {
+          "node_id": "charge:FEE-0014-1",
+          "node_type": "charge",
+          "label": "inbound_defect_fee ($2.00)",
+          "entity_id": "FEE-0014-1",
+          "data": {
+            "charge_type": "inbound_defect_fee",
+            "amount_usd": 2.0,
+            "posted_date": "2026-07-18"
+          },
+          "timestamp": "2026-07-18"
+        },
+        {
+          "node_id": "shipment:FBA-DUMMY-101",
+          "node_type": "shipment",
+          "label": "FBA-DUMMY-101",
+          "entity_id": "FBA-DUMMY-101",
+          "data": {},
+          "timestamp": null
+        },
+        {
+          "node_id": "sku:SKU-LAMP-LED",
+          "node_type": "sku",
+          "label": "SKU-LAMP-LED",
+          "entity_id": "SKU-LAMP-LED",
+          "data": {},
+          "timestamp": null
+        },
+        {
+          "node_id": "charge:FEE-0014-2",
+          "node_type": "charge",
+          "label": "lost_inbound ($0.00)",
+          "entity_id": "FEE-0014-2",
+          "data": {
+            "charge_type": "lost_inbound",
+            "amount_usd": 0.0,
+            "posted_date": "2026-06-16"
+          },
+          "timestamp": "2026-06-16"
+        },
+        {
+          "node_id": "charge:FEE-0014-3",
+          "node_type": "charge",
+          "label": "fulfilment_fee_weight_tier ($4.75)",
+          "entity_id": "FEE-0014-3",
+          "data": {
+            "charge_type": "fulfilment_fee_weight_tier",
+            "amount_usd": 4.75,
+            "posted_date": "2026-06-20"
+          },
+          "timestamp": "2026-06-20"
+        },
+        {
+          "node_id": "order:ORD-DUMMY-50014",
+          "node_type": "order",
+          "label": "ORD-DUMMY-50014",
+          "entity_id": "ORD-DUMMY-50014",
+          "data": {},
+          "timestamp": null
+        },
+        {
+          "node_id": "charge:FEE-0014-4",
+          "node_type": "charge",
+          "label": "refund_issued_item_not_returned ($0.00)",
+          "entity_id": "FEE-0014-4",
+          "data": {
+            "charge_type": "refund_issued_item_not_returned",
+            "amount_usd": 0.0,
+            "posted_date": "2026-07-18"
+          },
+          "timestamp": "2026-07-18"
+        },
+        {
+          "node_id": "evidence:RCV-0014",
+          "node_type": "evidence",
+          "label": "receiving evidence (PASS)",
+          "entity_id": "RCV-0014",
+          "data": {
+            "stage": "receiving",
+            "verdict": "PASS",
+            "outcome": "accept",
+            "status": "completed",
+            "agent_id": "receiving-stub@0"
+          },
+          "timestamp": "2026-10-09T06:43:10Z"
+        },
+        {
+          "node_id": "evidence:PRP-0014",
+          "node_type": "evidence",
+          "label": "prep evidence (PASS)",
+          "entity_id": "PRP-0014",
+          "data": {
+            "stage": "prep",
+            "verdict": "PASS",
+            "outcome": "compliant",
+            "status": "completed",
+            "agent_id": "prep-stub@0"
+          },
+          "timestamp": "2026-10-09T06:43:15Z"
+        },
+        {
+          "node_id": "evidence:RTN-PENDING-WF-org_demo_alpha-UNIT-0014-returns",
+          "node_type": "evidence",
+          "label": "returns evidence (UNCERTAIN)",
+          "entity_id": "RTN-PENDING-WF-org_demo_alpha-UNIT-0014-returns",
+          "data": {
+            "stage": "returns",
+            "verdict": "UNCERTAIN",
+            "outcome": "pending_review",
+            "status": "pending",
+            "agent_id": "returns-manager@1"
+          },
+          "timestamp": "2026-10-09T06:43:35Z"
+        },
+        {
+          "node_id": "evidence:RCY-UNIT-0014",
+          "node_type": "evidence",
+          "label": "recovery evidence (FAIL)",
+          "entity_id": "RCY-UNIT-0014",
+          "data": {
+            "stage": "recovery",
+            "verdict": "FAIL",
+            "outcome": "claim_recommended",
+            "status": "completed",
+            "agent_id": "recovery-manager@2"
+          },
+          "timestamp": "2026-10-09T06:43:39Z"
+        },
+        {
+          "node_id": "assessment:FEE-0014-1",
+          "node_type": "assessment",
+          "label": "Assessment: CONTRADICTS",
+          "entity_id": "FEE-0014-1",
+          "data": {
+            "verdict": "CONTRADICTS",
+            "confidence": 1.0,
+            "evidence_health": "SUFFICIENT"
+          },
+          "timestamp": null
+        },
+        {
+          "node_id": "decision:FEE-0014-1",
+          "node_type": "decision",
+          "label": "Decision: CLAIM",
+          "entity_id": "FEE-0014-1",
+          "data": {
+            "decision": "CLAIM",
+            "amount_usd": 2.0,
+            "reason": "Prep evidence shows the unit compliant"
+          },
+          "timestamp": null
+        },
+        {
+          "node_id": "assessment:FEE-0014-2",
+          "node_type": "assessment",
+          "label": "Assessment: SILENT",
+          "entity_id": "FEE-0014-2",
+          "data": {
+            "verdict": "SILENT",
+            "confidence": 1.0,
+            "evidence_health": "SUFFICIENT"
+          },
+          "timestamp": null
+        },
+        {
+          "node_id": "decision:FEE-0014-2",
+          "node_type": "decision",
+          "label": "Decision: NO_CLAIM",
+          "entity_id": "FEE-0014-2",
+          "data": {
+            "decision": "NO_CLAIM",
+            "amount_usd": 0.0,
+            "reason": "receiving shortfall is supplier-side, not channel-side loss (finding F-10)"
+          },
+          "timestamp": null
+        },
+        {
+          "node_id": "assessment:FEE-0014-3",
+          "node_type": "assessment",
+          "label": "Assessment: SILENT",
+          "entity_id": "FEE-0014-3",
+          "data": {
+            "verdict": "SILENT",
+            "confidence": 1.0,
+            "evidence_health": "SUFFICIENT"
+          },
+          "timestamp": null
+        },
+        {
+          "node_id": "decision:FEE-0014-3",
+          "node_type": "decision",
+          "label": "Decision: NO_CLAIM",
+          "entity_id": "FEE-0014-3",
+          "data": {
+            "decision": "NO_CLAIM",
+            "amount_usd": 4.75,
+            "reason": "no measured weight/dimensions upstream (finding F-07)"
+          },
+          "timestamp": null
+        },
+        {
+          "node_id": "assessment:FEE-0014-4",
+          "node_type": "assessment",
+          "label": "Assessment: SILENT",
+          "entity_id": "FEE-0014-4",
+          "data": {
+            "verdict": "SILENT",
+            "confidence": 1.0,
+            "evidence_health": "INSUFFICIENT"
+          },
+          "timestamp": null
+        },
+        {
+          "node_id": "decision:FEE-0014-4",
+          "node_type": "decision",
+          "label": "Decision: NO_CLAIM",
+          "entity_id": "FEE-0014-4",
+          "data": {
+            "decision": "NO_CLAIM",
+            "amount_usd": 0.0,
+            "reason": "Insufficient evidence to support or contradict the charge."
+          },
+          "timestamp": null
+        }
+      ],
+      "edges": [
+        {
+          "source": "charge:FEE-0014-1",
+          "target": "subject:UNIT-0014",
+          "relationship": "belongs_to",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "charge:FEE-0014-1",
+          "target": "shipment:FBA-DUMMY-101",
+          "relationship": "belongs_to",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "charge:FEE-0014-1",
+          "target": "sku:SKU-LAMP-LED",
+          "relationship": "references",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "charge:FEE-0014-2",
+          "target": "subject:UNIT-0014",
+          "relationship": "belongs_to",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "charge:FEE-0014-2",
+          "target": "shipment:FBA-DUMMY-101",
+          "relationship": "belongs_to",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "charge:FEE-0014-2",
+          "target": "sku:SKU-LAMP-LED",
+          "relationship": "references",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "charge:FEE-0014-3",
+          "target": "subject:UNIT-0014",
+          "relationship": "belongs_to",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "charge:FEE-0014-3",
+          "target": "order:ORD-DUMMY-50014",
+          "relationship": "belongs_to",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "charge:FEE-0014-3",
+          "target": "shipment:FBA-DUMMY-101",
+          "relationship": "belongs_to",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "charge:FEE-0014-3",
+          "target": "sku:SKU-LAMP-LED",
+          "relationship": "references",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "charge:FEE-0014-4",
+          "target": "subject:UNIT-0014",
+          "relationship": "belongs_to",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "charge:FEE-0014-4",
+          "target": "order:ORD-DUMMY-50014",
+          "relationship": "belongs_to",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "charge:FEE-0014-4",
+          "target": "shipment:FBA-DUMMY-101",
+          "relationship": "belongs_to",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "charge:FEE-0014-4",
+          "target": "sku:SKU-LAMP-LED",
+          "relationship": "references",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "evidence:RCV-0014",
+          "target": "subject:UNIT-0014",
+          "relationship": "about",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "evidence:RCV-0014",
+          "target": "sku:SKU-LAMP-LED",
+          "relationship": "references",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "evidence:PRP-0014",
+          "target": "subject:UNIT-0014",
+          "relationship": "about",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "evidence:PRP-0014",
+          "target": "evidence:RCV-0014",
+          "relationship": "consumes",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "evidence:PRP-0014",
+          "target": "sku:SKU-LAMP-LED",
+          "relationship": "references",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "evidence:RTN-PENDING-WF-org_demo_alpha-UNIT-0014-returns",
+          "target": "subject:UNIT-0014",
+          "relationship": "about",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "evidence:RTN-PENDING-WF-org_demo_alpha-UNIT-0014-returns",
+          "target": "evidence:RCV-0014",
+          "relationship": "consumes",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "evidence:RTN-PENDING-WF-org_demo_alpha-UNIT-0014-returns",
+          "target": "evidence:PRP-0014",
+          "relationship": "consumes",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "evidence:RCY-UNIT-0014",
+          "target": "subject:UNIT-0014",
+          "relationship": "about",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "evidence:RCY-UNIT-0014",
+          "target": "evidence:RCV-0014",
+          "relationship": "consumes",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "evidence:RCY-UNIT-0014",
+          "target": "evidence:PRP-0014",
+          "relationship": "consumes",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "evidence:RCY-UNIT-0014",
+          "target": "evidence:RTN-PENDING-WF-org_demo_alpha-UNIT-0014-returns",
+          "relationship": "consumes",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "assessment:FEE-0014-1",
+          "target": "charge:FEE-0014-1",
+          "relationship": "assesses",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "assessment:FEE-0014-1",
+          "target": "evidence:PRP-0014",
+          "relationship": "uses_evidence",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "assessment:FEE-0014-1",
+          "target": "evidence:RCV-0014",
+          "relationship": "uses_evidence",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "assessment:FEE-0014-1",
+          "target": "evidence:RCY-UNIT-0014",
+          "relationship": "uses_evidence",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "decision:FEE-0014-1",
+          "target": "assessment:FEE-0014-1",
+          "relationship": "based_on",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "assessment:FEE-0014-2",
+          "target": "charge:FEE-0014-2",
+          "relationship": "assesses",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "assessment:FEE-0014-2",
+          "target": "evidence:RCV-0014",
+          "relationship": "uses_evidence",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "assessment:FEE-0014-2",
+          "target": "evidence:PRP-0014",
+          "relationship": "uses_evidence",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "assessment:FEE-0014-2",
+          "target": "evidence:RCY-UNIT-0014",
+          "relationship": "uses_evidence",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "decision:FEE-0014-2",
+          "target": "assessment:FEE-0014-2",
+          "relationship": "based_on",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "assessment:FEE-0014-3",
+          "target": "charge:FEE-0014-3",
+          "relationship": "assesses",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "assessment:FEE-0014-3",
+          "target": "evidence:PRP-0014",
+          "relationship": "uses_evidence",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "assessment:FEE-0014-3",
+          "target": "evidence:RCV-0014",
+          "relationship": "uses_evidence",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "assessment:FEE-0014-3",
+          "target": "evidence:RCY-UNIT-0014",
+          "relationship": "uses_evidence",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "decision:FEE-0014-3",
+          "target": "assessment:FEE-0014-3",
+          "relationship": "based_on",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "assessment:FEE-0014-4",
+          "target": "charge:FEE-0014-4",
+          "relationship": "assesses",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "assessment:FEE-0014-4",
+          "target": "evidence:RCV-0014",
+          "relationship": "uses_evidence",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "assessment:FEE-0014-4",
+          "target": "evidence:PRP-0014",
+          "relationship": "uses_evidence",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "assessment:FEE-0014-4",
+          "target": "evidence:RCY-UNIT-0014",
+          "relationship": "uses_evidence",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "decision:FEE-0014-4",
+          "target": "assessment:FEE-0014-4",
+          "relationship": "based_on",
+          "verified": true,
+          "data": {}
+        }
+      ]
+    },
+    "investigation_timeline": {
+      "workflow_id": "WF-org_demo_alpha-UNIT-0014",
+      "events": [
+        {
+          "timestamp": "2026-06-04T14:36:00Z",
+          "event_type": "evidence_captured",
+          "stage": "receiving",
+          "entity_id": "RCV-0014",
+          "description": "receiving observation captured",
+          "evidence_id": "RCV-0014",
+          "data": {
+            "agent_id": "receiving-stub@0",
+            "verdict": "PASS"
+          }
+        },
+        {
+          "timestamp": "2026-06-06T07:36:00Z",
+          "event_type": "evidence_captured",
+          "stage": "prep",
+          "entity_id": "PRP-0014",
+          "description": "prep observation captured",
+          "evidence_id": "PRP-0014",
+          "data": {
+            "agent_id": "prep-stub@0",
+            "verdict": "PASS"
+          }
+        },
+        {
+          "timestamp": "2026-06-16T00:00:00Z",
+          "event_type": "charge_posted",
+          "stage": null,
+          "entity_id": "FEE-0014-2",
+          "description": "Charge lost_inbound: $0.00",
+          "evidence_id": null,
+          "data": {
+            "charge_type": "lost_inbound",
+            "amount_usd": 0.0,
+            "line_id": "FEE-0014-2"
+          }
+        },
+        {
+          "timestamp": "2026-06-20T00:00:00Z",
+          "event_type": "charge_posted",
+          "stage": null,
+          "entity_id": "FEE-0014-3",
+          "description": "Charge fulfilment_fee_weight_tier: $4.75",
+          "evidence_id": null,
+          "data": {
+            "charge_type": "fulfilment_fee_weight_tier",
+            "amount_usd": 4.75,
+            "line_id": "FEE-0014-3"
+          }
+        },
+        {
+          "timestamp": "2026-07-18T00:00:00Z",
+          "event_type": "charge_posted",
+          "stage": null,
+          "entity_id": "FEE-0014-1",
+          "description": "Charge inbound_defect_fee: $2.00",
+          "evidence_id": null,
+          "data": {
+            "charge_type": "inbound_defect_fee",
+            "amount_usd": 2.0,
+            "line_id": "FEE-0014-1"
+          }
+        },
+        {
+          "timestamp": "2026-07-18T00:00:00Z",
+          "event_type": "charge_posted",
+          "stage": null,
+          "entity_id": "FEE-0014-4",
+          "description": "Charge refund_issued_item_not_returned: $0.00",
+          "evidence_id": null,
+          "data": {
+            "charge_type": "refund_issued_item_not_returned",
+            "amount_usd": 0.0,
+            "line_id": "FEE-0014-4"
+          }
+        },
+        {
+          "timestamp": "2026-07-18T00:00:00Z",
+          "event_type": "evidence_captured",
+          "stage": "recovery",
+          "entity_id": "RCY-UNIT-0014",
+          "description": "recovery observation captured",
+          "evidence_id": "RCY-UNIT-0014",
+          "data": {
+            "agent_id": "recovery-manager@2",
+            "verdict": "FAIL"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:43:10Z",
+          "event_type": "evidence_produced",
+          "stage": "receiving",
+          "entity_id": "RCV-0014",
+          "description": "receiving evidence: PASS",
+          "evidence_id": "RCV-0014",
+          "data": {
+            "agent_id": "receiving-stub@0",
+            "verdict": "PASS",
+            "outcome": "accept"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:43:10Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0014",
+          "description": "workflow_created: flow=standard-v1",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:43:10Z",
+            "event": "workflow_created",
+            "stage": null,
+            "detail": "flow=standard-v1"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:43:10Z",
+          "event_type": "workflow_transition",
+          "stage": "pack",
+          "entity_id": "WF-org_demo_alpha-UNIT-0014",
+          "description": "stage_skipped: route='fba' not in ['mfn']",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:43:10Z",
+            "event": "stage_skipped",
+            "stage": "pack",
+            "detail": "route='fba' not in ['mfn']"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:43:10Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0014",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:43:10Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "PENDING",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:43:15Z",
+          "event_type": "evidence_produced",
+          "stage": "prep",
+          "entity_id": "PRP-0014",
+          "description": "prep evidence: PASS",
+          "evidence_id": "PRP-0014",
+          "data": {
+            "agent_id": "prep-stub@0",
+            "verdict": "PASS",
+            "outcome": "compliant"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:43:15Z",
+          "event_type": "workflow_transition",
+          "stage": "receiving",
+          "entity_id": "WF-org_demo_alpha-UNIT-0014",
+          "description": "stage_completed: accept / PASS",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:43:15Z",
+            "event": "stage_completed",
+            "stage": "receiving",
+            "detail": "accept / PASS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:43:26Z",
+          "event_type": "workflow_transition",
+          "stage": "prep",
+          "entity_id": "WF-org_demo_alpha-UNIT-0014",
+          "description": "stage_completed: compliant / PASS",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:43:26Z",
+            "event": "stage_completed",
+            "stage": "prep",
+            "detail": "compliant / PASS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:43:31Z",
+          "event_type": "workflow_transition",
+          "stage": "returns",
+          "entity_id": "WF-org_demo_alpha-UNIT-0014",
+          "description": "retry: ConnectError: [WinError 10061] No connection could be made because the target machine actively refused it",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:43:31Z",
+            "event": "retry",
+            "stage": "returns",
+            "detail": "ConnectError: [WinError 10061] No connection could be made because the target machine actively refused it"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:43:35Z",
+          "event_type": "evidence_captured",
+          "stage": "returns",
+          "entity_id": "RTN-PENDING-WF-org_demo_alpha-UNIT-0014-returns",
+          "description": "returns observation captured",
+          "evidence_id": "RTN-PENDING-WF-org_demo_alpha-UNIT-0014-returns",
+          "data": {
+            "agent_id": "returns-manager@1",
+            "verdict": "UNCERTAIN"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:43:35Z",
+          "event_type": "evidence_produced",
+          "stage": "returns",
+          "entity_id": "RTN-PENDING-WF-org_demo_alpha-UNIT-0014-returns",
+          "description": "returns evidence: UNCERTAIN",
+          "evidence_id": "RTN-PENDING-WF-org_demo_alpha-UNIT-0014-returns",
+          "data": {
+            "agent_id": "returns-manager@1",
+            "verdict": "UNCERTAIN",
+            "outcome": "pending_review"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:43:35Z",
+          "event_type": "workflow_transition",
+          "stage": "returns",
+          "entity_id": "WF-org_demo_alpha-UNIT-0014",
+          "description": "stage_degraded: agent_unavailable: recorded as pending; flow policy decides what next",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:43:35Z",
+            "event": "stage_degraded",
+            "stage": "returns",
+            "detail": "agent_unavailable: recorded as pending; flow policy decides what next"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:43:35Z",
+          "event_type": "workflow_transition",
+          "stage": "returns",
+          "entity_id": "WF-org_demo_alpha-UNIT-0014",
+          "description": "stage_error: pending_review / UNCERTAIN",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:43:35Z",
+            "event": "stage_error",
+            "stage": "returns",
+            "detail": "pending_review / UNCERTAIN"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:43:39Z",
+          "event_type": "evidence_produced",
+          "stage": "recovery",
+          "entity_id": "RCY-UNIT-0014",
+          "description": "recovery evidence: FAIL",
+          "evidence_id": "RCY-UNIT-0014",
+          "data": {
+            "agent_id": "recovery-manager@2",
+            "verdict": "FAIL",
+            "outcome": "claim_recommended"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:43:50Z",
+          "event_type": "workflow_transition",
+          "stage": "recovery",
+          "entity_id": "WF-org_demo_alpha-UNIT-0014",
+          "description": "stage_completed: claim_recommended / FAIL",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:43:50Z",
+            "event": "stage_completed",
+            "stage": "recovery",
+            "detail": "claim_recommended / FAIL"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:43:50Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_alpha-UNIT-0014",
+          "description": "status_changed: stage did not complete: returns",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:43:50Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "stage did not complete: returns",
+            "from_status": "IN_PROGRESS",
+            "to_status": "FAILED"
+          }
+        },
+        {
+          "timestamp": "All required evidence available",
+          "event_type": "investigation",
+          "stage": null,
+          "entity_id": "FEE-0014-1",
+          "description": "Investigation: CONTRADICTS \u2192 CLAIM",
+          "evidence_id": null,
+          "data": {
+            "verdict": "CONTRADICTS",
+            "decision": "CLAIM",
+            "confidence": 1.0
+          }
+        },
+        {
+          "timestamp": "All required evidence available",
+          "event_type": "investigation",
+          "stage": null,
+          "entity_id": "FEE-0014-2",
+          "description": "Investigation: SILENT \u2192 NO_CLAIM",
+          "evidence_id": null,
+          "data": {
+            "verdict": "SILENT",
+            "decision": "NO_CLAIM",
+            "confidence": 1.0
+          }
+        },
+        {
+          "timestamp": "All required evidence available",
+          "event_type": "investigation",
+          "stage": null,
+          "entity_id": "FEE-0014-3",
+          "description": "Investigation: SILENT \u2192 NO_CLAIM",
+          "evidence_id": null,
+          "data": {
+            "verdict": "SILENT",
+            "decision": "NO_CLAIM",
+            "confidence": 1.0
+          }
+        },
+        {
+          "timestamp": "Missing evidence: returns_evidence, returns.identity_match, returns.completeness",
+          "event_type": "investigation",
+          "stage": null,
+          "entity_id": "FEE-0014-4",
+          "description": "Investigation: SILENT \u2192 NO_CLAIM",
+          "evidence_id": null,
+          "data": {
+            "verdict": "SILENT",
+            "decision": "NO_CLAIM",
+            "confidence": 1.0
+          }
+        }
+      ]
+    },
+    "claim_dossiers": [
+      {
+        "dossier_id": "CLM-311a8c94",
+        "workflow_id": "WF-org_demo_alpha-UNIT-0014",
+        "subject_id": "UNIT-0014",
+        "org_id": "UNKNOWN",
+        "charge_id": "FEE-0014-1",
+        "charge_type": "inbound_defect_fee",
+        "charge_amount_usd": 2.0,
+        "decision": "CLAIM",
+        "claimable_amount_usd": 2.0,
+        "evidence_ids": [
+          "PRP-0014",
+          "RCV-0014",
+          "RCY-UNIT-0014"
+        ],
+        "evidence_summary": "Prep evidence shows the unit compliant",
+        "timeline_summary": "",
+        "reasoning": "Prep evidence shows the unit compliant",
+        "confidence": 1.0,
+        "contradictions": [],
+        "missing_evidence": [],
+        "recommended_action": "claim",
+        "created_at": "2026-10-09T14:37:44Z",
+        "deterministic_validated": true
+      }
+    ],
+    "overall_evidence_health": "INSUFFICIENT",
+    "evidence_gaps": [
+      {
+        "gap_id": "GAP-47bcc644",
+        "charge_id": "FEE-0014-4",
+        "order_id": "ORD-DUMMY-50014",
+        "shipment_id": "FBA-DUMMY-101",
+        "sku": "SKU-LAMP-LED",
+        "subject_id": "UNIT-0014",
+        "missing_stage": "returns",
+        "missing_check_keys": [
+          "identity_match",
+          "completeness"
+        ],
+        "responsible_agent": "returns",
+        "status": "OPEN",
+        "correlation_id": "WF-org_demo_alpha-UNIT-0014:FEE-0014-4",
+        "created_at": "2026-10-09T14:37:44Z",
+        "resolved_at": null,
+        "resolution_evidence_id": null
+      }
+    ],
+    "ai_used": false,
+    "ai_status": "UNAVAILABLE",
+    "deterministic_fallback_used": true,
+    "investigated_at": "2026-10-09T14:37:44Z"
+  },
+  "WF-org_demo_bravo-UNIT-0018": {
+    "workflow_id": "WF-org_demo_bravo-UNIT-0018",
+    "subject_id": "UNIT-0018",
+    "org_id": "org_demo_bravo",
+    "charge_investigations": [
+      {
+        "charge_id": "FEE-0018-1",
+        "charge_type": "inbound_defect_fee",
+        "amount_usd": 1.0,
+        "subject_id": "UNIT-0018",
+        "workflow_id": "WF-org_demo_bravo-UNIT-0018",
+        "order_id": "",
+        "shipment_id": "FBA-DUMMY-101",
+        "sku": "SKU-BOTTLE-750",
+        "retrieved_evidence_ids": [
+          "PRP-0018",
+          "RCV-0018",
+          "RCY-UNIT-0018"
+        ],
+        "evidence_health": {
+          "charge_id": "FEE-0018-1",
+          "charge_type": "inbound_defect_fee",
+          "status": "SUFFICIENT",
+          "expected_evidence": [
+            "prep_evidence"
+          ],
+          "available_evidence": [
+            "prep_evidence"
+          ],
+          "missing_evidence": [],
+          "conflicting_evidence": [],
+          "coverage_ratio": 1.0,
+          "details": "All required evidence available"
+        },
+        "ai_reasoning": null,
+        "deterministic_verdict": "CONTRADICTS",
+        "deterministic_reason": "Prep evidence shows the unit compliant",
+        "deterministic_evidence_ids": [
+          "PRP-0018"
+        ],
+        "final_verdict": "CONTRADICTS",
+        "final_confidence": 1.0,
+        "final_reason": "Prep evidence shows the unit compliant",
+        "decision": "CLAIM",
+        "gaps": []
+      },
+      {
+        "charge_id": "FEE-0018-2",
+        "charge_type": "fulfilment_fee_weight_tier",
+        "amount_usd": 5.1,
+        "subject_id": "UNIT-0018",
+        "workflow_id": "WF-org_demo_bravo-UNIT-0018",
+        "order_id": "ORD-DUMMY-50018",
+        "shipment_id": "FBA-DUMMY-101",
+        "sku": "SKU-BOTTLE-750",
+        "retrieved_evidence_ids": [
+          "PRP-0018",
+          "RCV-0018",
+          "RCY-UNIT-0018"
+        ],
+        "evidence_health": {
+          "charge_id": "FEE-0018-2",
+          "charge_type": "fulfilment_fee_weight_tier",
+          "status": "SUFFICIENT",
+          "expected_evidence": [
+            "prep_evidence"
+          ],
+          "available_evidence": [
+            "prep_evidence"
+          ],
+          "missing_evidence": [],
+          "conflicting_evidence": [],
+          "coverage_ratio": 1.0,
+          "details": "All required evidence available"
+        },
+        "ai_reasoning": null,
+        "deterministic_verdict": "SILENT",
+        "deterministic_reason": "no measured weight/dimensions upstream (finding F-07)",
+        "deterministic_evidence_ids": [],
+        "final_verdict": "SILENT",
+        "final_confidence": 1.0,
+        "final_reason": "no measured weight/dimensions upstream (finding F-07)",
+        "decision": "NO_CLAIM",
+        "gaps": []
+      }
+    ],
+    "overall_decision": "CLAIM",
+    "total_claimable_usd": 1.0,
+    "investigation_graph": {
+      "workflow_id": "WF-org_demo_bravo-UNIT-0018",
+      "nodes": [
+        {
+          "node_id": "subject:UNIT-0018",
+          "node_type": "subject",
+          "label": "UNIT-0018",
+          "entity_id": "UNIT-0018",
+          "data": {
+            "org_id": "org_demo_bravo"
+          },
+          "timestamp": null
+        },
+        {
+          "node_id": "charge:FEE-0018-1",
+          "node_type": "charge",
+          "label": "inbound_defect_fee ($1.00)",
+          "entity_id": "FEE-0018-1",
+          "data": {
+            "charge_type": "inbound_defect_fee",
+            "amount_usd": 1.0,
+            "posted_date": "2026-07-20"
+          },
+          "timestamp": "2026-07-20"
+        },
+        {
+          "node_id": "shipment:FBA-DUMMY-101",
+          "node_type": "shipment",
+          "label": "FBA-DUMMY-101",
+          "entity_id": "FBA-DUMMY-101",
+          "data": {},
+          "timestamp": null
+        },
+        {
+          "node_id": "sku:SKU-BOTTLE-750",
+          "node_type": "sku",
+          "label": "SKU-BOTTLE-750",
+          "entity_id": "SKU-BOTTLE-750",
+          "data": {},
+          "timestamp": null
+        },
+        {
+          "node_id": "charge:FEE-0018-2",
+          "node_type": "charge",
+          "label": "fulfilment_fee_weight_tier ($5.10)",
+          "entity_id": "FEE-0018-2",
+          "data": {
+            "charge_type": "fulfilment_fee_weight_tier",
+            "amount_usd": 5.1,
+            "posted_date": "2026-06-21"
+          },
+          "timestamp": "2026-06-21"
+        },
+        {
+          "node_id": "order:ORD-DUMMY-50018",
+          "node_type": "order",
+          "label": "ORD-DUMMY-50018",
+          "entity_id": "ORD-DUMMY-50018",
+          "data": {},
+          "timestamp": null
+        },
+        {
+          "node_id": "evidence:RCV-0018",
+          "node_type": "evidence",
+          "label": "receiving evidence (FAIL)",
+          "entity_id": "RCV-0018",
+          "data": {
+            "stage": "receiving",
+            "verdict": "FAIL",
+            "outcome": "accept_with_exceptions",
+            "status": "completed",
+            "agent_id": "receiving-stub@0"
+          },
+          "timestamp": "2026-10-09T06:46:00Z"
+        },
+        {
+          "node_id": "evidence:PRP-0018",
+          "node_type": "evidence",
+          "label": "prep evidence (PASS)",
+          "entity_id": "PRP-0018",
+          "data": {
+            "stage": "prep",
+            "verdict": "PASS",
+            "outcome": "compliant",
+            "status": "completed",
+            "agent_id": "prep-stub@0"
+          },
+          "timestamp": "2026-10-09T06:46:08Z"
+        },
+        {
+          "node_id": "evidence:RTN-PENDING-WF-org_demo_bravo-UNIT-0018-returns",
+          "node_type": "evidence",
+          "label": "returns evidence (UNCERTAIN)",
+          "entity_id": "RTN-PENDING-WF-org_demo_bravo-UNIT-0018-returns",
+          "data": {
+            "stage": "returns",
+            "verdict": "UNCERTAIN",
+            "outcome": "pending_review",
+            "status": "pending",
+            "agent_id": "returns-manager@1"
+          },
+          "timestamp": "2026-10-09T06:46:21Z"
+        },
+        {
+          "node_id": "evidence:RCY-UNIT-0018",
+          "node_type": "evidence",
+          "label": "recovery evidence (FAIL)",
+          "entity_id": "RCY-UNIT-0018",
+          "data": {
+            "stage": "recovery",
+            "verdict": "FAIL",
+            "outcome": "claim_recommended",
+            "status": "completed",
+            "agent_id": "recovery-manager@2"
+          },
+          "timestamp": "2026-10-09T06:46:24Z"
+        },
+        {
+          "node_id": "assessment:FEE-0018-1",
+          "node_type": "assessment",
+          "label": "Assessment: CONTRADICTS",
+          "entity_id": "FEE-0018-1",
+          "data": {
+            "verdict": "CONTRADICTS",
+            "confidence": 1.0,
+            "evidence_health": "SUFFICIENT"
+          },
+          "timestamp": null
+        },
+        {
+          "node_id": "decision:FEE-0018-1",
+          "node_type": "decision",
+          "label": "Decision: CLAIM",
+          "entity_id": "FEE-0018-1",
+          "data": {
+            "decision": "CLAIM",
+            "amount_usd": 1.0,
+            "reason": "Prep evidence shows the unit compliant"
+          },
+          "timestamp": null
+        },
+        {
+          "node_id": "assessment:FEE-0018-2",
+          "node_type": "assessment",
+          "label": "Assessment: SILENT",
+          "entity_id": "FEE-0018-2",
+          "data": {
+            "verdict": "SILENT",
+            "confidence": 1.0,
+            "evidence_health": "SUFFICIENT"
+          },
+          "timestamp": null
+        },
+        {
+          "node_id": "decision:FEE-0018-2",
+          "node_type": "decision",
+          "label": "Decision: NO_CLAIM",
+          "entity_id": "FEE-0018-2",
+          "data": {
+            "decision": "NO_CLAIM",
+            "amount_usd": 5.1,
+            "reason": "no measured weight/dimensions upstream (finding F-07)"
+          },
+          "timestamp": null
+        }
+      ],
+      "edges": [
+        {
+          "source": "charge:FEE-0018-1",
+          "target": "subject:UNIT-0018",
+          "relationship": "belongs_to",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "charge:FEE-0018-1",
+          "target": "shipment:FBA-DUMMY-101",
+          "relationship": "belongs_to",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "charge:FEE-0018-1",
+          "target": "sku:SKU-BOTTLE-750",
+          "relationship": "references",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "charge:FEE-0018-2",
+          "target": "subject:UNIT-0018",
+          "relationship": "belongs_to",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "charge:FEE-0018-2",
+          "target": "order:ORD-DUMMY-50018",
+          "relationship": "belongs_to",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "charge:FEE-0018-2",
+          "target": "shipment:FBA-DUMMY-101",
+          "relationship": "belongs_to",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "charge:FEE-0018-2",
+          "target": "sku:SKU-BOTTLE-750",
+          "relationship": "references",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "evidence:RCV-0018",
+          "target": "subject:UNIT-0018",
+          "relationship": "about",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "evidence:RCV-0018",
+          "target": "sku:SKU-BOTTLE-750",
+          "relationship": "references",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "evidence:PRP-0018",
+          "target": "subject:UNIT-0018",
+          "relationship": "about",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "evidence:PRP-0018",
+          "target": "evidence:RCV-0018",
+          "relationship": "consumes",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "evidence:PRP-0018",
+          "target": "sku:SKU-BOTTLE-750",
+          "relationship": "references",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "evidence:RTN-PENDING-WF-org_demo_bravo-UNIT-0018-returns",
+          "target": "subject:UNIT-0018",
+          "relationship": "about",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "evidence:RTN-PENDING-WF-org_demo_bravo-UNIT-0018-returns",
+          "target": "evidence:RCV-0018",
+          "relationship": "consumes",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "evidence:RTN-PENDING-WF-org_demo_bravo-UNIT-0018-returns",
+          "target": "evidence:PRP-0018",
+          "relationship": "consumes",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "evidence:RCY-UNIT-0018",
+          "target": "subject:UNIT-0018",
+          "relationship": "about",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "evidence:RCY-UNIT-0018",
+          "target": "evidence:RCV-0018",
+          "relationship": "consumes",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "evidence:RCY-UNIT-0018",
+          "target": "evidence:PRP-0018",
+          "relationship": "consumes",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "evidence:RCY-UNIT-0018",
+          "target": "evidence:RTN-PENDING-WF-org_demo_bravo-UNIT-0018-returns",
+          "relationship": "consumes",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "assessment:FEE-0018-1",
+          "target": "charge:FEE-0018-1",
+          "relationship": "assesses",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "assessment:FEE-0018-1",
+          "target": "evidence:PRP-0018",
+          "relationship": "uses_evidence",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "assessment:FEE-0018-1",
+          "target": "evidence:RCV-0018",
+          "relationship": "uses_evidence",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "assessment:FEE-0018-1",
+          "target": "evidence:RCY-UNIT-0018",
+          "relationship": "uses_evidence",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "decision:FEE-0018-1",
+          "target": "assessment:FEE-0018-1",
+          "relationship": "based_on",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "assessment:FEE-0018-2",
+          "target": "charge:FEE-0018-2",
+          "relationship": "assesses",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "assessment:FEE-0018-2",
+          "target": "evidence:PRP-0018",
+          "relationship": "uses_evidence",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "assessment:FEE-0018-2",
+          "target": "evidence:RCV-0018",
+          "relationship": "uses_evidence",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "assessment:FEE-0018-2",
+          "target": "evidence:RCY-UNIT-0018",
+          "relationship": "uses_evidence",
+          "verified": true,
+          "data": {}
+        },
+        {
+          "source": "decision:FEE-0018-2",
+          "target": "assessment:FEE-0018-2",
+          "relationship": "based_on",
+          "verified": true,
+          "data": {}
+        }
+      ]
+    },
+    "investigation_timeline": {
+      "workflow_id": "WF-org_demo_bravo-UNIT-0018",
+      "events": [
+        {
+          "timestamp": "2026-06-07T07:44:00Z",
+          "event_type": "evidence_captured",
+          "stage": "receiving",
+          "entity_id": "RCV-0018",
+          "description": "receiving observation captured",
+          "evidence_id": "RCV-0018",
+          "data": {
+            "agent_id": "receiving-stub@0",
+            "verdict": "FAIL"
+          }
+        },
+        {
+          "timestamp": "2026-06-08T04:44:00Z",
+          "event_type": "evidence_captured",
+          "stage": "prep",
+          "entity_id": "PRP-0018",
+          "description": "prep observation captured",
+          "evidence_id": "PRP-0018",
+          "data": {
+            "agent_id": "prep-stub@0",
+            "verdict": "PASS"
+          }
+        },
+        {
+          "timestamp": "2026-06-21T00:00:00Z",
+          "event_type": "charge_posted",
+          "stage": null,
+          "entity_id": "FEE-0018-2",
+          "description": "Charge fulfilment_fee_weight_tier: $5.10",
+          "evidence_id": null,
+          "data": {
+            "charge_type": "fulfilment_fee_weight_tier",
+            "amount_usd": 5.1,
+            "line_id": "FEE-0018-2"
+          }
+        },
+        {
+          "timestamp": "2026-07-20T00:00:00Z",
+          "event_type": "charge_posted",
+          "stage": null,
+          "entity_id": "FEE-0018-1",
+          "description": "Charge inbound_defect_fee: $1.00",
+          "evidence_id": null,
+          "data": {
+            "charge_type": "inbound_defect_fee",
+            "amount_usd": 1.0,
+            "line_id": "FEE-0018-1"
+          }
+        },
+        {
+          "timestamp": "2026-07-20T00:00:00Z",
+          "event_type": "evidence_captured",
+          "stage": "recovery",
+          "entity_id": "RCY-UNIT-0018",
+          "description": "recovery observation captured",
+          "evidence_id": "RCY-UNIT-0018",
+          "data": {
+            "agent_id": "recovery-manager@2",
+            "verdict": "FAIL"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:46:00Z",
+          "event_type": "evidence_produced",
+          "stage": "receiving",
+          "entity_id": "RCV-0018",
+          "description": "receiving evidence: FAIL",
+          "evidence_id": "RCV-0018",
+          "data": {
+            "agent_id": "receiving-stub@0",
+            "verdict": "FAIL",
+            "outcome": "accept_with_exceptions"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:46:00Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_bravo-UNIT-0018",
+          "description": "workflow_created: flow=standard-v1",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:46:00Z",
+            "event": "workflow_created",
+            "stage": null,
+            "detail": "flow=standard-v1"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:46:00Z",
+          "event_type": "workflow_transition",
+          "stage": "pack",
+          "entity_id": "WF-org_demo_bravo-UNIT-0018",
+          "description": "stage_skipped: route='fba' not in ['mfn']",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:46:00Z",
+            "event": "stage_skipped",
+            "stage": "pack",
+            "detail": "route='fba' not in ['mfn']"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:46:00Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_bravo-UNIT-0018",
+          "description": "status_changed: advancing",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:46:00Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "advancing",
+            "from_status": "PENDING",
+            "to_status": "IN_PROGRESS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:46:08Z",
+          "event_type": "evidence_produced",
+          "stage": "prep",
+          "entity_id": "PRP-0018",
+          "description": "prep evidence: PASS",
+          "evidence_id": "PRP-0018",
+          "data": {
+            "agent_id": "prep-stub@0",
+            "verdict": "PASS",
+            "outcome": "compliant"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:46:08Z",
+          "event_type": "workflow_transition",
+          "stage": "receiving",
+          "entity_id": "WF-org_demo_bravo-UNIT-0018",
+          "description": "stage_completed: accept_with_exceptions / FAIL",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:46:08Z",
+            "event": "stage_completed",
+            "stage": "receiving",
+            "detail": "accept_with_exceptions / FAIL"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:46:12Z",
+          "event_type": "workflow_transition",
+          "stage": "prep",
+          "entity_id": "WF-org_demo_bravo-UNIT-0018",
+          "description": "stage_completed: compliant / PASS",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:46:12Z",
+            "event": "stage_completed",
+            "stage": "prep",
+            "detail": "compliant / PASS"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:46:17Z",
+          "event_type": "workflow_transition",
+          "stage": "returns",
+          "entity_id": "WF-org_demo_bravo-UNIT-0018",
+          "description": "retry: ConnectError: [WinError 10061] No connection could be made because the target machine actively refused it",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:46:17Z",
+            "event": "retry",
+            "stage": "returns",
+            "detail": "ConnectError: [WinError 10061] No connection could be made because the target machine actively refused it"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:46:21Z",
+          "event_type": "evidence_captured",
+          "stage": "returns",
+          "entity_id": "RTN-PENDING-WF-org_demo_bravo-UNIT-0018-returns",
+          "description": "returns observation captured",
+          "evidence_id": "RTN-PENDING-WF-org_demo_bravo-UNIT-0018-returns",
+          "data": {
+            "agent_id": "returns-manager@1",
+            "verdict": "UNCERTAIN"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:46:21Z",
+          "event_type": "evidence_produced",
+          "stage": "returns",
+          "entity_id": "RTN-PENDING-WF-org_demo_bravo-UNIT-0018-returns",
+          "description": "returns evidence: UNCERTAIN",
+          "evidence_id": "RTN-PENDING-WF-org_demo_bravo-UNIT-0018-returns",
+          "data": {
+            "agent_id": "returns-manager@1",
+            "verdict": "UNCERTAIN",
+            "outcome": "pending_review"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:46:21Z",
+          "event_type": "workflow_transition",
+          "stage": "returns",
+          "entity_id": "WF-org_demo_bravo-UNIT-0018",
+          "description": "stage_degraded: agent_unavailable: recorded as pending; flow policy decides what next",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:46:21Z",
+            "event": "stage_degraded",
+            "stage": "returns",
+            "detail": "agent_unavailable: recorded as pending; flow policy decides what next"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:46:21Z",
+          "event_type": "workflow_transition",
+          "stage": "returns",
+          "entity_id": "WF-org_demo_bravo-UNIT-0018",
+          "description": "stage_error: pending_review / UNCERTAIN",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:46:21Z",
+            "event": "stage_error",
+            "stage": "returns",
+            "detail": "pending_review / UNCERTAIN"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:46:24Z",
+          "event_type": "evidence_produced",
+          "stage": "recovery",
+          "entity_id": "RCY-UNIT-0018",
+          "description": "recovery evidence: FAIL",
+          "evidence_id": "RCY-UNIT-0018",
+          "data": {
+            "agent_id": "recovery-manager@2",
+            "verdict": "FAIL",
+            "outcome": "claim_recommended"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:46:35Z",
+          "event_type": "workflow_transition",
+          "stage": "recovery",
+          "entity_id": "WF-org_demo_bravo-UNIT-0018",
+          "description": "stage_completed: claim_recommended / FAIL",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:46:35Z",
+            "event": "stage_completed",
+            "stage": "recovery",
+            "detail": "claim_recommended / FAIL"
+          }
+        },
+        {
+          "timestamp": "2026-10-09T06:46:35Z",
+          "event_type": "workflow_transition",
+          "stage": null,
+          "entity_id": "WF-org_demo_bravo-UNIT-0018",
+          "description": "status_changed: stage did not complete: returns",
+          "evidence_id": null,
+          "data": {
+            "at": "2026-10-09T06:46:35Z",
+            "event": "status_changed",
+            "stage": null,
+            "detail": "stage did not complete: returns",
+            "from_status": "IN_PROGRESS",
+            "to_status": "FAILED"
+          }
+        },
+        {
+          "timestamp": "All required evidence available",
+          "event_type": "investigation",
+          "stage": null,
+          "entity_id": "FEE-0018-1",
+          "description": "Investigation: CONTRADICTS \u2192 CLAIM",
+          "evidence_id": null,
+          "data": {
+            "verdict": "CONTRADICTS",
+            "decision": "CLAIM",
+            "confidence": 1.0
+          }
+        },
+        {
+          "timestamp": "All required evidence available",
+          "event_type": "investigation",
+          "stage": null,
+          "entity_id": "FEE-0018-2",
+          "description": "Investigation: SILENT \u2192 NO_CLAIM",
+          "evidence_id": null,
+          "data": {
+            "verdict": "SILENT",
+            "decision": "NO_CLAIM",
+            "confidence": 1.0
+          }
+        }
+      ]
+    },
+    "claim_dossiers": [
+      {
+        "dossier_id": "CLM-2a600c64",
+        "workflow_id": "WF-org_demo_bravo-UNIT-0018",
+        "subject_id": "UNIT-0018",
+        "org_id": "UNKNOWN",
+        "charge_id": "FEE-0018-1",
+        "charge_type": "inbound_defect_fee",
+        "charge_amount_usd": 1.0,
+        "decision": "CLAIM",
+        "claimable_amount_usd": 1.0,
+        "evidence_ids": [
+          "PRP-0018",
+          "RCV-0018",
+          "RCY-UNIT-0018"
+        ],
+        "evidence_summary": "Prep evidence shows the unit compliant",
+        "timeline_summary": "",
+        "reasoning": "Prep evidence shows the unit compliant",
+        "confidence": 1.0,
+        "contradictions": [],
+        "missing_evidence": [],
+        "recommended_action": "claim",
+        "created_at": "2026-10-09T14:37:44Z",
+        "deterministic_validated": true
+      }
+    ],
+    "overall_evidence_health": "SUFFICIENT",
+    "evidence_gaps": [],
+    "ai_used": false,
+    "ai_status": "UNAVAILABLE",
+    "deterministic_fallback_used": true,
+    "investigated_at": "2026-10-09T14:37:44Z"
+  }
+}

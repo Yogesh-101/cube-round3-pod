@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './App.css'
-
-// API base URL: uses env var in production, falls back to localhost for dev
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8100'
+import { 
+  orchestratorApi, 
+  getConfiguredApiBase, 
+  setCustomApiBase, 
+  isForceEmbedded, 
+  setForceEmbedded,
+  subscribeConnectionState 
+} from './apiClient'
 
 // Safe Error Boundary to guarantee zero white-screen crashes
 class ErrorBoundary extends React.Component {
@@ -81,6 +86,12 @@ function App() {
   const [activeTab, setActiveTab] = useState('dashboard') // 'dashboard' | 'inspect' | 'results'
   const [health, setHealth] = useState(null)
   const [loadingHealth, setLoadingHealth] = useState(true)
+  const [engineMode, setEngineMode] = useState('detecting') // 'live' | 'embedded' | 'detecting'
+  const [showSettingsModal, setShowSettingsModal] = useState(false)
+  const [customApiUrlInput, setCustomApiUrlInput] = useState(getConfiguredApiBase())
+  const [testResult, setTestResult] = useState(null)
+  const [testingConnection, setTestingConnection] = useState(false)
+  const [forceEmbeddedMode, setForceEmbeddedModeState] = useState(isForceEmbedded())
   
   const [recentWorkflows, setRecentWorkflows] = useState([])
   const [loadingWorkflows, setLoadingWorkflows] = useState(true)
@@ -122,45 +133,48 @@ function App() {
     }))
   }
 
-  const fetchHealth = () => {
+  const fetchHealth = async () => {
     setLoadingHealth(true)
-    fetch(`${API_BASE}/health`)
-      .then(res => res.json())
-      .then(data => {
-        setHealth(data)
-        setLoadingHealth(false)
-      })
-      .catch(err => {
-        console.error("Health check error:", err)
-        setLoadingHealth(false)
-      })
+    try {
+      const data = await orchestratorApi.fetchHealth()
+      setHealth(data)
+      setEngineMode(data.mode === 'embedded' ? 'embedded' : 'live')
+    } catch (err) {
+      console.error("Health check error:", err)
+      setEngineMode('embedded')
+    } finally {
+      setLoadingHealth(false)
+    }
   }
 
-  const fetchWorkflows = () => {
+  const fetchWorkflows = async (targetOrg = null) => {
     setLoadingWorkflows(true)
-    fetch(`${API_BASE}/workflows`)
-      .then(res => res.json())
-      .then(data => {
-        if (Array.isArray(data)) {
-          // Filter by org if needed, or show all with current org highlighted
-          setRecentWorkflows(data)
-        }
-        setLoadingWorkflows(false)
-      })
-      .catch(err => {
-        console.warn("Recent workflows load error:", err)
-        setLoadingWorkflows(false)
-      })
+    try {
+      const data = await orchestratorApi.fetchWorkflows(targetOrg || orgId)
+      if (Array.isArray(data)) {
+        setRecentWorkflows(data)
+      }
+    } catch (err) {
+      console.warn("Recent workflows load error:", err)
+    } finally {
+      setLoadingWorkflows(false)
+    }
   }
 
   useEffect(() => {
     fetchHealth()
     fetchWorkflows()
+    const unsubscribe = subscribeConnectionState(({ isLiveOnline, mode }) => {
+      setEngineMode(mode)
+    })
     const interval = setInterval(() => {
       fetchHealth()
     }, 15000)
-    return () => clearInterval(interval)
-  }, [])
+    return () => {
+      clearInterval(interval)
+      unsubscribe()
+    }
+  }, [orgId])
 
   const selectWorkflow = async (wf) => {
     setWorkflow(wf)
@@ -170,13 +184,8 @@ function App() {
     
     // Attempt to load investigation
     try {
-      const invRes = await fetch(`${API_BASE}/phase2/investigation/${wf.workflow_id}`)
-      if (invRes.ok) {
-        const invData = await invRes.json()
-        setInvestigation(invData)
-      } else {
-        setInvestigation(null)
-      }
+      const invData = await orchestratorApi.getInvestigation(wf.workflow_id)
+      setInvestigation(invData)
     } catch (e) {
       console.warn("Failed to fetch investigation:", e)
       setInvestigation(null)
@@ -199,40 +208,49 @@ function App() {
     showToast(`Launching multi-agent pipeline for ${target}...`, 'info')
 
     try {
-      const res = await fetch(`${API_BASE}/workflows`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ org_id: orgId, unit_id: target })
-      })
-      
-      if (!res.ok) {
-        throw new Error(`API returned ${res.status}: ${res.statusText}`)
-      }
-      const data = await res.json()
+      const { data, isLive } = await orchestratorApi.runWorkflow(orgId, target)
       setWorkflow(data)
+      setEngineMode(isLive ? 'live' : 'embedded')
       fetchWorkflows()
       const outcome = getOutcome(data)
-      showToast(`Finished execution for ${target}: ${outcome}`, outcome === 'CLEAN' || outcome === 'PASS' ? 'seal' : (outcome === 'EXCEPTION' ? 'stop' : 'warn'))
+      showToast(
+        `Finished execution for ${target}: ${outcome} (${isLive ? 'Live API' : 'Embedded Engine'})`, 
+        outcome === 'CLEAN' || outcome === 'PASS' ? 'seal' : (outcome === 'EXCEPTION' ? 'stop' : 'warn')
+      )
 
       // Fetch intelligence Phase 2 results
       try {
-        const invRes = await fetch(`${API_BASE}/phase2/investigate/${data.workflow_id}`, {
-          method: 'POST',
-        })
-        if (invRes.ok) {
-          const invData = await invRes.json()
-          setInvestigation(invData)
-        }
+        const invData = await orchestratorApi.investigateWorkflow(data.workflow_id)
+        setInvestigation(invData)
       } catch (invErr) {
         console.warn("Phase 2 investigation error:", invErr)
       }
     } catch (err) {
       console.error(err)
-      setErrorMsg(err.message || "Failed to run workflow. Make sure orchestrator is running on port 8100.")
+      setErrorMsg(err.message || "Failed to run workflow.")
       showToast(err.message || "Workflow execution failed", 'stop')
     } finally {
       setExecuting(false)
     }
+  }
+
+  const exportEvidence = () => {
+    if (!workflow) return
+    const bundleData = {
+      workflow,
+      investigation,
+      exported_at: new Date().toISOString()
+    }
+    const blob = new Blob([JSON.stringify(bundleData, null, 2)], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `evidence-${workflow.workflow_id}.json`
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+    showToast("Downloaded complete evidence bundle JSON", "seal")
   }
 
   const isHealthy = health?.status === 'ok'
@@ -378,10 +396,31 @@ function App() {
               />
             </div>
 
-            <a className="health" href="#" onClick={(e) => { e.preventDefault(); fetchHealth(); showToast("Health checked", "info") }} title="Refresh API health">
-              <span className={`dot ${isHealthy ? 'ok' : 'down'}`}></span>
-              <span id="healthText">{loadingHealth ? 'API...' : (isHealthy ? 'API OK' : 'DEGRADED')}</span>
-            </a>
+            <button 
+              type="button"
+              className="health" 
+              onClick={(e) => { e.preventDefault(); setShowSettingsModal(true) }} 
+              title={engineMode === 'live' ? "Connected to live backend. Click to manage connection." : "Backend offline — running on embedded orchestrator engine. Click to configure."}
+              style={{
+                background: 'rgba(255, 255, 255, 0.04)',
+                border: '1px solid var(--border)',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '6px 12px',
+                borderRadius: 'var(--radius-sm)'
+              }}
+            >
+              <span className={`dot ${engineMode === 'live' ? 'ok' : ''}`} style={engineMode === 'embedded' ? { background: '#38bdf8' } : {}}></span>
+              <span id="healthText" style={{ fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.04em' }}>
+                {loadingHealth ? 'CONNECTING...' : (engineMode === 'live' ? 'LIVE API' : 'DEMO ENGINE')}
+              </span>
+              <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2" style={{ opacity: 0.7 }}>
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+              </svg>
+            </button>
           </nav>
         </div>
       </header>
@@ -621,7 +660,9 @@ function App() {
 
                   <div style={{ marginTop: 20, paddingTop: 16, borderTop: '1px solid var(--border)', fontSize: '0.8rem', color: 'var(--ink-400)' }}>
                     <div><strong>Flow ID:</strong> {health?.flow || 'standard-v1'}</div>
-                    <div style={{ marginTop: 4 }}><strong>System State:</strong> {isHealthy ? '100% Operational' : 'Degraded Fallback Active'}</div>
+                    <div style={{ marginTop: 4 }}>
+                      <strong>System State:</strong> {engineMode === 'live' ? '100% Operational (Live Orchestrator)' : '100% Operational (Embedded Engine)'}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -782,14 +823,14 @@ function App() {
                     >
                       Copy JSON State
                     </button>
-                    <a 
-                      href={`${API_BASE}/workflows/${workflow.workflow_id}/evidence`} 
-                      target="_blank" 
-                      rel="noreferrer"
+                    <button 
+                      type="button"
                       className="btn btn-ghost btn-sm"
+                      onClick={exportEvidence}
+                      title="Export complete immutable evidence ledger JSON"
                     >
-                      Export Evidence Bundle ↗
-                    </a>
+                      Export Evidence Bundle ⤓
+                    </button>
                   </div>
                 )}
               </div>
@@ -797,7 +838,7 @@ function App() {
               {/* Error Alert Banner */}
               {errorMsg && (
                 <div style={{ padding: '16px 20px', background: 'var(--stop-soft)', border: '1px solid var(--stop-edge)', borderRadius: 'var(--radius)', color: 'var(--stop)', marginBottom: 20 }}>
-                  <strong>Execution Error:</strong> {errorMsg}
+                  <strong>Execution Notice:</strong> {errorMsg}
                 </div>
               )}
 
@@ -1256,6 +1297,143 @@ function App() {
           </div>
         ))}
       </div>
+
+      {/* Backend Connection Settings Modal */}
+      {showSettingsModal && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'rgba(0, 0, 0, 0.75)',
+          backdropFilter: 'blur(6px)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 9999,
+          padding: 20
+        }}>
+          <div className="card" style={{ maxWidth: 520, width: '100%', border: '1px solid var(--border)', background: 'var(--surface1)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+              <h2 style={{ margin: 0, fontSize: '1.2rem' }}>Backend Connection Settings</h2>
+              <button 
+                type="button"
+                className="btn btn-ghost btn-sm" 
+                onClick={() => { setShowSettingsModal(false); setTestResult(null) }}
+                style={{ padding: '4px 8px' }}
+              >
+                ✕
+              </button>
+            </div>
+
+            <div style={{ marginBottom: 18, padding: 12, borderRadius: 'var(--radius-sm)', background: engineMode === 'live' ? 'var(--seal-soft)' : 'var(--surface2)', border: `1px solid ${engineMode === 'live' ? 'var(--seal-edge)' : 'var(--border)'}` }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+                <span className={`dot ${engineMode === 'live' ? 'ok' : ''}`} style={engineMode === 'embedded' ? { background: '#38bdf8' } : {}}></span>
+                <strong style={{ fontSize: '0.9rem', color: engineMode === 'live' ? 'var(--seal)' : '#38bdf8' }}>
+                  {engineMode === 'live' ? 'Connected to Live Orchestrator' : 'Embedded Engine Active (Zero-Config)'}
+                </strong>
+              </div>
+              <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--ink-400)' }}>
+                {engineMode === 'live' 
+                  ? 'Requests are routed directly to the live backend server.' 
+                  : 'Backend is offline or unreachable on this machine. Running in-browser embedded engine with 14 benchmark workflows, full evidence records, and Phase 2 AI intelligence.'}
+              </p>
+            </div>
+
+            <div style={{ marginBottom: 16 }}>
+              <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: 'var(--ink-300)', marginBottom: 6 }}>
+                Backend API Endpoint URL
+              </label>
+              <div style={{ display: 'flex', gap: 8 }}>
+                <input 
+                  type="text" 
+                  value={customApiUrlInput} 
+                  onChange={e => setCustomApiUrlInput(e.target.value)}
+                  placeholder="http://localhost:8100"
+                  style={{ flex: 1, padding: '8px 12px', background: 'var(--surface2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)', color: '#fff', fontSize: '0.85rem' }}
+                />
+                <button 
+                  type="button"
+                  className="btn btn-primary btn-sm"
+                  disabled={testingConnection}
+                  onClick={async () => {
+                    setTestingConnection(true)
+                    setTestResult(null)
+                    const res = await orchestratorApi.testConnection(customApiUrlInput)
+                    setTestingConnection(false)
+                    setTestResult(res)
+                    if (res.ok) {
+                      setCustomApiBase(customApiUrlInput)
+                      setForceEmbedded(false)
+                      setForceEmbeddedModeState(false)
+                      fetchHealth()
+                      fetchWorkflows()
+                      showToast('Connected to backend!', 'seal')
+                    }
+                  }}
+                >
+                  {testingConnection ? 'Testing...' : 'Test & Connect'}
+                </button>
+              </div>
+              {testResult && (
+                <div style={{ marginTop: 8, fontSize: '0.8rem', color: testResult.ok ? 'var(--seal)' : 'var(--stop)' }}>
+                  {testResult.ok ? '✓ Backend reached successfully!' : `✕ Could not reach endpoint (${testResult.error}). Embedded fallback active.`}
+                </div>
+              )}
+            </div>
+
+            <div style={{ marginBottom: 20 }}>
+              <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', fontSize: '0.85rem', color: 'var(--ink-300)' }}>
+                <input 
+                  type="checkbox" 
+                  checked={forceEmbeddedMode} 
+                  onChange={e => {
+                    const checked = e.target.checked
+                    setForceEmbeddedModeState(checked)
+                    setForceEmbedded(checked)
+                    fetchHealth()
+                    fetchWorkflows()
+                    showToast(checked ? 'Switched to Demo Engine' : 'Switched to Auto Detection', 'info')
+                  }}
+                />
+                Force Embedded Demo Engine (Ignore remote backend)
+              </label>
+            </div>
+
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10 }}>
+              <button 
+                type="button"
+                className="btn btn-ghost btn-sm"
+                onClick={() => {
+                  setCustomApiBase('')
+                  setCustomApiUrlInput('http://localhost:8100')
+                  setForceEmbedded(false)
+                  setForceEmbeddedModeState(false)
+                  fetchHealth()
+                  fetchWorkflows()
+                  setShowSettingsModal(false)
+                  showToast('Reset to default configuration', 'info')
+                }}
+              >
+                Reset Default
+              </button>
+              <button 
+                type="button"
+                className="btn btn-primary btn-sm"
+                onClick={() => {
+                  setCustomApiBase(customApiUrlInput)
+                  fetchHealth()
+                  fetchWorkflows()
+                  setShowSettingsModal(false)
+                }}
+              >
+                Done
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <footer>
         <div className="container" style={{display: 'flex', justifyContent: 'space-between', padding: '24px 0', color: 'var(--ink-400)', fontSize: '0.8125rem', flexWrap: 'wrap', gap: 12}}>

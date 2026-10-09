@@ -210,8 +210,12 @@ def _load_order_row(request: dict) -> dict:
 
 
 def _run_decision_on_sample(row: dict, evidence_refs: list[str]):
-    from app.decision.engine import run_decision_engine
-    from app.domain.schemas import ObservedItem, OrderLine
+    try:
+        from app.decision.engine import run_decision_engine
+        from app.domain.schemas import ObservedItem, OrderLine
+    except ImportError:
+        from agents.pack.runtime.app.decision.engine import run_decision_engine  # type: ignore
+        from agents.pack.runtime.app.domain.schemas import ObservedItem, OrderLine  # type: ignore
 
     want = _parse_lines(row["order_lines"])
     got = _parse_lines(row.get("observed_in_box") or "")
@@ -233,8 +237,12 @@ def _run_decision_on_sample(row: dict, evidence_refs: list[str]):
 
 
 def _run_vlm_pipeline(request: dict, row: dict, image_paths: list[str]):
-    from app.domain.schemas import Channel, Order, OrderLine
-    from app.pipeline import run_inspection
+    try:
+        from app.domain.schemas import Channel, Order, OrderLine
+        from app.pipeline import run_inspection
+    except ImportError:
+        from agents.pack.runtime.app.domain.schemas import Channel, Order, OrderLine  # type: ignore
+        from agents.pack.runtime.app.pipeline import run_inspection  # type: ignore
 
     want = _parse_lines(row["order_lines"])
     channel_raw = (row.get("channel") or "shopify").lower()
@@ -255,7 +263,10 @@ def _run_vlm_pipeline(request: dict, row: dict, image_paths: list[str]):
     cat_path = RUNTIME / "data" / "eval" / "catalogue.json"
     if cat_path.is_file():
         import json
-        from app.domain.schemas import CatalogueProduct
+        try:
+            from app.domain.schemas import CatalogueProduct
+        except ImportError:
+            from agents.pack.runtime.app.domain.schemas import CatalogueProduct  # type: ignore
 
         catalogue = [CatalogueProduct(**row) for row in json.loads(cat_path.read_text(encoding="utf-8"))]
 
