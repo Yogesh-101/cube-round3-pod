@@ -41,8 +41,14 @@ class FileStore(MemoryStore):
     def __init__(self, root: str | Path | None = None) -> None:
         super().__init__()
         self.root = Path(root or os.environ.get("OUT_DIR", "out"))
-        (self.root / "workflows").mkdir(parents=True, exist_ok=True)
-        (self.root / "evidence").mkdir(parents=True, exist_ok=True)
+        try:
+            (self.root / "workflows").mkdir(parents=True, exist_ok=True)
+            (self.root / "evidence").mkdir(parents=True, exist_ok=True)
+        except OSError:
+            # Serverless environments (Vercel) have read-only filesystems except /tmp
+            self.root = Path("/tmp/out")
+            (self.root / "workflows").mkdir(parents=True, exist_ok=True)
+            (self.root / "evidence").mkdir(parents=True, exist_ok=True)
 
     def load_workflow(self, workflow_id: str) -> dict | None:
         p = self.root / "workflows" / f"{workflow_id}.json"
