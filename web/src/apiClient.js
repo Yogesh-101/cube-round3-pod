@@ -11,8 +11,8 @@ export function getConfiguredApiBase() {
   if (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
     return 'http://localhost:8100'
   }
-  // If running on a deployed domain (like Vercel), default to relative /api or localhost
-  return 'http://localhost:8100'
+  // If running on a deployed domain (like Render), default to the live Render backend
+  return 'https://cube-orchestrator-api.onrender.com'
 }
 
 export function isForceEmbedded() {

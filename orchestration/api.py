@@ -39,6 +39,17 @@ FLOW = os.environ.get("ORCH_FLOW") or default_flow_path()
 STORE = FileStore()
 
 
+@app.get("/")
+def root() -> dict:
+    return {
+        "service": "CUBE Round 3 Orchestrator",
+        "status": "online",
+        "health": "/health",
+        "docs": "/docs",
+        "workflows": "/workflows"
+    }
+
+
 @app.get("/health")
 def health() -> dict:
     agents = {}
