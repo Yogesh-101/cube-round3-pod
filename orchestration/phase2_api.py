@@ -32,9 +32,8 @@ def investigate_workflow(workflow_id: str, store: FileStore = Depends(get_store)
     if not wf:
         raise HTTPException(status_code=404, detail="Workflow not found")
         
-    subject = wf.get("subject", {})
-    subject_id = subject.get("subject_id")
-    org_id = subject.get("org_id")
+    subject_id = wf.get("subject_id")
+    org_id = wf.get("org_id")
     
     if not subject_id or not org_id:
         raise HTTPException(status_code=400, detail="Workflow missing subject/org_id")

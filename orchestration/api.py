@@ -52,6 +52,25 @@ def health() -> dict:
     return {"status": "ok" if ok else "degraded", "flow": load_flow(FLOW)["flow_id"], "agents": agents}
 
 
+import json
+
+
+@app.get("/workflows")
+def list_workflows(org_id: str | None = None) -> list[dict]:
+    p = STORE.root / "workflows"
+    if not p.exists():
+        return []
+    results = []
+    for f in sorted(p.glob("*.json"), key=lambda x: x.stat().st_mtime, reverse=True)[:30]:
+        try:
+            wf = json.loads(f.read_text())
+            if not org_id or wf.get("org_id") == org_id:
+                results.append(wf)
+        except Exception:
+            pass
+    return results
+
+
 @app.post("/workflows")
 def create(body: dict) -> dict:
     org, subject = body.get("org_id"), body.get("subject_id") or body.get("unit_id")
