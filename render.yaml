@@ -1,0 +1,26 @@
+services:
+  # Python FastAPI Orchestrator Backend Service
+  - type: web
+    name: cube-orchestrator-api
+    env: python
+    plan: free
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "uvicorn orchestration.api:app --host 0.0.0.0 --port $PORT"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: OUT_DIR
+        value: "out"
+
+  # React / Vite Frontend Static Site
+  - type: web
+    name: cube-orchestrator-web
+    env: static
+    plan: free
+    buildCommand: "npm install && npm run build"
+    staticPublishPath: "./dist"
+    rootDir: "web"
+    routes:
+      - type: rewrite
+        source: "/*"
+        destination: "/index.html"
