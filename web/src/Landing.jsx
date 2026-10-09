@@ -141,11 +141,6 @@ export default function Landing() {
               { label: 'Home', href: '#' },
               { label: 'Features', href: '#features' },
               { label: 'Architecture', href: '#architecture' },
-              { label: 'Solutions', href: '#solutions' },
-              { label: 'Pricing', href: '#pricing' },
-              { label: 'Resources', href: '#resources' },
-              { label: 'Company', href: '#company' },
-              { label: 'Contact', href: '#contact' },
             ].map(({ label, href }) => (
               <a
                 key={label} href={href}
@@ -232,46 +227,6 @@ export default function Landing() {
           <FeatureRow title="Immutable Evidence Records" desc="Every agent emits a deterministic JSON envelope. Outcomes, decisions, and raw VLM outputs are signed with SHA-256 hashes. The orchestrator references these hashes, ensuring a fully auditable chain of custody that survives process restarts and disputes." icon={Database} reversed={false} />
           <FeatureRow title="Fail-Open Architecture" desc="The physical world doesn't pause for 503 errors. If the VLM hallucinates or an API times out, the agent falls back to PENDING_REVIEW. Operators are never blocked by the software, and decisions are safely routed to human dashboards." icon={Activity} reversed={true} />
           <FeatureRow title="Deterministic Decision Engine" desc="We separate vision from reasoning. The Vision Language Model operates at Temperature 0.0 to strictly report physical geometry and features. A deterministic, rule-based Python engine digests this to render the final PASS/FAIL verdict, eliminating LLM flakiness." icon={ShieldCheck} reversed={false} />
-        </div>
-      </section>
-
-      {/* ── SOLUTIONS ────────────────────────────────────────── */}
-      <section id="solutions" style={{ padding: '80px 24px', background: '#0f172a' }}>
-        <div style={{ maxWidth: '1060px', margin: '0 auto', textAlign: 'center' }}>
-          <h2 style={{ fontSize: '2.5rem', fontWeight: 700, color: '#f8fafc', marginBottom: '20px' }}>Solutions</h2>
-          <p style={{ color: '#94a3b8', fontSize: '1.1rem' }}>Tailored fulfillment orchestration for enterprise use cases.</p>
-        </div>
-      </section>
-
-      {/* ── PRICING ──────────────────────────────────────────── */}
-      <section id="pricing" style={{ padding: '80px 24px', background: '#020617' }}>
-        <div style={{ maxWidth: '1060px', margin: '0 auto', textAlign: 'center' }}>
-          <h2 style={{ fontSize: '2.5rem', fontWeight: 700, color: '#f8fafc', marginBottom: '20px' }}>Pricing</h2>
-          <p style={{ color: '#94a3b8', fontSize: '1.1rem' }}>Transparent, usage-based pricing for high-volume operations.</p>
-        </div>
-      </section>
-
-      {/* ── RESOURCES ────────────────────────────────────────── */}
-      <section id="resources" style={{ padding: '80px 24px', background: '#0f172a' }}>
-        <div style={{ maxWidth: '1060px', margin: '0 auto', textAlign: 'center' }}>
-          <h2 style={{ fontSize: '2.5rem', fontWeight: 700, color: '#f8fafc', marginBottom: '20px' }}>Resources</h2>
-          <p style={{ color: '#94a3b8', fontSize: '1.1rem' }}>Documentation, API references, and case studies.</p>
-        </div>
-      </section>
-
-      {/* ── COMPANY ──────────────────────────────────────────── */}
-      <section id="company" style={{ padding: '80px 24px', background: '#020617' }}>
-        <div style={{ maxWidth: '1060px', margin: '0 auto', textAlign: 'center' }}>
-          <h2 style={{ fontSize: '2.5rem', fontWeight: 700, color: '#f8fafc', marginBottom: '20px' }}>Company</h2>
-          <p style={{ color: '#94a3b8', fontSize: '1.1rem' }}>Learn about our mission to revolutionize fulfillment operations.</p>
-        </div>
-      </section>
-
-      {/* ── CONTACT ──────────────────────────────────────────── */}
-      <section id="contact" style={{ padding: '80px 24px', background: '#0f172a' }}>
-        <div style={{ maxWidth: '1060px', margin: '0 auto', textAlign: 'center' }}>
-          <h2 style={{ fontSize: '2.5rem', fontWeight: 700, color: '#f8fafc', marginBottom: '20px' }}>Contact</h2>
-          <p style={{ color: '#94a3b8', fontSize: '1.1rem' }}>Get in touch with our enterprise sales team.</p>
         </div>
       </section>
 
