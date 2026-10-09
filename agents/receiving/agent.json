@@ -1,10 +1,10 @@
 {
   "stage": "receiving",
-  "agent_id": "receiving-backend@1",
+  "agent_id": "receiving-manager@2",
   "owner": "@team",
   "mode": "inproc",
   "url": "http://localhost:8101",
   "module": "agents.receiving.app",
-  "implementation": "python-backend",
-  "notes": "Backend pipeline for Receiving using Pydantic schemas"
+  "implementation": "Round 2 Receiving Manager. With photos in data/input/<unit>/receiving/ and AI_API_KEY/OPENAI_API_KEY set: order-blind vision model reads SKU, counts, variant, damage and components from the photos, then a deterministic decision engine compares them with the PO (7 checks; unseen values are UNCERTAIN, never assumed). Without photos or a key: the same rules over the operator's recorded counts, disclosed as model 'receiving-rules', calls 0, payload.method 'operator_counts'.",
+  "notes": "Vision failure is fail-open: a pending record with error code model_error, routed to human review. Vision path needs the openai package."
 }
