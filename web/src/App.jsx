@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import './App.css'
 
 // Safe Error Boundary to guarantee zero white-screen crashes
@@ -73,6 +74,7 @@ function formatDuration(ms) {
 }
 
 function App() {
+  const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState('dashboard') // 'dashboard' | 'inspect' | 'results'
   const [health, setHealth] = useState(null)
   const [loadingHealth, setLoadingHealth] = useState(true)
@@ -295,6 +297,20 @@ function App() {
           </button>
 
           <nav id="mainNav" className={mobileNavOpen ? 'open' : ''} aria-label="Main">
+            <a 
+              href="/" 
+              onClick={(e) => { 
+                e.preventDefault()
+                navigate('/')
+              }}
+              style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+            >
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="m15 18-6-6 6-6"/>
+              </svg>
+              Home
+            </a>
+
             <a 
               href="#dashboard" 
               className={activeTab === 'dashboard' ? 'active' : ''} 
