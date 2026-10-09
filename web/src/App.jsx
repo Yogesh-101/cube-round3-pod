@@ -1407,9 +1407,10 @@ function App() {
                 className="btn btn-ghost btn-sm"
                 onClick={() => {
                   setCustomApiBase('')
-                  setCustomApiUrlInput('http://localhost:8100')
                   setForceEmbedded(false)
                   setForceEmbeddedModeState(false)
+                  const def = getConfiguredApiBase()
+                  setCustomApiUrlInput(def)
                   fetchHealth()
                   fetchWorkflows()
                   setShowSettingsModal(false)
