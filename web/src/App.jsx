@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './App.css'
 
+// API base URL: uses env var in production, falls back to localhost for dev
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8100'
+
 // Safe Error Boundary to guarantee zero white-screen crashes
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -121,7 +124,7 @@ function App() {
 
   const fetchHealth = () => {
     setLoadingHealth(true)
-    fetch('http://localhost:8100/health')
+    fetch(`${API_BASE}/health`)
       .then(res => res.json())
       .then(data => {
         setHealth(data)
@@ -135,7 +138,7 @@ function App() {
 
   const fetchWorkflows = () => {
     setLoadingWorkflows(true)
-    fetch('http://localhost:8100/workflows')
+    fetch(`${API_BASE}/workflows`)
       .then(res => res.json())
       .then(data => {
         if (Array.isArray(data)) {
@@ -167,7 +170,7 @@ function App() {
     
     // Attempt to load investigation
     try {
-      const invRes = await fetch(`http://localhost:8100/phase2/investigation/${wf.workflow_id}`)
+      const invRes = await fetch(`${API_BASE}/phase2/investigation/${wf.workflow_id}`)
       if (invRes.ok) {
         const invData = await invRes.json()
         setInvestigation(invData)
@@ -196,7 +199,7 @@ function App() {
     showToast(`Launching multi-agent pipeline for ${target}...`, 'info')
 
     try {
-      const res = await fetch('http://localhost:8100/workflows', {
+      const res = await fetch(`${API_BASE}/workflows`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ org_id: orgId, unit_id: target })
@@ -213,7 +216,7 @@ function App() {
 
       // Fetch intelligence Phase 2 results
       try {
-        const invRes = await fetch(`http://localhost:8100/phase2/investigate/${data.workflow_id}`, {
+        const invRes = await fetch(`${API_BASE}/phase2/investigate/${data.workflow_id}`, {
           method: 'POST',
         })
         if (invRes.ok) {
@@ -780,7 +783,7 @@ function App() {
                       Copy JSON State
                     </button>
                     <a 
-                      href={`http://localhost:8100/workflows/${workflow.workflow_id}/evidence`} 
+                      href={`${API_BASE}/workflows/${workflow.workflow_id}/evidence`} 
                       target="_blank" 
                       rel="noreferrer"
                       className="btn btn-ghost btn-sm"
