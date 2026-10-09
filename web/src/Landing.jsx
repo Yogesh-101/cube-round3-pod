@@ -131,7 +131,7 @@ export default function Landing() {
               <Box size={18} color="#60a5fa" />
             </div>
             <span style={{ fontSize: '1.2rem', fontWeight: 800, color: '#fff', letterSpacing: '-0.5px' }}>
-              CUBE
+              Orchestrator
             </span>
           </div>
 
@@ -184,7 +184,7 @@ export default function Landing() {
 
       {/* ── HERO (WebGL Shader) ───────────────────────────────── */}
       <Hero
-        trustBadge={{ text: 'Multi-Agent Orchestrator · CUBE Round 3', icons: ['📦', '🛡️', '⚡'] }}
+        trustBadge={{ text: 'Multi-Agent Orchestrator', icons: ['📦', '🛡️', '⚡'] }}
         headline={{ line1: 'Sovereign Fulfillment.', line2: 'Cryptographic Trust.' }}
         subtitle="A deterministic orchestrator uniting 5 independent AI agents. From receiving docks to return flows — every stage produces auditable, cryptographic evidence."
         buttons={{
@@ -266,10 +266,10 @@ export default function Landing() {
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <Box size={18} color="#60a5fa" />
-            <span style={{ fontSize: '1rem', fontWeight: 700, color: '#f8fafc' }}>CUBE<span style={{ color: '#60a5fa' }}>.</span></span>
+            <span style={{ fontSize: '1rem', fontWeight: 700, color: '#f8fafc' }}>Orchestrator<span style={{ color: '#60a5fa' }}>.</span></span>
           </div>
           <div style={{ color: '#475569', fontSize: '0.88rem' }}>
-            CUBE Build-A-Thon · Round 3 · Multi-Agent Orchestrator
+            Multi-Agent Orchestrator
           </div>
         </footer>
       </section>
