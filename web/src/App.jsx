@@ -66,6 +66,12 @@ function formatSafe(val) {
   return String(val)
 }
 
+function formatDuration(ms) {
+  if (!ms && ms !== 0) return null
+  if (ms < 1000) return `${ms}ms`
+  return `${(ms / 1000).toFixed(2)}s`
+}
+
 function App() {
   const [activeTab, setActiveTab] = useState('dashboard') // 'dashboard' | 'inspect' | 'results'
   const [health, setHealth] = useState(null)
@@ -81,7 +87,35 @@ function App() {
   const [investigation, setInvestigation] = useState(null)
   const [executing, setExecuting] = useState(false)
   const [errorMsg, setErrorMsg] = useState(null)
-  const [copied, setCopied] = useState(false)
+  
+  // UX enhancement states
+  const [quickUnit, setQuickUnit] = useState('')
+  const [mobileNavOpen, setMobileNavOpen] = useState(false)
+  const [toasts, setToasts] = useState([])
+  const [tableFilter, setTableFilter] = useState('ALL')
+  const [searchQuery, setSearchQuery] = useState('')
+  const [expandedStages, setExpandedStages] = useState({})
+
+  const showToast = (message, type = 'info') => {
+    const id = Date.now() + Math.random()
+    setToasts(prev => [...prev, { id, message, type }])
+    setTimeout(() => {
+      setToasts(prev => prev.filter(t => t.id !== id))
+    }, 3200)
+  }
+
+  const copyToClipboard = (text, successMsg = "Copied to clipboard!") => {
+    if (!text) return
+    navigator.clipboard.writeText(text)
+    showToast(successMsg, 'seal')
+  }
+
+  const toggleStage = (idx) => {
+    setExpandedStages(prev => ({
+      ...prev,
+      [idx]: !prev[idx]
+    }))
+  }
 
   const fetchHealth = () => {
     setLoadingHealth(true)
@@ -103,6 +137,7 @@ function App() {
       .then(res => res.json())
       .then(data => {
         if (Array.isArray(data)) {
+          // Filter by org if needed, or show all with current org highlighted
           setRecentWorkflows(data)
         }
         setLoadingWorkflows(false)
@@ -126,6 +161,7 @@ function App() {
     setWorkflow(wf)
     setErrorMsg(null)
     setActiveTab('results')
+    window.scrollTo({ top: 0, behavior: 'smooth' })
     
     // Attempt to load investigation
     try {
@@ -148,11 +184,14 @@ function App() {
     if (!target || !orgId) return
 
     setUnitId(target)
+    setQuickUnit('')
     setWorkflow(null)
     setInvestigation(null)
     setErrorMsg(null)
     setExecuting(true)
-    setActiveTab('results') // Seamlessly switch to Results page immediately!
+    setActiveTab('results')
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+    showToast(`Launching multi-agent pipeline for ${target}...`, 'info')
 
     try {
       const res = await fetch('http://localhost:8100/workflows', {
@@ -167,6 +206,8 @@ function App() {
       const data = await res.json()
       setWorkflow(data)
       fetchWorkflows()
+      const outcome = getOutcome(data)
+      showToast(`Finished execution for ${target}: ${outcome}`, outcome === 'CLEAN' || outcome === 'PASS' ? 'seal' : (outcome === 'EXCEPTION' ? 'stop' : 'warn'))
 
       // Fetch intelligence Phase 2 results
       try {
@@ -183,6 +224,7 @@ function App() {
     } catch (err) {
       console.error(err)
       setErrorMsg(err.message || "Failed to run workflow. Make sure orchestrator is running on port 8100.")
+      showToast(err.message || "Workflow execution failed", 'stop')
     } finally {
       setExecuting(false)
     }
@@ -198,12 +240,26 @@ function App() {
   const stopCount = recentWorkflows.filter(w => getOutcome(w) === 'EXCEPTION' || getOutcome(w) === 'FAIL').length
   const reviewCount = recentWorkflows.filter(w => getOutcome(w) === 'NEEDS_REVIEW' || getOutcome(w) === 'INCOMPLETE').length
 
-  const copyWorkflowJson = () => {
-    if (!workflow) return
-    navigator.clipboard.writeText(JSON.stringify(workflow, null, 2))
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
-  }
+  // Filtered workflows for dashboard
+  const filteredWorkflows = recentWorkflows.filter(wf => {
+    const outcome = getOutcome(wf)
+    const matchesFilter = 
+      tableFilter === 'ALL' ? true :
+      tableFilter === 'CLEAN' ? (outcome === 'CLEAN' || outcome === 'PASS') :
+      tableFilter === 'EXCEPTION' ? (outcome === 'EXCEPTION' || outcome === 'FAIL') :
+      tableFilter === 'REVIEW' ? (outcome === 'NEEDS_REVIEW' || outcome === 'INCOMPLETE') : true
+
+    const query = searchQuery.toLowerCase().trim()
+    if (!query) return matchesFilter
+
+    const matchesQuery = 
+      (wf.subject_id || '').toLowerCase().includes(query) ||
+      (wf.workflow_id || '').toLowerCase().includes(query) ||
+      (getReason(wf) || '').toLowerCase().includes(query) ||
+      (wf.context?.route || '').toLowerCase().includes(query)
+
+    return matchesFilter && matchesQuery
+  })
 
   return (
     <>
@@ -221,11 +277,32 @@ function App() {
             System Orchestrator
           </a>
 
-          <nav id="mainNav" aria-label="Main">
+          {/* Mobile hamburger toggle */}
+          <button 
+            type="button" 
+            className="nav-toggle" 
+            aria-label="Toggle navigation menu"
+            aria-expanded={mobileNavOpen}
+            onClick={() => setMobileNavOpen(!mobileNavOpen)}
+          >
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              {mobileNavOpen ? (
+                <path d="M18 6 6 18M6 6l12 12" />
+              ) : (
+                <path d="M4 6h16M4 12h16M4 18h16" />
+              )}
+            </svg>
+          </button>
+
+          <nav id="mainNav" className={mobileNavOpen ? 'open' : ''} aria-label="Main">
             <a 
               href="#dashboard" 
               className={activeTab === 'dashboard' ? 'active' : ''} 
-              onClick={(e) => { e.preventDefault(); setActiveTab('dashboard') }}
+              onClick={(e) => { 
+                e.preventDefault()
+                setActiveTab('dashboard')
+                setMobileNavOpen(false)
+              }}
             >
               <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/>
@@ -237,7 +314,11 @@ function App() {
             <a 
               href="#inspect" 
               className={activeTab === 'inspect' ? 'active' : ''} 
-              onClick={(e) => { e.preventDefault(); setActiveTab('inspect') }}
+              onClick={(e) => { 
+                e.preventDefault()
+                setActiveTab('inspect')
+                setMobileNavOpen(false)
+              }}
             >
               <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
@@ -248,7 +329,11 @@ function App() {
             <a 
               href="#results" 
               className={activeTab === 'results' ? 'active' : ''} 
-              onClick={(e) => { e.preventDefault(); setActiveTab('results') }}
+              onClick={(e) => { 
+                e.preventDefault()
+                setActiveTab('results')
+                setMobileNavOpen(false)
+              }}
             >
               <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
@@ -261,13 +346,20 @@ function App() {
               <input 
                 value={orgId} 
                 onChange={e => setOrgId(e.target.value)} 
+                onKeyDown={e => {
+                  if (e.key === 'Enter') {
+                    fetchWorkflows(e.target.value)
+                    showToast(`Switched active tenant to ${e.target.value}`, 'info')
+                  }
+                }}
                 spellCheck="false" 
                 autoComplete="off" 
                 placeholder="org_..." 
+                title="Press Enter to filter by tenant org"
               />
             </div>
 
-            <a className="health" href="#" onClick={(e) => { e.preventDefault(); fetchHealth() }} title="Refresh API health">
+            <a className="health" href="#" onClick={(e) => { e.preventDefault(); fetchHealth(); showToast("Health checked", "info") }} title="Refresh API health">
               <span className={`dot ${isHealthy ? 'ok' : 'down'}`}></span>
               <span id="healthText">{loadingHealth ? 'API...' : (isHealthy ? 'API OK' : 'DEGRADED')}</span>
             </a>
@@ -310,12 +402,12 @@ function App() {
                 </div>
               </div>
 
-              {/* KPI Stat Cards matching Pack Manager */}
+              {/* KPI Stat Cards */}
               <div className="grid-4" style={{ marginBottom: 24 }}>
                 <div className="stat">
                   <div className="stat-label">Total Inspections</div>
                   <div className="stat-value">{loadingWorkflows ? '—' : totalCount}</div>
-                  <div className="stat-sub">in tenant {orgId}</div>
+                  <div className="stat-sub">recorded runs</div>
                 </div>
                 <div className="stat is-seal">
                   <div className="stat-label">Sealed / Clean</div>
@@ -344,9 +436,51 @@ function App() {
                       </svg>
                       Recent Workflow Runs
                     </h2>
-                    <button className="btn btn-ghost btn-sm" onClick={fetchWorkflows} title="Refresh">
+                    <button className="btn btn-ghost btn-sm" onClick={() => fetchWorkflows()} title="Refresh">
                       Refresh List
                     </button>
+                  </div>
+
+                  {/* Filter and Search Bar */}
+                  <div className="filter-bar">
+                    <div className="filter-chips">
+                      <button 
+                        type="button" 
+                        className={`filter-chip ${tableFilter === 'ALL' ? 'active' : ''}`}
+                        onClick={() => setTableFilter('ALL')}
+                      >
+                        All ({recentWorkflows.length})
+                      </button>
+                      <button 
+                        type="button" 
+                        className={`filter-chip ${tableFilter === 'CLEAN' ? 'active' : ''}`}
+                        onClick={() => setTableFilter('CLEAN')}
+                      >
+                        Clean ({sealedCount})
+                      </button>
+                      <button 
+                        type="button" 
+                        className={`filter-chip ${tableFilter === 'EXCEPTION' ? 'active' : ''}`}
+                        onClick={() => setTableFilter('EXCEPTION')}
+                      >
+                        Exceptions ({stopCount})
+                      </button>
+                      <button 
+                        type="button" 
+                        className={`filter-chip ${tableFilter === 'REVIEW' ? 'active' : ''}`}
+                        onClick={() => setTableFilter('REVIEW')}
+                      >
+                        Review ({reviewCount})
+                      </button>
+                    </div>
+
+                    <input 
+                      type="text"
+                      className="table-search-input"
+                      placeholder="Filter unit or reason..."
+                      value={searchQuery}
+                      onChange={e => setSearchQuery(e.target.value)}
+                    />
                   </div>
 
                   {loadingWorkflows ? (
@@ -354,12 +488,20 @@ function App() {
                       <div className="spinner"></div>
                       <div>Loading recent workflows...</div>
                     </div>
-                  ) : recentWorkflows.length === 0 ? (
+                  ) : filteredWorkflows.length === 0 ? (
                     <div style={{ textAlign: 'center', padding: '40px 20px', color: 'var(--ink-400)' }}>
-                      <p style={{ marginBottom: 12 }}>No workflows recorded yet for this organization.</p>
-                      <button className="btn btn-primary btn-sm" onClick={() => setActiveTab('inspect')}>
-                        Run Your First Inspection
-                      </button>
+                      <p style={{ marginBottom: 12 }}>
+                        {recentWorkflows.length === 0 ? "No workflows recorded yet." : "No workflows matched your search filter."}
+                      </p>
+                      {recentWorkflows.length === 0 ? (
+                        <button className="btn btn-primary btn-sm" onClick={() => setActiveTab('inspect')}>
+                          Run Your First Inspection
+                        </button>
+                      ) : (
+                        <button className="btn btn-ghost btn-sm" onClick={() => { setTableFilter('ALL'); setSearchQuery('') }}>
+                          Clear Filters
+                        </button>
+                      )}
                     </div>
                   ) : (
                     <div className="table-wrap">
@@ -374,15 +516,20 @@ function App() {
                           </tr>
                         </thead>
                         <tbody>
-                          {recentWorkflows.slice(0, 10).map((wf) => {
+                          {filteredWorkflows.slice(0, 15).map((wf) => {
                             const outcome = getOutcome(wf)
                             const reason = getReason(wf)
                             const isSeal = outcome === 'CLEAN' || outcome === 'PASS'
                             const isStop = outcome === 'EXCEPTION' || outcome === 'FAIL'
                             return (
-                              <tr key={wf.workflow_id} style={{ borderBottom: '1px solid var(--border)' }}>
+                              <tr 
+                                key={wf.workflow_id} 
+                                className="row-link"
+                                onClick={() => selectWorkflow(wf)}
+                                title="Click to view detailed audit trail"
+                              >
                                 <td style={{ padding: '14px 16px', fontWeight: 700, color: '#fff' }}>
-                                  {wf.subject_id}
+                                  <span className="mono">{wf.subject_id}</span>
                                 </td>
                                 <td style={{ padding: '14px 16px', textTransform: 'uppercase', fontSize: '0.8rem', color: 'var(--ink-300)' }}>
                                   {wf.context?.route || 'FBA'}
@@ -398,7 +545,10 @@ function App() {
                                 <td style={{ padding: '14px 16px', textAlign: 'right' }}>
                                   <button 
                                     className="btn btn-ghost btn-sm"
-                                    onClick={() => selectWorkflow(wf)}
+                                    onClick={(e) => {
+                                      e.stopPropagation()
+                                      selectWorkflow(wf)
+                                    }}
                                   >
                                     View Results →
                                   </button>
@@ -493,7 +643,7 @@ function App() {
                       type="button" 
                       className="btn btn-ghost btn-sm"
                       onClick={() => setUnitId('UNIT-0001')}
-                      style={{ border: unitId === 'UNIT-0001' ? '1px solid var(--seal)' : undefined }}
+                      style={{ border: unitId === 'UNIT-0001' ? '1px solid var(--seal)' : undefined, background: unitId === 'UNIT-0001' ? 'rgba(52, 211, 153, 0.1)' : undefined }}
                     >
                       <span className="dot ok" style={{ display: 'inline-block', width: 6, height: 6, borderRadius: '50%', background: 'var(--seal)', marginRight: 6 }}></span>
                       UNIT-0001 (Clean Pass)
@@ -502,7 +652,7 @@ function App() {
                       type="button" 
                       className="btn btn-ghost btn-sm"
                       onClick={() => setUnitId('UNIT-0002')}
-                      style={{ border: unitId === 'UNIT-0002' ? '1px solid var(--stop)' : undefined }}
+                      style={{ border: unitId === 'UNIT-0002' ? '1px solid var(--stop)' : undefined, background: unitId === 'UNIT-0002' ? 'rgba(248, 113, 113, 0.1)' : undefined }}
                     >
                       <span className="dot down" style={{ display: 'inline-block', width: 6, height: 6, borderRadius: '50%', background: 'var(--stop)', marginRight: 6 }}></span>
                       UNIT-0002 (Prep Exception)
@@ -511,7 +661,7 @@ function App() {
                       type="button" 
                       className="btn btn-ghost btn-sm"
                       onClick={() => setUnitId('UNIT-0003')}
-                      style={{ border: unitId === 'UNIT-0003' ? '1px solid var(--uncertain)' : undefined }}
+                      style={{ border: unitId === 'UNIT-0003' ? '1px solid var(--uncertain)' : undefined, background: unitId === 'UNIT-0003' ? 'rgba(251, 191, 36, 0.1)' : undefined }}
                     >
                       <span className="dot" style={{ display: 'inline-block', width: 6, height: 6, borderRadius: '50%', background: 'var(--uncertain)', marginRight: 6 }}></span>
                       UNIT-0003 (Degraded / Review)
@@ -520,6 +670,7 @@ function App() {
                       type="button" 
                       className="btn btn-ghost btn-sm"
                       onClick={() => setUnitId('UNIT-0004')}
+                      style={{ border: unitId === 'UNIT-0004' ? '1px solid var(--brand-500)' : undefined }}
                     >
                       UNIT-0004
                     </button>
@@ -527,6 +678,7 @@ function App() {
                       type="button" 
                       className="btn btn-ghost btn-sm"
                       onClick={() => setUnitId('UNIT-0005')}
+                      style={{ border: unitId === 'UNIT-0005' ? '1px solid var(--brand-500)' : undefined }}
                     >
                       UNIT-0005
                     </button>
@@ -596,9 +748,20 @@ function App() {
                   ← Back to Inspect Form
                 </button>
                 {workflow && (
-                  <div style={{ display: 'flex', gap: 10 }}>
-                    <button className="btn btn-ghost btn-sm" onClick={copyWorkflowJson}>
-                      {copied ? "✓ Copied JSON!" : "Copy JSON State"}
+                  <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                    <button 
+                      className="btn btn-ghost btn-sm" 
+                      onClick={() => runWorkflow(null, workflow.subject_id)}
+                      disabled={executing}
+                      title="Re-run pipeline for this unit"
+                    >
+                      ↺ Re-run Unit
+                    </button>
+                    <button 
+                      className="btn btn-ghost btn-sm" 
+                      onClick={() => copyToClipboard(JSON.stringify(workflow, null, 2), "Copied full workflow JSON state!")}
+                    >
+                      Copy JSON State
                     </button>
                     <a 
                       href={`http://localhost:8100/workflows/${workflow.workflow_id}/evidence`} 
@@ -629,7 +792,7 @@ function App() {
                   <p className="hint" style={{ fontSize: '1rem', maxWidth: 500, margin: '0 auto 20px auto' }}>
                     Executing pipeline for <strong className="mono" style={{ color: 'var(--brand-300)' }}>{unitId}</strong> under tenant <strong className="mono">{orgId}</strong>...
                   </p>
-                  <div style={{ display: 'flex', justifyContent: 'center', gap: 16, fontSize: '0.85rem', color: 'var(--ink-400)' }}>
+                  <div style={{ display: 'flex', justifyContent: 'center', gap: 16, fontSize: '0.85rem', color: 'var(--ink-400)', flexWrap: 'wrap' }}>
                     <span>✓ Receiving</span>
                     <span>→ Prep</span>
                     <span>→ Pack</span>
@@ -669,13 +832,13 @@ function App() {
                       <div className="db-sub">{reasonStr || 'Deterministic multi-agent orchestrator decision'}</div>
                     </div>
                     <div style={{ textAlign: 'right', fontSize: '0.85rem' }}>
-                      <div style={{ color: 'var(--ink-400)' }}>Unit: <strong style={{ color: '#fff' }}>{workflow.subject_id}</strong></div>
+                      <div style={{ color: 'var(--ink-400)' }}>Unit: <strong style={{ color: '#fff' }} className="mono">{workflow.subject_id}</strong></div>
                       <div style={{ color: 'var(--ink-400)', marginTop: 4 }}>ID: <span className="mono">{workflow.workflow_id}</span></div>
                     </div>
                   </div>
 
-                  {/* 2-Column Main Results Layout */}
-                  <div className="grid-sidebar">
+                  {/* Dedicated Results Layout: Left column for Stages/Manifest, Right column for Phase 2 & Test presets */}
+                  <div className="results-layout">
                     <div className="stack">
                       
                       {/* 5-Agent Stage Execution Flow */}
@@ -687,6 +850,9 @@ function App() {
                             </svg>
                             Stage Execution Pipeline
                           </h2>
+                          <span className="badge badge-info no-dot" style={{ fontSize: '0.72rem' }}>
+                            5 Stages Orchestrated
+                          </span>
                         </div>
 
                         <ul className="flow">
@@ -695,14 +861,28 @@ function App() {
                             const isSkipped = stage.state === 'skipped'
                             const vStr = stage.verdict ? (typeof stage.verdict === 'object' ? (stage.verdict.verdict || JSON.stringify(stage.verdict)) : stage.verdict) : null
                             const oStr = stage.outcome ? (typeof stage.outcome === 'object' ? (stage.outcome.outcome || JSON.stringify(stage.outcome)) : stage.outcome) : null
+                            const isExpanded = !!expandedStages[i]
+                            const durationText = formatDuration(stage.duration_ms)
 
                             return (
-                              <li key={i}>
+                              <li key={i} style={{ borderBottom: '1px solid var(--border)', paddingBottom: 14 }}>
                                 <span className="flow-n">{i + 1}</span>
-                                <div>
+                                <div style={{ width: '100%', minWidth: 0 }}>
                                   <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4, flexWrap: 'wrap', gap: 6}}>
-                                    <strong style={{color: '#fff', textTransform: 'uppercase', fontSize: '0.95rem'}}>{stage.stage}</strong>
-                                    <div style={{display: 'flex', gap: 8}}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+                                      <strong style={{color: '#fff', textTransform: 'uppercase', fontSize: '0.95rem'}}>{stage.stage}</strong>
+                                      {stage.agent_id && (
+                                        <span style={{ fontSize: '0.72rem', color: 'var(--ink-400)', fontFamily: 'var(--font-mono)' }}>
+                                          @{stage.agent_id}
+                                        </span>
+                                      )}
+                                    </div>
+                                    <div style={{display: 'flex', gap: 6, alignItems: 'center'}}>
+                                      {durationText && (
+                                        <span style={{ fontSize: '0.72rem', color: 'var(--brand-300)', fontFamily: 'var(--font-mono)' }}>
+                                          ⚡ {durationText}
+                                        </span>
+                                      )}
                                       <span className={`badge ${isCompleted ? 'badge-seal' : (isSkipped ? 'badge-pending' : 'badge-stop')}`}>
                                         {stage.state}
                                       </span>
@@ -713,12 +893,59 @@ function App() {
                                       )}
                                     </div>
                                   </div>
-                                  <p className="faint" style={{ fontSize: '0.85rem' }}>
-                                    {isSkipped ? `Skipped: ${stage.skipped_reason || 'Condition not applicable'}` : (oStr ? `Outcome: ${oStr}` : (stage.error || 'Finished cleanly'))}
-                                  </p>
+
+                                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 8 }}>
+                                    <p className="faint" style={{ fontSize: '0.85rem', margin: 0 }}>
+                                      {isSkipped ? `Skipped: ${stage.skipped_reason || 'Condition not applicable'}` : (oStr ? `Outcome: ${oStr}` : (stage.error || 'Finished cleanly'))}
+                                    </p>
+                                    <button 
+                                      type="button" 
+                                      className="btn-link"
+                                      onClick={() => toggleStage(i)}
+                                      style={{ fontSize: '0.72rem' }}
+                                    >
+                                      {isExpanded ? 'Hide Details ▲' : 'Inspect Audit ▼'}
+                                    </button>
+                                  </div>
+
                                   {stage.record_id && (
-                                    <div className="mono" style={{ fontSize: '0.75rem', color: 'var(--brand-300)', marginTop: 4 }}>
-                                      Evidence Record: {stage.record_id}
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 6 }}>
+                                      <span style={{ fontSize: '0.75rem', color: 'var(--ink-400)' }}>Record:</span>
+                                      <button 
+                                        type="button"
+                                        className="evidence-chip"
+                                        onClick={() => copyToClipboard(stage.record_id, `Copied record ${stage.record_id}`)}
+                                        style={{ padding: '3px 8px', fontSize: '0.72rem' }}
+                                        title="Click to copy record ID"
+                                      >
+                                        <span>{stage.record_id}</span>
+                                        <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2">
+                                          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                                        </svg>
+                                      </button>
+                                    </div>
+                                  )}
+
+                                  {/* Expandable audit payload */}
+                                  {isExpanded && (
+                                    <div style={{ marginTop: 10, padding: 12, background: 'var(--surface-sunken)', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)', fontSize: '0.78rem' }}>
+                                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 8, marginBottom: 8 }}>
+                                        <div><span style={{ color: 'var(--ink-400)' }}>Agent ID:</span> <strong className="mono">{stage.agent_id || 'n/a'}</strong></div>
+                                        <div><span style={{ color: 'var(--ink-400)' }}>Attempts:</span> <span className="mono">{stage.attempts || 1}</span></div>
+                                        <div><span style={{ color: 'var(--ink-400)' }}>Needs Human:</span> <span className="mono">{String(stage.needs_human ?? false)}</span></div>
+                                        <div><span style={{ color: 'var(--ink-400)' }}>Evidence Status:</span> <span className="mono">{stage.evidence_status || 'completed'}</span></div>
+                                      </div>
+                                      {stage.next_step_recommendation && (
+                                        <div style={{ marginTop: 6, color: 'var(--brand-300)' }}>
+                                          <strong>Recommendation:</strong> {stage.next_step_recommendation}
+                                        </div>
+                                      )}
+                                      {stage.error && (
+                                        <div style={{ marginTop: 6, color: 'var(--stop)' }}>
+                                          <strong>Error details:</strong> {stage.error}
+                                        </div>
+                                      )}
                                     </div>
                                   )}
                                 </div>
@@ -737,23 +964,36 @@ function App() {
                             </svg>
                             Evidence Manifest
                           </h2>
+                          <span className="badge badge-seal no-dot" style={{ fontSize: '0.7rem' }}>
+                            SHA-256 Verified
+                          </span>
                         </div>
-                        <p className="hint" style={{ marginBottom: 12 }}>
-                          Append-only records with SHA-256 cryptographic verification.
+                        <p className="hint" style={{ marginBottom: 14 }}>
+                          Append-only records with SHA-256 cryptographic verification. Click any ID to copy:
                         </p>
                         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                           {(workflow.evidence_references || []).map((refId, i) => (
-                            <span key={i} className="mono" style={{ padding: '6px 12px', background: 'var(--surface2)', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)', fontSize: '0.8rem', color: 'var(--brand-300)' }}>
-                              {refId}
-                            </span>
+                            <button 
+                              key={i} 
+                              type="button"
+                              className="evidence-chip"
+                              onClick={() => copyToClipboard(refId, `Copied evidence ref: ${refId}`)}
+                              title="Click to copy SHA-256 evidence reference"
+                            >
+                              <span>{refId}</span>
+                              <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                              </svg>
+                            </button>
                           ))}
                         </div>
                       </div>
 
                     </div>
 
-                    {/* Column 2: Phase 2 Intelligence & Breeth Reasoning */}
-                    <div className="stack">
+                    {/* Column 2: Phase 2 Intelligence & Quick Test Presets */}
+                    <div className="results-sidebar">
                       <div className="card card-accent">
                         <div className="card-head">
                           <h2>
@@ -762,6 +1002,9 @@ function App() {
                             </svg>
                             Phase 2 Intelligence (Breeth)
                           </h2>
+                          <span className={`badge ${investigation?.ai_used ? 'badge-seal' : 'badge-info'}`}>
+                            {investigation?.ai_status || 'DETERMINISTIC'}
+                          </span>
                         </div>
 
                         {investigation ? (
@@ -771,8 +1014,8 @@ function App() {
                                 <span style={{ fontSize: '0.75rem', textTransform: 'uppercase', color: 'var(--ink-400)', display: 'block', fontWeight: 700 }}>AI Reasoner</span>
                                 <strong style={{ color: '#fff' }}>Breeth Graph Memory</strong>
                               </div>
-                              <span className={`badge ${investigation.ai_used ? 'badge-seal' : 'badge-pending'}`}>
-                                {investigation.ai_status || 'DETERMINISTIC'}
+                              <span className="mono" style={{ fontSize: '0.75rem', color: 'var(--brand-300)' }}>
+                                Active
                               </span>
                             </div>
 
@@ -843,17 +1086,132 @@ function App() {
                         )}
                       </div>
 
-                      {/* Action Trigger Card */}
-                      <div className="card">
-                        <h2>Run Another Test</h2>
-                        <p className="hint" style={{ marginBottom: 14 }}>
-                          Choose another physical unit to verify tenant isolation and deterministic branching.
+                      {/* Clean, Non-Overflowing Test Presets Switcher Card */}
+                      <div className="card quick-test-card">
+                        <div className="card-head">
+                          <h2>
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{marginRight: 8, color: 'var(--brand-400)'}}>
+                              <polygon points="5 3 19 12 5 21 5 3"/>
+                            </svg>
+                            Run Another Test
+                          </h2>
+                          <span className="badge badge-info no-dot" style={{ fontSize: '0.7rem' }}>
+                            Branch Presets
+                          </span>
+                        </div>
+                        <p className="hint" style={{ marginBottom: 16 }}>
+                          Quick-switch physical units to verify tenant isolation, defect trapping, and branch execution.
                         </p>
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-                          <button className="btn btn-ghost btn-sm" onClick={() => runWorkflow(null, 'UNIT-0001')}>UNIT-0001 (Clean)</button>
-                          <button className="btn btn-ghost btn-sm" onClick={() => runWorkflow(null, 'UNIT-0002')}>UNIT-0002 (Exception)</button>
-                          <button className="btn btn-ghost btn-sm" onClick={() => runWorkflow(null, 'UNIT-0003')}>UNIT-0003 (Review)</button>
-                          <button className="btn btn-primary btn-sm" onClick={() => setActiveTab('inspect')}>Custom Unit...</button>
+
+                        <div className="preset-list">
+                          {/* Preset 1: Clean Pass */}
+                          <button 
+                            type="button"
+                            className={`preset-item ${workflow?.subject_id === 'UNIT-0001' ? 'is-active' : ''}`}
+                            onClick={() => runWorkflow(null, 'UNIT-0001')}
+                            disabled={executing}
+                          >
+                            <div className="preset-main">
+                              <div className="preset-title">
+                                <span className="dot ok" />
+                                <span className="mono">UNIT-0001</span>
+                                <span className="preset-label">Clean Pass</span>
+                              </div>
+                              <span className="badge badge-seal">PASS</span>
+                            </div>
+                            <div className="preset-sub">
+                              100% compliant flow across intake, prep, and recovery
+                            </div>
+                          </button>
+
+                          {/* Preset 2: Prep Exception */}
+                          <button 
+                            type="button"
+                            className={`preset-item ${workflow?.subject_id === 'UNIT-0002' ? 'is-active' : ''}`}
+                            onClick={() => runWorkflow(null, 'UNIT-0002')}
+                            disabled={executing}
+                          >
+                            <div className="preset-main">
+                              <div className="preset-title">
+                                <span className="dot down" />
+                                <span className="mono">UNIT-0002</span>
+                                <span className="preset-label">Prep Exception</span>
+                              </div>
+                              <span className="badge badge-stop">EXCEPTION</span>
+                            </div>
+                            <div className="preset-sub">
+                              Simulates visual prep defect &amp; stop-and-fix halt
+                            </div>
+                          </button>
+
+                          {/* Preset 3: Needs Review */}
+                          <button 
+                            type="button"
+                            className={`preset-item ${workflow?.subject_id === 'UNIT-0003' ? 'is-active' : ''}`}
+                            onClick={() => runWorkflow(null, 'UNIT-0003')}
+                            disabled={executing}
+                          >
+                            <div className="preset-main">
+                              <div className="preset-title">
+                                <span className="dot" style={{ background: 'var(--uncertain)' }} />
+                                <span className="mono">UNIT-0003</span>
+                                <span className="preset-label">Needs Review</span>
+                              </div>
+                              <span className="badge badge-uncertain">REVIEW</span>
+                            </div>
+                            <div className="preset-sub">
+                              Degraded recovery ledger requiring human adjudication
+                            </div>
+                          </button>
+                        </div>
+
+                        {/* Inline Custom Unit Quick Input */}
+                        <div className="quick-custom-box">
+                          <form 
+                            onSubmit={(e) => {
+                              e.preventDefault()
+                              if (quickUnit.trim()) {
+                                runWorkflow(null, quickUnit.trim())
+                              }
+                            }}
+                            className="quick-unit-form"
+                          >
+                            <input 
+                              type="text"
+                              value={quickUnit}
+                              onChange={(e) => setQuickUnit(e.target.value)}
+                              placeholder="Unit ID (e.g. UNIT-0004)..."
+                              className="quick-input"
+                              disabled={executing}
+                            />
+                            <button 
+                              type="submit" 
+                              className="btn btn-primary btn-sm"
+                              disabled={executing || !quickUnit.trim()}
+                            >
+                              {executing ? '...' : 'Run Unit'}
+                            </button>
+                          </form>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 12 }}>
+                            <button 
+                              type="button"
+                              className="btn-link"
+                              onClick={() => setActiveTab('inspect')}
+                            >
+                              Open Inspection Form →
+                            </button>
+                            {workflow && (
+                              <button
+                                type="button"
+                                className="btn-link"
+                                onClick={() => runWorkflow(null, workflow.subject_id)}
+                                title="Re-execute current unit"
+                                disabled={executing}
+                              >
+                                ↺ Re-run Current
+                              </button>
+                            )}
+                          </div>
                         </div>
                       </div>
 
@@ -866,6 +1224,15 @@ function App() {
 
         </div>
       </main>
+
+      {/* Floating Toast Notification Container */}
+      <div id="toasts">
+        {toasts.map(t => (
+          <div key={t.id} className={`toast ${t.type === 'seal' ? 'is-seal' : (t.type === 'stop' ? 'is-stop' : (t.type === 'warn' ? 'is-uncertain' : ''))}`}>
+            {t.message}
+          </div>
+        ))}
+      </div>
 
       <footer>
         <div className="container" style={{display: 'flex', justifyContent: 'space-between', padding: '24px 0', color: 'var(--ink-400)', fontSize: '0.8125rem', flexWrap: 'wrap', gap: 12}}>

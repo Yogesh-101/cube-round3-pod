@@ -69,9 +69,9 @@ def get_breeth_client(api_key: str | None = None) -> BreethClient | None:
 
     base_url = os.environ.get("BREETH_BASE_URL", "").strip() or None
     try:
-        timeout = float(os.environ.get("BREETH_TIMEOUT_S", "10.0"))
+        timeout = float(os.environ.get("BREETH_TIMEOUT_S", "2.5"))
     except ValueError:
-        timeout = 10.0
+        timeout = 2.5
 
     try:
         client = BreethClient(api_key=key, base_url=base_url, timeout=timeout)
