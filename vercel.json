@@ -4,6 +4,7 @@
     "app": {
       "root": ".",
       "framework": "fastapi",
+      "entrypoint": "orchestration/api.py",
       "buildCommand": "pip install -r requirements.txt",
       "bindings": []
     },
