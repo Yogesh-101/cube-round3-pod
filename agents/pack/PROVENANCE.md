@@ -6,7 +6,18 @@
 | **Commit integrated** | `19406b5` (durable SQLite + JSONL mirror; inspections survive restart/redeploy) |
 | **Owner** | @Yogesh-101 |
 | **Stage** | `pack` |
-| **Agent id** | `pack-manager@1` |
+| **Agent id** | `pack-manager@2` |
+
+## v2 Competitive Upgrades
+
+Upgraded to **v2** to directly address gaps :
+- **Object-level bounding boxes**: VLM now returns `[ymin, xmin, ymax, xmax]` for every detected object, grounding observations in the photos.
+- **Scene Coverage Check**: Added a new check (`scene_coverage`) to assess whether the entire box interior is visible or if items might be hidden.
+- **Photo Reuse Detection**: Added a new check (`photo_reuse`) that uses SHA-256 hashes to detect if a photo has already been used for another order.
+- **Deterministic Decision Routing**: `UNCERTAIN` results are now correctly routed to `PENDING_REVIEW` instead of `STOP_AND_FIX`, requiring human review.
+- **Substitution Detection**: The decision engine now pairs missing expected items with unexpected extra items, correctly identifying substitutions (`wrong_item`).
+- **Richer Prompting**: The VLM prompt now provides per-candidate attribute descriptions and requires the VLM to state the `deciding_feature` and `alternative_skus` for each item.
+- **Temperature 0**: VLM generation temperature is now strictly 0.0 with a separated `SYSTEM_INSTRUCTION` for maximum determinism.
 
 ## What was brought in
 

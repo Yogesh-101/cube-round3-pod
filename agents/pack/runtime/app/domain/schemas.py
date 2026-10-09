@@ -1,9 +1,14 @@
 """
-PCK Pack Manager — Domain Data Contracts
+PCK Pack Manager — Domain Data Contracts (v2)
 
 All Pydantic models that define the system's typed interfaces.
 These schemas are the single source of truth for data flowing through
 the pipeline: order input → VLM observation → decision engine → evidence record.
+
+v2 additions:
+  - SceneCoverage: captures whether the whole box interior is visible.
+  - CheckKey.SCENE_COVERAGE: checks whether all items are visible in the scene.
+  - CheckKey.PHOTO_REUSE: detects reused photos across different orders.
 """
 
 from __future__ import annotations
@@ -57,6 +62,8 @@ class CheckKey(str, Enum):
     NO_EXTRA_ITEMS = "no_extra_items"
     NO_WRONG_ITEMS = "no_wrong_items"
     IMAGE_QUALITY = "image_quality"
+    SCENE_COVERAGE = "scene_coverage"   # v2: was the whole box interior visible?
+    PHOTO_REUSE = "photo_reuse"         # v2: was this exact photo already used for another order?
 
 
 class UncertaintyReason(str, Enum):
@@ -253,3 +260,22 @@ class ItemDiscrepancy(BaseModel):
         ..., description="One of: missing, extra, wrong_quantity, wrong_item, unknown_item"
     )
     detail: str = ""
+
+
+# ---------------------------------------------------------------------------
+# v2: Scene Coverage (from VLM)
+# ---------------------------------------------------------------------------
+
+class SceneCoverage(BaseModel):
+    """Assessment of whether the whole box interior is visible in the photos."""
+    box_interior_fully_visible: bool = Field(
+        True, description="True only if the entire inside of the box is in frame"
+    )
+    items_may_be_hidden: bool = Field(
+        False, description="True if anything covers part of the box or items are stacked"
+    )
+    visibility_confidence: float = Field(
+        1.0, ge=0.0, le=1.0,
+        description="Confidence 0-1 that every item in the box is visible. Cluttered = below 0.5."
+    )
+    notes: str = Field("", description="Any scene-level observations")

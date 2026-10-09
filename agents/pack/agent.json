@@ -1,11 +1,10 @@
 {
   "stage": "pack",
-  "agent_id": "pack-manager@1",
+  "agent_id": "pack-manager@2",
   "owner": "@Yogesh-101",
   "mode": "inproc",
   "url": "http://localhost:8103",
   "module": "agents.pack.app",
-  "implementation": "Production Pack Manager (Round 2 → Round 3): order-blind Gemini VLM + quality gate + deterministic decision engine. Outcomes: seal | stop_and_fix | pending_review. Held-out eval 38/38, 0 false SEALs.",
-  "notes": "inproc ready. Live VLM needs GEMINI_API_KEY (+ agents/pack/requirements.txt). Captures from request.inputs or data/input/<id>/pack/. Sample path uses decision engine on labelled observations. FBA route fail-open. See PROVENANCE.md and docs/decisions.md D-007."
+  "implementation": "Production Pack Manager v2 (Round 3): order-blind Gemini VLM + object-level bounding boxes + scene coverage check + photo reuse detection + quality gate + deterministic decision engine. Outcomes: seal | stop_and_fix | pending_review. Checks: image_quality, scene_coverage, photo_reuse, items_present, quantity_match, no_extra_items, no_wrong_items.",
+  "notes": "v2 prompt (order-blind-v2): per-object bounding boxes, scene visibility assessment, alternative SKU reporting, deciding_feature, count certainty tracking. Decision engine: 7 checks including scene_coverage and photo_reuse. UNCERTAIN correctly routes to pending_review (human review), not stop_and_fix. inproc ready. Live VLM needs GEMINI_API_KEY. See PROVENANCE.md."
 }
-

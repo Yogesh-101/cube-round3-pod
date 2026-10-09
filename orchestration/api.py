@@ -22,6 +22,19 @@ from .orchestrator import apply_override, bundle, default_flow_path, flow_stages
 from .store import EvidenceConflict, FileStore
 
 app = FastAPI(title="CUBE Round 3 orchestrator")
+
+from fastapi.middleware.cors import CORSMiddleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+from orchestration.phase2_api import router as phase2_router
+app.include_router(phase2_router)
+
 FLOW = os.environ.get("ORCH_FLOW") or default_flow_path()
 STORE = FileStore()
 
@@ -37,6 +50,25 @@ def health() -> dict:
             agents[stage] = {"status": "down", "error": str(exc)[:200], "owner": load_manifest(stage)["owner"]}
     ok = all(a["status"] == "ok" for a in agents.values())
     return {"status": "ok" if ok else "degraded", "flow": load_flow(FLOW)["flow_id"], "agents": agents}
+
+
+import json
+
+
+@app.get("/workflows")
+def list_workflows(org_id: str | None = None) -> list[dict]:
+    p = STORE.root / "workflows"
+    if not p.exists():
+        return []
+    results = []
+    for f in sorted(p.glob("*.json"), key=lambda x: x.stat().st_mtime, reverse=True)[:30]:
+        try:
+            wf = json.loads(f.read_text())
+            if not org_id or wf.get("org_id") == org_id:
+                results.append(wf)
+        except Exception:
+            pass
+    return results
 
 
 @app.post("/workflows")

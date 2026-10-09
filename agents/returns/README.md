@@ -1,44 +1,208 @@
-# agents/returns/  ·  Returns Manager
+# RETURNIQ — Creative React/Vite + Flask Return Intelligence
 
-**Owner:** Member 4 (Returns Manager)  (set `owner` in `agent.json` and the handle in `.github/CODEOWNERS`)
+RETURNIQ is an AI-assisted returns inspection workspace. This version keeps the existing React/Vite workflow, adds a production-shaped Flask API, persistent inspection-image storage, catalog-vs-return visual matching, optional Gemini vision analysis, and a more cinematic command-center theme.
 
-> **This folder currently contains an organiser stub** that replays the synthetic Round 2 CSV. It is *not* an agent. Replace it, then replace this README with one that describes what you actually built, how to run it, and its limits.
-
-| | |
-|---|---|
-| **Reads (inputs)** | Photos of the returned parcel and the expected parts list |
-| **Reads (previous evidence)** | Pack (what was sent), Receiving |
-| **Produces** | identity, completeness, condition, disposition |
-| **Recommended `check_key`s** | `identity_match, completeness, condition` |
-| **`decision.outcome` values** | `restock, refurbish, liquidate, dispose, pending_review` |
-
-Grade condition on **Amazon's published condition scale**: do not invent your own (the Round 2 data leaves `amazon_condition` empty on purpose). The shipped stub does not grade condition (`payload.condition_graded: false`) and copies the operator's disposition: replace it. Returns on FBA-routed units are an open question (finding F-11).
-
-## Where your code goes
+## Project structure
 
 ```text
-agents/returns/
-├── app.py          ← expose  handle(agent_input: dict) -> dict  (an Agent Output). Keep `app = make_app(...)` to serve over HTTP.
-├── agent.json      ← stage · agent_id · owner · mode (inproc | http) · url · an honest `implementation` description
-├── PROVENANCE.md   ← your Round 2 repo URL + commit this came from (create it)
-├── README.md       ← this file, rewritten
-└── …               ← your Round 2 code, prompts, rules, fixtures
+ProjectManagement/
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── data/
+│   │   ├── services/
+│   │   ├── assets/images/
+│   │   ├── index.css
+│   │   ├── style.css
+│   │   ├── App.tsx
+│   │   └── main.tsx
+│   ├── package.json
+│   ├── tsconfig.json
+│   └── vite.config.ts
+├── backend/
+│   ├── app.py
+│   ├── requirements.txt
+│   ├── .env.example
+│   └── storage/inspection-images/
+└── README.md
 ```
 
-## Integrating, in order
+## Frontend — npm
 
-1. Read [`INTEGRATION-GUIDE.md`](../../INTEGRATION-GUIDE.md) and [`EVIDENCE-CONTRACT.md`](../../EVIDENCE-CONTRACT.md); open [`examples/end-to-end/`](../../examples/) for a real Agent Output.
-2. In `handle()`: read `request["subject"]`, `request["inputs"]` (your captures) and `request["previous_evidence"]`; run your agent (**one batched model call per unit**); build the record with `shared.utils.records.build_record()` and wrap it with `build_output()`.
-3. **Fail open.** On a model error return `pending_output(...)`, not an exception. Never invent evidence: if you did not see it, say UNCERTAIN with an `uncertain_reason`.
-4. **Refuse other tenants.** Raise `LookupError` (HTTP 404) for a subject that is not under `subject.org_id`.
-5. Make it idempotent: the same `request_id` must yield the same `record_id`. Use the **latest override** of previous evidence (`context.overrides`).
-6. Run `pytest tests/integration/test_agent_contracts.py`, first on the stub (it passes), then on yours, **with your own fixtures**.
-7. Run the whole system: `make run` and `make test`.
+Requires Node.js 20+.
 
-## Run on its own
-
-```sh
-.venv/bin/uvicorn agents.returns.app:app --port 8104
-curl localhost:8104/health
+```bash
+cd frontend
+npm install
+npm run dev
 ```
-Then set `"mode": "http"` in `agent.json` if you want the orchestrator to call it over HTTP.
+
+Useful commands:
+
+```bash
+npm run dev
+npm run lint
+npm run build
+npm run preview
+```
+
+Vite runs on `http://localhost:3003` and proxies `/api/*` to Flask on port `3000`.
+
+## Backend — Flask
+
+Requires Python 3.10+.
+
+```bash
+cd backend
+python -m venv venv
+```
+
+Windows:
+
+```bash
+venv\Scripts\activate
+```
+
+macOS/Linux:
+
+```bash
+source venv/bin/activate
+```
+
+Install:
+
+```bash
+pip install -r requirements.txt
+```
+
+Optional Gemini configuration:
+
+```bash
+cp .env.example .env
+```
+
+Set:
+
+```env
+GEMINI_API_KEY=your_real_key_here
+GEMINI_MODEL=gemini-2.5-flash
+PORT=3000
+```
+
+Run:
+
+```bash
+python app.py
+```
+
+Health check:
+
+```text
+http://localhost:3000/api/health
+```
+
+## Return-image matching and storage
+
+The inspection flow now sends the original catalog product image as the visual baseline together with every uploaded return image.
+
+The Flask backend:
+
+1. receives the return images;
+2. saves normalized JPEG copies under `backend/storage/inspection-images/`;
+3. exposes saved images through `/api/images/<filename>`;
+4. computes a local perceptual similarity signal against the original catalog image;
+5. optionally sends the catalog image + return images to Gemini when `GEMINI_API_KEY` is configured;
+6. combines the visual result with the existing frontend decision engine;
+7. returns structured identity, condition, completeness, integrity, and evidence information.
+
+Important: image similarity is an inspection signal, not proof that a product is authentic. Serial numbers, barcodes, hidden components, and final fraud decisions should still use the existing evidence/manual-review workflow.
+
+## API
+
+### `GET /api/health`
+
+Returns backend status and whether Gemini is configured.
+
+### `POST /api/inspect`
+
+JSON body:
+
+```json
+{
+  "returnId": "RET-88410",
+  "order": {
+    "orderId": "ORD-10984",
+    "productName": "Apple iPhone 15 Pro Max (256GB)",
+    "brand": "Apple",
+    "model": "A2849",
+    "sku": "APPL-IPH15PM-256-NT",
+    "serialNumber": "SERIAL",
+    "expectedComponents": [],
+    "expectedImageData": "data:image/jpeg;base64,..."
+  },
+  "images": [
+    {
+      "id": "img-1",
+      "category": "FRONT",
+      "name": "front.jpg",
+      "data": "data:image/jpeg;base64,..."
+    }
+  ]
+}
+```
+
+Response includes:
+
+- `analysis`
+- `visualMatch`
+- `storedImages`
+- `inspectionId`
+- `processingTimeMs`
+- analysis source
+
+### `GET /api/inspections`
+
+Returns recently saved inspection-image references.
+
+## Visual design upgrades
+
+The UI now includes:
+
+- animated ambient AI/warehouse grid background;
+- floating light-orb graphics;
+- subtle scanline effect;
+- glass-style operational panels;
+- improved motion and hover depth;
+- reduced-motion accessibility fallback;
+- a dedicated `src/style.css` theme layer while preserving Tailwind;
+- local imported demo product images so Vite builds can resolve assets correctly.
+
+## Architecture
+
+```text
+React + TypeScript + Vite
+        |
+        | /api/inspect
+        v
+Flask REST API
+        |
+        +--> persistent inspection image storage
+        |
+        +--> local perceptual image matching
+        |
+        +--> optional Gemini Vision
+        |
+        +--> structured inspection result
+        |
+        v
+Existing deterministic decision engine
+        |
+        v
+Dashboard / Analytics / Manual Review / Certificate
+```
+
+## Security
+
+Keep API keys only in `backend/.env`. Never put `GEMINI_API_KEY` in frontend code.
+
+For production, replace the local filesystem storage with object storage (S3/GCS/Azure Blob), add authentication, database-backed inspection records, rate limiting, and virus/content validation for uploaded files.

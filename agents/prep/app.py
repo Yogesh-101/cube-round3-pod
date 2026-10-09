@@ -15,37 +15,55 @@ from shared.utils.stubs import STUB_MODEL, photos, verdict_from
 
 STAGE = "prep"
 AGENT_ID = "prep-stub@0"
-# (check_key, csv column, passing values, failing values). "not_required" rows produce no check.
-RULES = [
-    ("polybag_sealed", "polybag_present_sealed", {"yes"}, {"not_sealed", "missing"}),
-    ("suffocation_warning", "suffocation_warning", {"legible"}, {"obscured_by_fold", "missing"}),
-    ("fnsku_label_placement", "fnsku_label_placement", {"flat"}, {"on_seam", "on_curve", "on_edge", "missing"}),
-    ("original_barcode_covered", "original_barcode_covered", {"yes"}, {"no"}),
-    ("expiry_legible", "expiry_date", {"legible"}, {"illegible_after_wrap"}),
-    ("handling_marks", "handling_marks", {"all_present"}, {"some_missing"}),
-]
-
+from .backend.schemas import PrepInput
+from .backend.logic import process_prep
 
 def handle(request: dict) -> dict:
     s = request["subject"]
     r = sample_data.row("prep", s["subject_id"], s["org_id"])
-    refs = [p["ref"] for p in photos(r)]
-    checks = [
-        check(key, verdict_from(r[col], ok, bad), None, expected=sorted(ok)[0], observed=r[col],
-              evidence_refs=refs, uncertain_reason="poor_image")
-        for key, col, ok, bad in RULES if r[col] != "not_required"
-    ]
-    verdict = "FAIL" if any(c["verdict"] == "FAIL" for c in checks) else (
-        "UNCERTAIN" if any(c["verdict"] == "UNCERTAIN" for c in checks) or not checks else "PASS")
-    outcome = {"PASS": "compliant", "FAIL": "non_compliant", "UNCERTAIN": "pending_review"}[verdict]
-    record = build_record(
-        request, agent_id=AGENT_ID, record_id=r["record_id"], captured_at=r["captured_at"], operator_id=r["operator_id"],
-        refs={"work_order_id": r["work_order_id"], "fba_shipment_id": r["fba_shipment_id"], "sku": r["sku"],
-              "asin": r["asin"], "fnsku": r["fnsku"]},
-        checks=checks, outcome=outcome, model=STUB_MODEL, inputs=photos(r),
-        reason=f"stub replay of sample row; {sum(c['verdict'] == 'FAIL' for c in checks)} failed check(s)",
-        payload={"prep_price_usd": float(r["prep_price_usd"]), "measurements": None},
+    
+    input_data = PrepInput(
+        subject_id=s["subject_id"],
+        org_id=s["org_id"],
+        work_order_id=r["work_order_id"],
+        fba_shipment_id=r["fba_shipment_id"],
+        sku=r["sku"],
+        asin=r["asin"],
+        fnsku=r["fnsku"],
+        polybag_present_sealed=r["polybag_present_sealed"],
+        suffocation_warning=r["suffocation_warning"],
+        fnsku_label_placement=r["fnsku_label_placement"],
+        original_barcode_covered=r["original_barcode_covered"],
+        expiry_date=r["expiry_date"],
+        handling_marks=r["handling_marks"],
+        prep_price_usd=float(r["prep_price_usd"]),
+        operator_id=r["operator_id"],
+        photo_refs=[p["ref"] for p in photos(r)],
+        captured_at=r["captured_at"]
     )
+    
+    decision = process_prep(input_data)
+    
+    record = build_record(
+        request, agent_id=AGENT_ID, record_id=r["record_id"], captured_at=input_data.captured_at, operator_id=input_data.operator_id,
+        refs={"work_order_id": input_data.work_order_id, "fba_shipment_id": input_data.fba_shipment_id, "sku": input_data.sku,
+              "asin": input_data.asin, "fnsku": input_data.fnsku},
+        checks=decision.checks, outcome=decision.outcome, model=STUB_MODEL, inputs=photos(r),
+        reason=f"backend processed; {sum(c['verdict'] == 'FAIL' for c in decision.checks)} failed check(s)",
+        payload={"prep_price_usd": input_data.prep_price_usd, "measurements": None},
+    )
+    
+    try:
+        from shared.utils.breeth_memory import record_agent_memory
+        record_agent_memory(
+            stage=STAGE,
+            org_id=s.get("org_id", "default"),
+            subject_id=s.get("subject_id", "default"),
+            content=f"Prep inspection: outcome={decision.outcome}, fba_shipment_id={input_data.fba_shipment_id}, fnsku={input_data.fnsku}"
+        )
+    except Exception:
+        pass
+        
     return build_output(record)
 
 

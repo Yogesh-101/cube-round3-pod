@@ -25,7 +25,7 @@ def _req(unit_id: str, org_id: str, *, route: str = "mfn", request_id: str | Non
 def test_seal_sample_unit_is_contract_valid():
     out = handle(_req("UNIT-0006", "org_demo_bravo"))
     assert errors("agent-output", out) == []
-    assert out["agent_id"] == "pack-manager@1"
+    assert out["agent_id"] == "pack-manager@2"
     assert out["verdict"] == "PASS"
     assert out["evidence"]["decision"]["outcome"] == "seal"
     assert verify(out["evidence"])

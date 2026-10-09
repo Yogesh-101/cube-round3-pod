@@ -1,10 +1,10 @@
 {
   "stage": "returns",
-  "agent_id": "returns-stub@0",
-  "owner": "@github-handle-of-the-owner",
+  "agent_id": "returns-manager@1",
+  "owner": "@2420030580-HEMA",
   "mode": "inproc",
-  "url": "http://localhost:8104",
+  "url": "http://localhost:3000",
   "module": "agents.returns.app",
-  "implementation": "organiser-stub",
-  "notes": "Set mode to \"http\" if your agent is not Python or runs as its own service. Change implementation to a short honest description of what you built."
+  "implementation": "Returns Manager Agent evaluating 5 condition checks, deterministic non-forced UNCERTAIN routing, Supabase/SQLite audit persistence, and multi-angle optical inspection.",
+  "provenance": "https://github.com/2420030580-HEMA/cube26-rtn-0259-2420030580-hema"
 }

@@ -116,15 +116,111 @@ Every failure is **recorded and never becomes success**: a degraded evidence rec
 
 ---
 
-## Your Pod's architecture  ← **replace this section**
+## Your Pod's Architecture (Phase 1 Integrated 5-Agent Workflow)
 
-_Delete this note and describe **your** system. At minimum:_
+### 1. System Architecture & Component Diagram
 
-1. **Diagram** of your actual components and flow, including anything you added.
-2. **What each agent really is**: model, rules, services, dependencies; which are still stubs.
-3. **Your orchestrator**: approach, how workflow state is stored, retries, how evidence is persisted, how overrides work (link the decisions in `docs/decisions.md`).
-4. **Your routing and final-outcome logic**, and how they treat uncertainty and weak evidence.
-5. **Tenancy**: where it is enforced, and how you tested it.
-6. **Failure model**: what you break in the demo and what happens.
-7. **Deployment**: where it runs, how to reach it, how to start it.
-8. **Known limits.**
+```text
+                                  POD WORKFLOW
+                                       │
+                      ┌────────────────▼────────────────┐
+                      │    Orchestration Engine         │  owns workflow state & audit log
+                      │    (orchestration/orchestrator) │  enforces tenancy & contracts
+                      └────────────────┬────────────────┘
+                                       │
+            ┌──────────────────────────┼──────────────────────────┐
+            │ (Step 1: Inbound)        │                          │
+   ┌────────▼────────┐                 │                          │
+   │Receiving Manager│                 │                          │
+   │   (RCV-*)       │                 │                          │
+   └────────┬────────┘                 │                          │
+            │                          │                          │
+            ├───────────────┬──────────┘                          │
+            │ (if FBA)      │ (if MFN)                            │
+   ┌────────▼────┐ ┌────────▼────┐                                │
+   │Prep Manager │ │Pack Manager │                                │
+   │   (PRP-*)   │ │   (PCK-*)   │                                │
+   └────────┬────┘ └────────┬────┘                                │
+            │               │                                     │
+            └───────┬───────┘                                     │
+                    │ (if returned)                               │
+           ┌────────▼──────┐                                      │
+           │Returns Manager│                                      │
+           │   (RTN-*)     │                                      │
+           └────────┬──────┘                                      │
+                    │                                             │
+                    └──────────────────┬──────────────────────────┘
+                                       │ (Accumulated Evidence Chain)
+                              ┌────────▼─────────┐
+                              │ Recovery Manager │  audits channel fee reports
+                              │     (RCY-*)      │  against upstream evidence
+                              └────────┬─────────┘
+                                       │
+                              ┌────────▼─────────┐
+                              │  Final Outcome   │  CLEAN / CLAIM_RECOMMENDED /
+                              │ (Derived Rollup) │  EXCEPTION / NEEDS_REVIEW / INCOMPLETE
+                              └──────────────────┘
+```
+
+### 2. 5-Agent Responsibilities & Implementation
+
+| Agent | Stage | Implementation Status | Core Responsibility | Produced Record | Key Identifiers Preserved |
+|---|---|---|---|---|---|
+| **Receiving** | `receiving` | Integrated Stub | Verifies supplier delivery against PO: carton count, unit count, physical damage, and quality flags. | `RCV-<record_id>` | `po_number`, `po_line`, `sku`, `asin`, `supplier` |
+| **Prep** | `prep` | Integrated Stub | Verifies packaging compliance for Amazon FBA units: polybag seal, suffocation warning, FNSKU label, barcode covering, handling marks. | `PRP-<record_id>` | `work_order_id`, `fba_shipment_id`, `sku`, `asin`, `fnsku` |
+| **Pack** | `pack` | **Production Pack Manager** (Round 2 → Round 3) | Order-blind VLM analysis + quality gate + deterministic decision engine verifying merchant-fulfilled box contents (items present, quantities correct, no extra/wrong items). | `PCK-<record_id>` | `order_id`, `order_lines`, `observed_in_box` |
+| **Returns** | `returns` | Integrated Stub | Verifies customer return against original order: item identity match and part completeness. | `RTN-<record_id>` | `order_id`, `sku`, `asin` |
+| **Recovery** | `recovery` | Integrated Stub / Audit Engine | Reconciles channel fee reports against upstream evidence chain (`previous_evidence`). Classifies each charge as `CONTRADICTS` (claimable), `SUPPORTS` (valid fee), or `SILENT` (insufficient evidence). | `RCY-<subject_id>` | `line_id`, `charge_type`, `evidence_record_ids` |
+
+### 3. Orchestrator, Evidence Contract & State Management
+- **Workflow State Ownership**: The orchestrator (`orchestration/orchestrator.py`) exclusively owns workflow state (`Workflow State v1.0`). Agents return advice and evidence; they never alter workflow state directly.
+- **Strict Evidence Contract**: Every handoff is strictly validated against `shared/schemas/agent-output.schema.json` and `shared/schemas/evidence.schema.json`. Invalid or non-conforming outputs are rejected immediately and recorded as structured errors (`invalid_output`), preventing corrupt data from propagating.
+- **Evidence Immutability & Content Hashing**: Every evidence record is sealed with a SHA-256 hash of its normalized JSON payload. Any data modification breaks cryptographic verification (`shared.utils.hashing.verify()`).
+- **Audit Logging**: All state transitions (`workflow_created`, `stage_started`, `stage_completed`, `stage_degraded`, `status_changed`) are appended to `transitions[]` with UTC timestamps.
+- **Human Overrides**: Operator overrides do not rewrite historic evidence; they are appended to the workflow audit log with target record, actor, reason, and new verdict. Recovery respects effective verdicts when auditing charges.
+
+### 4. Tenancy & Security
+- Every request, record, and workflow is scoped to an `org_id` tenant.
+- Cross-tenant requests are rejected at the agent boundary (`AgentRejected` / `LookupError` returning HTTP 404/422).
+- Tenancy isolation is tested across all 5 agents and the orchestrator in the test suite.
+
+### 5. Failure Model & Error Taxonomy
+- Standardized error codes: `agent_unavailable`, `agent_timeout`, `agent_rejected`, `invalid_output`, `upstream_missing`.
+- Failures are recorded and **never hidden**: a degraded evidence record is produced, the stage state is marked `error`, and workflow status becomes `FAILED` with outcome `INCOMPLETE`.
+- Cross-platform socket resilience: connection timeouts on unavailable endpoints are safely categorized as `agent_unavailable`.
+
+### 6. Official Data Usage
+- Evaluated on all 100 official sample scenarios (`data/sample/cases.json`).
+- Validated with 100% agreement against canonical outcomes (`data/expected/final-outcomes.sample.json`) and the canonical walkthrough case `UNIT-0014` (`data/expected/canonical-workflow.json`).
+
+### 7. Breeth Intent Memory Layer (Persistent Memory)
+- **Persistent Intent-Aware Memory**: Integrates [Breeth](https://www.thebreeth.com/app) (`shared/utils/breeth_memory.py`, SDK `breeth>=0.1.0`) across the multi-agent pipeline.
+- **Tenant Isolation**: Each tenant's episodic knowledge graph is strictly partitioned via `group_id = f"cube-org-{org_id}"`. Zero cross-tenant memory leakage.
+- **Episodic Knowledge Recording**: Upon workflow finalization in `_finalize()`, the orchestrator synthesizes an execution narrative capturing stage verdicts, rationales, and claim decisions, then commits it to Breeth with automatic intent extraction (`extract_intent=True`).
+- **Agent Memory**: Agents (e.g. Pack Manager) can write operational notes or query historical packaging quirks and supplier dispute precedents.
+- **MCP Server Support**: Workspace provides `.agents/mcp_config.json` configuring the Breeth MCP server (`https://mcp.thebreeth.com/mcp`) for tool-assisted agent memory operations.
+- **Fail-Open Architecture**: All Breeth interactions are non-blocking and fail-open. When `BREETH_API_KEY` is not set or the network is unavailable, operations gracefully degrade to no-ops without impacting pipeline execution or test suite stability.
+
+### 8. How to Run the Complete Workflow & Tests
+- **Run Complete 100-Case Workflow**:
+  ```bash
+  python -c "from orchestration.orchestrator import run_workflow; from orchestration.store import FileStore; import json, pathlib; cases = json.loads(pathlib.Path('data/sample/cases.json').read_text()); store = FileStore('out'); [run_workflow(c, store=store) for c in cases]; print('100 workflows completed')"
+  ```
+- **Run All Tests (Unit, Integration, E2E, Contract Compliance)**:
+  ```bash
+  python -m pytest -v
+  ```
+- **Run Phase 1 Compliance Suite**:
+  ```bash
+  python -m pytest tests/integration/test_phase1_compliance.py -v
+  ```
+- **Run Breeth Memory Integration Tests**:
+  ```bash
+  python -m pytest tests/integration/test_breeth_integration.py -v
+  ```
+
+### 9. Known Limitations & Next Steps
+- Production Pack Manager is fully integrated; Receiving, Prep, Returns, and Recovery are currently using contract-compliant organizer stubs pending Pod members bringing their Round 2 models.
+- Live VLM execution for Pack requires `GEMINI_API_KEY` when evaluating novel captures not in the sample dataset.
+- Live Breeth memory synchronization requires a valid `BREETH_API_KEY` (`ck_live_...`).
+
