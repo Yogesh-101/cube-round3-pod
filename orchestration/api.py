@@ -22,12 +22,21 @@ from .orchestrator import apply_override, bundle, default_flow_path, flow_stages
 from .store import EvidenceConflict, FileStore
 
 app = FastAPI(title="CUBE Round 3 orchestrator")
+
+from fastapi.middleware.cors import CORSMiddleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 from orchestration.phase2_api import router as phase2_router
 app.include_router(phase2_router)
 
 FLOW = os.environ.get("ORCH_FLOW") or default_flow_path()
-from shared.db.store import SqlStore
-STORE = SqlStore()
+STORE = FileStore()
 
 
 @app.get("/health")

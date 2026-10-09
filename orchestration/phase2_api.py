@@ -9,16 +9,14 @@ import json
 from fastapi import APIRouter, HTTPException, Depends
 from typing import Any
 
-from .store import Store, _default_store
+from orchestration.store import FileStore
 from shared.utils import sample_data
 from shared.intelligence.investigation_runner import run_full_investigation
 
-
 router = APIRouter(prefix="/phase2", tags=["phase2"])
 
-
-def get_store() -> Store:
-    return _default_store()
+def get_store() -> FileStore:
+    return FileStore()
 
 
 @router.get("/health")
@@ -28,7 +26,7 @@ def health() -> dict:
 
 
 @router.post("/investigate/{workflow_id}")
-def investigate_workflow(workflow_id: str, store: Store = Depends(get_store)) -> dict:
+def investigate_workflow(workflow_id: str, store: FileStore = Depends(get_store)) -> dict:
     """Run an intelligent investigation over a completed or failed workflow."""
     wf = store.load_workflow(workflow_id)
     if not wf:
@@ -68,7 +66,7 @@ def investigate_workflow(workflow_id: str, store: Store = Depends(get_store)) ->
 
 
 @router.get("/investigation/{workflow_id}")
-def get_investigation(workflow_id: str, store: Store = Depends(get_store)) -> dict:
+def get_investigation(workflow_id: str, store: FileStore = Depends(get_store)) -> dict:
     """Get the investigation results for a workflow.
     
     In a real system, these would be cached/stored. Here we just compute on the fly.

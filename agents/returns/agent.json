@@ -2,7 +2,7 @@
   "stage": "returns",
   "agent_id": "returns-manager@1",
   "owner": "@2420030580-HEMA",
-  "mode": "http",
+  "mode": "inproc",
   "url": "http://localhost:3000",
   "module": "agents.returns.app",
   "implementation": "Returns Manager Agent evaluating 5 condition checks, deterministic non-forced UNCERTAIN routing, Supabase/SQLite audit persistence, and multi-angle optical inspection.",
