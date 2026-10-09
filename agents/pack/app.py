@@ -19,9 +19,9 @@ from shared.utils.server import make_app
 from shared.utils.stubs import photos, previous
 
 STAGE = "pack"
-AGENT_ID = "pack-manager@1"
-VERSION = "1.0.0"
-PROMPT_VERSION = "order-blind-v1"
+AGENT_ID = "pack-manager@2"
+VERSION = "2.0.0"
+PROMPT_VERSION = "order-blind-v2"
 RUNTIME = Path(__file__).resolve().parent / "runtime"
 REPO_ROOT = Path(__file__).resolve().parents[2]
 if str(RUNTIME) not in sys.path:
@@ -35,6 +35,8 @@ CHECK_KEY_MAP = {
     "no_extra_items": "no_extra_items",
     "no_wrong_items": "no_wrong_items",
     "image_quality": "image_quality",
+    "scene_coverage": "scene_coverage",   # v2: was the whole box visible?
+    "photo_reuse": "photo_reuse",         # v2: photo not used for another order
 }
 VERDICT_MAP = {"pass": "PASS", "fail": "FAIL", "uncertain": "UNCERTAIN"}
 UNCERTAIN_REASON_MAP = {
@@ -409,8 +411,9 @@ def handle(request: dict) -> dict:
             "order_lines": _parse_lines(row["order_lines"]),
             "observed_in_box": observed_map,
             "operator_verdict": row.get("operator_verdict") or None,
-            "implementation": "round2-pack-manager",
+            "implementation": "round2-pack-manager-v2",
             "prompt_version": PROMPT_VERSION,
+            "agent_version": VERSION,
         },
     )
     out = build_output(record)
