@@ -938,7 +938,11 @@ function App() {
                                       </div>
                                       {stage.next_step_recommendation && (
                                         <div style={{ marginTop: 6, color: 'var(--brand-300)' }}>
-                                          <strong>Recommendation:</strong> {stage.next_step_recommendation}
+                                          <strong>Recommendation:</strong> {
+                                            typeof stage.next_step_recommendation === 'object'
+                                              ? `${stage.next_step_recommendation.action || 'Unknown'} - ${stage.next_step_recommendation.reason || ''}`
+                                              : stage.next_step_recommendation
+                                          }
                                         </div>
                                       )}
                                       {stage.error && (
