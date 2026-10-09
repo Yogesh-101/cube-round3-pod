@@ -59,13 +59,14 @@ def handle(request: dict) -> dict:
     
     lines = sample_data.fee_lines(s["subject_id"], s["org_id"])
     evidence_records = request.get("previous_evidence", [])
+    overrides = request.get("context", {}).get("overrides", [])
     
     checks, charges, claimable = [], [], 0.0
     workflow_id = request.get("workflow_id", f"WF-{s['org_id']}-{s['subject_id']}")
     
     for line in lines:
         # Run Phase 2 Intelligent Investigation
-        inv = investigate_charge(line, s["subject_id"], s["org_id"], workflow_id, evidence_records)
+        inv = investigate_charge(line, s["subject_id"], s["org_id"], workflow_id, evidence_records, overrides)
         
         pos = inv.final_verdict
         why = inv.final_reason

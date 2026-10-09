@@ -96,7 +96,13 @@ def test_mock_successful_workflow_episode_recording():
         "stage_results": [],
     }
 
-    res = bm.record_workflow_episode(wf, client=mock_client, extract_intent=True)
+    import os
+    from unittest.mock import patch
+    
+    with patch.dict(os.environ):
+        if "PYTEST_CURRENT_TEST" in os.environ:
+            del os.environ["PYTEST_CURRENT_TEST"]
+        res = bm.record_workflow_episode(wf, client=mock_client, extract_intent=True)
 
     assert res is not None
     assert res["ok"] is True

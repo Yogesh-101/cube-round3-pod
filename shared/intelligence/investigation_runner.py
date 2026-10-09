@@ -18,8 +18,10 @@ def investigate_charge(
     org_id: str,
     workflow_id: str,
     all_evidence_records: list[dict],
+    overrides: list[dict] = None,
 ) -> ChargeInvestigation:
     """Investigate a single charge end-to-end."""
+    overrides = overrides or []
     charge_id = charge.get("line_id", "")
     charge_type = charge.get("charge_type", "unknown")
     amount_usd = float(charge.get("amount_usd", 0))
@@ -61,6 +63,12 @@ def investigate_charge(
     det_reason = ""
     det_evidence_ids = []
     
+    def effective_verdict(rec: dict) -> str:
+        for override in reversed(overrides):
+            if override["supersedes"]["record_id"] == rec["record_id"]:
+                return override["new_verdict"]
+        return rec.get("decision", {}).get("verdict")
+    
     if inv.evidence_health.status == "INSUFFICIENT":
         det_verdict = "SILENT"
         det_reason = "Insufficient evidence to support or contradict the charge."
@@ -69,7 +77,7 @@ def investigate_charge(
         if charge_type == "inbound_defect_fee":
             prep = next((r for r in relevant_evidence if r.get("stage") == "prep"), None)
             if prep:
-                v = prep.get("decision", {}).get("verdict")
+                v = effective_verdict(prep)
                 if v == "PASS":
                     det_verdict = "CONTRADICTS"
                     det_reason = "Prep evidence shows the unit compliant"
@@ -85,7 +93,7 @@ def investigate_charge(
         elif charge_type == "refund_issued_item_not_returned":
             ret = next((r for r in relevant_evidence if r.get("stage") == "returns"), None)
             if ret and ret.get("checks"):
-                v = ret["checks"][0].get("verdict")
+                v = effective_verdict(ret)
                 if v == "PASS":
                     det_verdict = "CONTRADICTS"
                     det_reason = "Returns record shows the right item came back"
@@ -104,7 +112,7 @@ def investigate_charge(
         # Generic fallback if charge type not matched but we have FAIL evidence
         if det_verdict == "SILENT" and not det_reason:
             for rec in relevant_evidence:
-                v = rec.get("decision", {}).get("verdict")
+                v = effective_verdict(rec)
                 if v == "FAIL":
                     det_verdict = "CONTRADICTS"
                     det_reason = f"Evidence {rec.get('record_id')} contradicts the charge."
