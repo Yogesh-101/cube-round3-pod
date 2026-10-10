@@ -8,6 +8,7 @@ import {
   CheckCircle2, Terminal, Cpu, FileCheck, Lock, Layers, ExternalLink, ChevronRight
 } from 'lucide-react';
 import Hero from './components/ui/animated-shader-hero';
+import { ContainerScroll } from './components/ui/container-scroll-animation';
 
 // ------------------------------------------------------------------
 // METRICS BAR (Instant Enterprise Authority Above the Fold)
@@ -176,17 +177,15 @@ const EvidenceShowcase = () => {
 
   return (
     <div data-aos="fade-up" style={{
-      maxWidth: '1060px',
-      margin: '0 auto 100px auto',
-      padding: '0 24px'
+      width: '100%',
+      height: '100%',
+      margin: '0 auto',
     }}>
       <div style={{
         background: 'rgba(15, 23, 42, 0.8)',
         backdropFilter: 'blur(20px)',
-        border: '1px solid rgba(59, 130, 246, 0.25)',
-        borderRadius: '24px',
+        height: '100%',
         overflow: 'hidden',
-        boxShadow: '0 24px 60px -15px rgba(2, 6, 23, 0.9), 0 0 30px rgba(59, 130, 246, 0.15)'
       }}>
         {/* Terminal Header */}
         <div style={{
@@ -601,26 +600,30 @@ export default function Landing() {
       </section>
 
       {/* ── INTERACTIVE EVIDENCE SHOWCASE ─────────────────────── */}
-      <section style={{ padding: '40px 24px 80px', background: '#020617' }}>
-        <div data-aos="fade-up" style={{ textAlign: 'center', marginBottom: '48px' }}>
-          <div style={{
-            display: 'inline-flex', alignItems: 'center', gap: '8px',
-            padding: '6px 16px', background: 'rgba(52,211,153,0.08)',
-            border: '1px solid rgba(52,211,153,0.25)', borderRadius: '999px',
-            color: '#34d399', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '1px',
-            marginBottom: '16px'
-          }}>
-            <Lock size={14} /> IMMUTABLE AUDIT TRAIL
-          </div>
-          <h2 style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.6rem)', fontWeight: 800, margin: '0 0 16px 0', color: '#f8fafc' }}>
-            Deterministic Verification in Action
-          </h2>
-          <p style={{ fontSize: '1.05rem', color: '#94a3b8', maxWidth: '620px', margin: '0 auto', lineHeight: 1.6 }}>
-            Inspect a live evidence envelope. Each fulfillment decision is backed by SHA-256 hashes and stored immutably.
-          </p>
-        </div>
-
-        <EvidenceShowcase />
+      <section style={{ padding: '0px 24px 20px', background: '#020617' }}>
+        <ContainerScroll
+          titleComponent={
+            <div data-aos="fade-up" style={{ textAlign: 'center', marginBottom: '48px' }}>
+              <div style={{
+                display: 'inline-flex', alignItems: 'center', gap: '8px',
+                padding: '6px 16px', background: 'rgba(52,211,153,0.08)',
+                border: '1px solid rgba(52,211,153,0.25)', borderRadius: '999px',
+                color: '#34d399', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '1px',
+                marginBottom: '16px'
+              }}>
+                <Lock size={14} /> IMMUTABLE AUDIT TRAIL
+              </div>
+              <h2 style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.6rem)', fontWeight: 800, margin: '0 0 16px 0', color: '#f8fafc' }}>
+                Deterministic Verification in Action
+              </h2>
+              <p style={{ fontSize: '1.05rem', color: '#94a3b8', maxWidth: '620px', margin: '0 auto', lineHeight: 1.6 }}>
+                Inspect a live evidence envelope. Each fulfillment decision is backed by SHA-256 hashes and stored immutably.
+              </p>
+            </div>
+          }
+        >
+          <EvidenceShowcase />
+        </ContainerScroll>
       </section>
 
       {/* ── FEATURE ROWS ─────────────────────────────────────── */}
