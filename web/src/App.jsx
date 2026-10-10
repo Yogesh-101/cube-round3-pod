@@ -340,19 +340,7 @@ function App({ defaultMode = 'dashboard' }) {
           </button>
 
           <nav id="mainNav" className={mobileNavOpen ? 'open' : ''} aria-label="Main">
-            <a 
-              href="/" 
-              onClick={(e) => { 
-                e.preventDefault()
-                navigate('/')
-              }}
-              style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
-            >
-              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="m15 18-6-6 6-6"/>
-              </svg>
-              Home
-            </a>
+
 
             <a 
               href="#dashboard" 
@@ -442,40 +430,7 @@ function App({ defaultMode = 'dashboard' }) {
                   Sign Out
                 </button>
               </div>
-            ) : (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setAuthModalMode('login')
-                    setShowAuthModal(true)
-                  }}
-                  style={{
-                    background: 'none',
-                    border: '1px solid var(--border)',
-                    borderRadius: '6px',
-                    color: '#fff',
-                    fontSize: '0.8rem',
-                    padding: '5px 10px',
-                    cursor: 'pointer',
-                    fontWeight: 600,
-                  }}
-                >
-                  Sign In
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setAuthModalMode('register')
-                    setShowAuthModal(true)
-                  }}
-                  className="btn btn-primary btn-sm"
-                  style={{ fontSize: '0.8rem', padding: '5px 10px' }}
-                >
-                  Register
-                </button>
-              </div>
-            )}
+            ) : null}
 
             <div className="org-switch">
               <label>Org</label>

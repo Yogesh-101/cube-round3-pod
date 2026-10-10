@@ -447,7 +447,7 @@ export default function Landing() {
           {/* CTA Group */}
           <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
             <button
-              onClick={() => navigate('/login')}
+              onClick={() => navigate('/app')}
               style={{
                 background: 'transparent',
                 border: '1px solid rgba(255, 255, 255, 0.15)',
@@ -489,7 +489,7 @@ export default function Landing() {
                 e.currentTarget.style.boxShadow = '0 4px 16px rgba(10, 132, 255, 0.4), inset 0 1px 0 rgba(255,255,255,0.2)';
               }}
             >
-              Enter Platform <ArrowRight size={15} />
+              Sign Up <ArrowRight size={15} />
             </button>
           </div>
         </nav>
