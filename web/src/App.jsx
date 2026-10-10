@@ -370,21 +370,7 @@ function App({ defaultMode = 'dashboard' }) {
               Dashboard
             </a>
 
-            <a 
-              href="#agents" 
-              className={activeTab === 'agents' ? 'active' : ''} 
-              onClick={(e) => { 
-                e.preventDefault()
-                setActiveTab('agents')
-                setMobileNavOpen(false)
-              }}
-            >
-              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
-              </svg>
-              5 Agents Mode
-            </a>
-            
+
             <a 
               href="#inspect" 
               className={activeTab === 'inspect' ? 'active' : ''} 
@@ -432,7 +418,7 @@ function App({ defaultMode = 'dashboard' }) {
 
             {currentUser ? (
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.8rem', color: 'var(--brand-300)', fontWeight: 600 }}>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.8rem', color: 'var(--brand-300)', fontWeight: 600, whiteSpace: 'nowrap' }}>
                   <User size={14} /> {currentUser.name || currentUser.email.split('@')[0]}
                 </span>
                 <button
@@ -450,6 +436,7 @@ function App({ defaultMode = 'dashboard' }) {
                     fontSize: '0.75rem',
                     padding: '4px 8px',
                     cursor: 'pointer',
+                    whiteSpace: 'nowrap',
                   }}
                 >
                   Sign Out
