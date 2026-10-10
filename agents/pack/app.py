@@ -55,7 +55,7 @@ UNCERTAIN_REASON_MAP = {
 
 def _parse_lines(text: str) -> dict[str, int]:
     out: dict[str, int] = {}
-    for part in filter(None, str(text or "").split(";")):
+    for part in filter(None, (text or "").split(";")):
         sku, _, qty = part.partition(":")
         sku = sku.strip()
         if not sku:
@@ -128,13 +128,13 @@ def _resolve_image_paths(request: dict) -> list[tuple[str, str | None]]:
 
 
 def _verdict_r3(v: str) -> str:
-    return VERDICT_MAP.get(str(v).lower(), str(v).upper())
+    return VERDICT_MAP.get(v.lower(), v.upper())
 
 
 def _uncertain_reason_r3(code: str | None) -> str:
     if not code:
         return "insufficient_evidence"
-    return UNCERTAIN_REASON_MAP.get(str(code).lower(), "insufficient_evidence")
+    return UNCERTAIN_REASON_MAP.get(code.lower(), "insufficient_evidence")
 
 
 def _checks_from_decision(decision_checks, evidence_refs: list[str]) -> list[dict]:
@@ -275,7 +275,7 @@ def _run_vlm_pipeline(request: dict, row: dict, image_paths: list[str]):
     observed: dict[str, int] = {}
     for item in inspection.observed_items:
         if item.sku:
-            observed[item.sku] = observed.get(item.sku, 0) + int(item.observed_quantity)
+            observed[item.sku] = observed.get(item.sku, 0) + item.observed_quantity
     return inspection, observed
 
 

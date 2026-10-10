@@ -198,7 +198,9 @@ def _run_stage(wf: dict, sr: dict, idx: int, opts: dict, store, client) -> str |
             code = "tenant_mismatch" if bad[0].startswith("TENANCY") else "invalid_output"
             err, out = error_obj(code, "; ".join(bad), retryable=False, stage=stage), None
             _log(wf, "invalid_output", stage, err["message"])
-    if out is None and isinstance(err, dict):
+    if out is None:
+        if err is None or not isinstance(err, dict):
+            err = error_obj("unknown_error", "No output or error returned", retryable=False, stage=stage)
         out = pending_output(request, code=err["code"], message=err["message"], retryable=err["retryable"],
                              agent_id=sr["agent_id"])
         _log(wf, "stage_degraded", stage, f"{err['code']}: recorded as {out['evidence']['status']}; flow policy decides what next")
