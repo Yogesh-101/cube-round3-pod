@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { orchestratorApi } from '../apiClient'
-import { Inbox, Package, RefreshCcw, DollarSign, Search, AlertTriangle, CheckCircle, Info, Target, Download, Zap, Play } from 'lucide-react'
+import { Inbox, Package, RefreshCcw, DollarSign, Search, AlertTriangle, CheckCircle, Info, Target, Download, Zap, Play, Loader } from 'lucide-react'
 
 const AGENT_CONFIGS = {
   receiving: {
@@ -478,7 +478,7 @@ export default function AgentWorkspace({ initialStage = 'receiving', onSwitchToW
                 }}
               >
                 {executing ? (
-                  <span>⏳ Executing {currentConfig.title}...</span>
+                  <span><Loader size={14} style={{ marginRight: '4px', animation: 'spin 1s linear infinite' }} /> Executing {currentConfig.title}...</span>
                 ) : (
                   <span><Play size={14} style={{ marginRight: '4px' }} /> Run {currentConfig.title} Independently</span>
                 )}
