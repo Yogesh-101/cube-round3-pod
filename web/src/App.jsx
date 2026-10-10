@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams, Link } from 'react-router-dom'
 import './App.css'
 import { 
   orchestratorApi, 
@@ -9,6 +9,8 @@ import {
   setForceEmbedded,
   subscribeConnectionState 
 } from './apiClient'
+import AgentWorkspace from './components/AgentWorkspace'
+import AuthModal from './components/AuthModal'
 
 // Safe Error Boundary to guarantee zero white-screen crashes
 class ErrorBoundary extends React.Component {
@@ -81,9 +83,14 @@ function formatDuration(ms) {
   return `${(ms / 1000).toFixed(2)}s`
 }
 
-function App() {
+function App({ defaultMode = 'dashboard' }) {
   const navigate = useNavigate()
-  const [activeTab, setActiveTab] = useState('dashboard') // 'dashboard' | 'inspect' | 'results'
+  const { stage: urlStage } = useParams()
+  const [activeTab, setActiveTab] = useState(defaultMode === 'agents' || urlStage ? 'agents' : 'dashboard') // 'dashboard' | 'agents' | 'inspect' | 'results'
+  const [selectedAgentStage, setSelectedAgentStage] = useState(urlStage || 'receiving')
+  const [currentUser, setCurrentUser] = useState(orchestratorApi.getAuthUser())
+  const [showAuthModal, setShowAuthModal] = useState(false)
+  const [authModalMode, setAuthModalMode] = useState('login')
   const [health, setHealth] = useState(null)
   const [loadingHealth, setLoadingHealth] = useState(true)
   const [engineMode, setEngineMode] = useState('detecting') // 'live' | 'embedded' | 'detecting'
@@ -175,6 +182,19 @@ function App() {
       unsubscribe()
     }
   }, [orgId])
+
+  useEffect(() => {
+    orchestratorApi.fetchMe().then(user => {
+      if (user) setCurrentUser(user)
+    })
+  }, [])
+
+  useEffect(() => {
+    if (urlStage) {
+      setSelectedAgentStage(urlStage)
+      setActiveTab('agents')
+    }
+  }, [urlStage])
 
   const selectWorkflow = async (wf) => {
     setWorkflow(wf)
@@ -347,6 +367,21 @@ function App() {
               </svg>
               Dashboard
             </a>
+
+            <a 
+              href="#agents" 
+              className={activeTab === 'agents' ? 'active' : ''} 
+              onClick={(e) => { 
+                e.preventDefault()
+                setActiveTab('agents')
+                setMobileNavOpen(false)
+              }}
+            >
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+              </svg>
+              5 Agents Mode
+            </a>
             
             <a 
               href="#inspect" 
@@ -360,7 +395,7 @@ function App() {
               <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
               </svg>
-              New Inspection
+              Pipeline Run
             </a>
 
             <a 
@@ -377,6 +412,66 @@ function App() {
               </svg>
               Results {workflow ? `(${workflow.subject_id || 'Active'})` : ''}
             </a>
+
+            {currentUser ? (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ fontSize: '0.8rem', color: 'var(--brand-300)', fontWeight: 600 }}>
+                  👤 {currentUser.name || currentUser.email.split('@')[0]}
+                </span>
+                <button
+                  type="button"
+                  onClick={async () => {
+                    await orchestratorApi.logout()
+                    setCurrentUser(null)
+                    showToast('Logged out successfully', 'info')
+                  }}
+                  style={{
+                    background: 'none',
+                    border: '1px solid var(--edge)',
+                    borderRadius: '6px',
+                    color: 'var(--text-muted)',
+                    fontSize: '0.75rem',
+                    padding: '4px 8px',
+                    cursor: 'pointer',
+                  }}
+                >
+                  Sign Out
+                </button>
+              </div>
+            ) : (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setAuthModalMode('login')
+                    setShowAuthModal(true)
+                  }}
+                  style={{
+                    background: 'none',
+                    border: '1px solid var(--border)',
+                    borderRadius: '6px',
+                    color: '#fff',
+                    fontSize: '0.8rem',
+                    padding: '5px 10px',
+                    cursor: 'pointer',
+                    fontWeight: 600,
+                  }}
+                >
+                  Sign In
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setAuthModalMode('register')
+                    setShowAuthModal(true)
+                  }}
+                  className="btn btn-primary btn-sm"
+                  style={{ fontSize: '0.8rem', padding: '5px 10px' }}
+                >
+                  Register
+                </button>
+              </div>
+            )}
 
             <div className="org-switch">
               <label>Org</label>
