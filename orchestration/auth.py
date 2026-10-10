@@ -26,8 +26,23 @@ from sqlalchemy.orm import Session
 
 from .database import User, get_db
 
-JWT_SECRET = os.environ.get("JWT_SECRET") or os.environ.get("SECRET_KEY") or "cube-super-secret-production-orchestrator-key-2026"
+_raw_secret = os.environ.get("JWT_SECRET") or os.environ.get("SECRET_KEY")
+if not _raw_secret:
+    import logging as _logging
+    _logging.getLogger("orchestrator").warning(
+        "JWT_SECRET is not set. A random ephemeral secret is being used. "
+        "Sessions will NOT persist across restarts. Set JWT_SECRET in production."
+    )
+    _raw_secret = secrets.token_hex(32)
+JWT_SECRET = _raw_secret
 TOKEN_EXPIRY_SECONDS = 7 * 24 * 3600  # 7 days
+
+
+def is_secure_context() -> bool:
+    """Detect whether the app is running in an HTTPS context (e.g., Render, Heroku)."""
+    return os.environ.get("HTTPS", "").lower() in ("1", "true", "on") or \
+           os.environ.get("RENDER", "") != "" or \
+           os.environ.get("IS_HTTPS", "").lower() in ("1", "true", "on")
 
 security_bearer = HTTPBearer(auto_error=False)
 

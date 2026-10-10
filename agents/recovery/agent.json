@@ -1,10 +1,10 @@
 {
-  "stage": "recovery",
-  "agent_id": "recovery-stub@0",
-  "owner": "@github-handle-of-the-owner",
-  "mode": "inproc",
-  "url": "http://localhost:8105",
-  "module": "agents.recovery.app",
-  "implementation": "organiser-stub",
-  "notes": "Set mode to \"http\" if your agent is not Python or runs as its own service. Change implementation to a short honest description of what you built."
+    "stage": "recovery",
+    "agent_id": "recovery-manager@2",
+    "owner": "@team",
+    "mode": "inproc",
+    "url": "http://localhost:8105",
+    "module": "agents.recovery.app",
+    "implementation": "Phase 2 Recovery Manager: charge-by-charge fee dispute investigation using deterministic evidence matching plus AI reasoning (Gemini, fail-open). Each charge is assessed via the Phase 2 IntelligentInvestigationRunner: evidence health check → AI reasoning → deterministic validation guard. Semantics: CONTRADICTS=FAIL (claim), SUPPORTS=PASS (no claim), SILENT=UNCERTAIN (never claims). Implements findings F-07 to F-12 explicitly. Integrates Breeth intent memory (fail-open).",
+    "notes": "Implements the EVIDENCE-CONTRACT.md Recovery semantics: check condition is 'this charge is supported by evidence'. SILENT (insufficient evidence) never becomes a claim. AI reasoning is constrained by deterministic validation to prevent hallucinated claims. Phase 2 investigation graph and timeline are produced per workflow."
 }
