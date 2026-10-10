@@ -237,16 +237,14 @@ const Hero = ({ trustBadge, headline, subtitle, buttons, style }) => {
           <h1 className="_heroFadeUp _delay200" style={{
             fontSize: 'clamp(2.8rem, 8vw, 6rem)', fontWeight: 800, margin: '0 0 8px 0',
             lineHeight: 1.1, letterSpacing: '-0.02em',
-            background: 'linear-gradient(135deg, #93c5fd 0%, #38bdf8 50%, #818cf8 100%)',
-            WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text'
+            color: '#fff'
           }}>
             {headline.line1}
           </h1>
           <h1 className="_heroFadeUp _delay400" style={{
             fontSize: 'clamp(2.8rem, 8vw, 6rem)', fontWeight: 800, margin: 0,
             lineHeight: 1.1, letterSpacing: '-0.02em',
-            background: 'linear-gradient(135deg, #38bdf8 0%, #60a5fa 50%, #a78bfa 100%)',
-            WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text'
+            color: '#fff'
           }}>
             {headline.line2}
           </h1>
