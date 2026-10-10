@@ -17,9 +17,10 @@ from shared.utils.log import get_logger
 from shared.utils.records import build_output, build_record, check, pending_output, utcnow
 from shared.utils.server import make_app
 from shared.utils.stubs import photos, previous
+from shared.utils.omni_agent import evaluate_data
 
 STAGE = "pack"
-AGENT_ID = "pack-manager@2"
+AGENT_ID = "pack-manager@omni"
 VERSION = "2.0.0"
 PROMPT_VERSION = "order-blind-v2"
 RUNTIME = Path(__file__).resolve().parent / "runtime"
@@ -228,8 +229,8 @@ def _run_decision_on_sample(row: dict, evidence_refs: list[str]):
         for sku, qty in got.items()
     ]
     result = run_decision_engine(
-        expected_lines=expected,
-        observed_items=observed,
+        expected_lines=expected, # type: ignore
+        observed_items=observed, # type: ignore
         image_quality_ok=True,
         model_version="decision-engine@1",
     )
@@ -270,7 +271,7 @@ def _run_vlm_pipeline(request: dict, row: dict, image_paths: list[str]):
 
         catalogue = [CatalogueProduct(**row) for row in json.loads(cat_path.read_text(encoding="utf-8"))]
 
-    inspection = run_inspection(order, image_paths, catalogue=catalogue or None)
+    inspection = run_inspection(order, image_paths, catalogue=catalogue or None) # type: ignore
     observed: dict[str, int] = {}
     for item in inspection.observed_items:
         if item.sku:
@@ -281,6 +282,28 @@ def _run_vlm_pipeline(request: dict, row: dict, image_paths: list[str]):
 def handle(request: dict) -> dict:
     t0 = time.time()
     s = request["subject"]
+    
+    # DYNAMIC DATA PATH (Hackathon feature)
+    case_data = request.get("context", {}).get("case", {})
+    if case_data and case_data.get("use_omni"):
+        rules = "1. Verify packing complete. 2. Verify accurate labels."
+        omni_result = evaluate_data(STAGE, case_data, rules)
+        
+        checks = []
+        for c in omni_result.get("checks", []):
+            if isinstance(c, dict):
+                conf = c.get("confidence")
+                conf = float(conf) if conf is not None else None
+                checks.append(check(str(c.get("check_key")), str(c.get("verdict")), conf, detail=str(c.get("detail", ""))))
+            
+        record = build_record(
+            request, agent_id=AGENT_ID, record_id=f"PCK-OMNI-{s['subject_id']}", captured_at=utcnow(), operator_id="omni-agent",
+            unit_scope="order", refs={"subject_id": s["subject_id"]},
+            checks=checks, outcome=str(omni_result.get("outcome", "unknown")), model={"name": "omni-gemini", "version": "1.0"}, inputs=request.get("inputs", []),
+            reason=str(omni_result.get("reason", "")), verdict=str(omni_result.get("verdict", "UNCERTAIN")), payload={"dynamic_data_processed": True}
+        )
+        return build_output(record)
+
     logger.info(
         "handle_start",
         extra={"ctx": {

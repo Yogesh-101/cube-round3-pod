@@ -9,17 +9,41 @@ Run:  uvicorn agents.prep.app:app --port 8102
 ===============================================================
 """
 from shared.utils import sample_data
-from shared.utils.records import build_output, build_record, check
+from shared.utils.records import build_output, build_record, check, utcnow
 from shared.utils.server import make_app
 from shared.utils.stubs import STUB_MODEL, photos, verdict_from
+from shared.utils.omni_agent import evaluate_data
 
 STAGE = "prep"
-AGENT_ID = "prep-stub@0"
+AGENT_ID = "prep-manager@omni"
 from .backend.schemas import PrepInput
 from .backend.logic import process_prep
 
 def handle(request: dict) -> dict:
     s = request["subject"]
+    
+    # DYNAMIC DATA PATH (Hackathon feature)
+    case_data = request.get("context", {}).get("case", {})
+    if case_data and case_data.get("use_omni"):
+        rules = "1. Ensure item is safely packed. 2. Verify prep requirements are met."
+        omni_result = evaluate_data(STAGE, case_data, rules)
+        
+        checks = []
+        for c in omni_result.get("checks", []):
+            if isinstance(c, dict):
+                conf = c.get("confidence")
+                conf = float(conf) if conf is not None else None
+                checks.append(check(str(c.get("check_key")), str(c.get("verdict")), conf, detail=str(c.get("detail", ""))))
+            
+        record = build_record(
+            request, agent_id=AGENT_ID, record_id=f"PRP-OMNI-{s['subject_id']}", captured_at=utcnow(), operator_id="omni-agent",
+            unit_scope="unit", refs={"subject_id": s["subject_id"]},
+            checks=checks, outcome=str(omni_result.get("outcome", "unknown")), model={"name": "omni-gemini", "version": "1.0"}, inputs=request.get("inputs", []),
+            reason=str(omni_result.get("reason", "")), verdict=str(omni_result.get("verdict", "UNCERTAIN")), payload={"dynamic_data_processed": True}
+        )
+        return build_output(record)
+
+    # STUB PATH (Backward compatibility)
     r = sample_data.row("prep", s["subject_id"], s["org_id"])
     
     input_data = PrepInput(

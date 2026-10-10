@@ -52,6 +52,16 @@ def flow_stages(flow: dict | None = None) -> list[str]:
 
 
 def applies(step: dict, case: dict) -> tuple[bool, str]:
+    if "dynamic_when" in step:
+        try:
+            from shared.utils.omni_agent import evaluate_data
+            result = evaluate_data("routing", case, step["dynamic_when"])
+            if result.get("verdict") == "PASS":
+                return True, ""
+            return False, f"dynamic condition not met: {result.get('reason', 'failed rules')}"
+        except Exception as e:
+            return False, f"dynamic router error: {e}"
+
     for key, allowed in step.get("when", {}).items():
         if case.get(key) not in allowed:
             return False, f"{key}={case.get(key)!r} not in {allowed}"
@@ -148,7 +158,7 @@ def _validate(out: dict, wf: dict, stage: str) -> list[str]:
     return []
 
 
-def _run_stage(wf: dict, sr: dict, idx: int, opts: dict, store, client) -> dict | None:
+def _run_stage(wf: dict, sr: dict, idx: int, opts: dict, store, client) -> str | None:
     """Run one stage. Returns a halt reason, or None. Always leaves a stored evidence record behind."""
     stage = sr["stage"]
     sr["runs"] += 1
@@ -188,7 +198,7 @@ def _run_stage(wf: dict, sr: dict, idx: int, opts: dict, store, client) -> dict 
             code = "tenant_mismatch" if bad[0].startswith("TENANCY") else "invalid_output"
             err, out = error_obj(code, "; ".join(bad), retryable=False, stage=stage), None
             _log(wf, "invalid_output", stage, err["message"])
-    if out is None:
+    if out is None and isinstance(err, dict):
         out = pending_output(request, code=err["code"], message=err["message"], retryable=err["retryable"],
                              agent_id=sr["agent_id"])
         _log(wf, "stage_degraded", stage, f"{err['code']}: recorded as {out['evidence']['status']}; flow policy decides what next")
@@ -267,6 +277,7 @@ def run_workflow(case: dict, flow: dict | None = None, store=None, clients: dict
 def resume(workflow_id: str, flow: dict | None = None, store=None, clients: dict | None = None) -> dict:
     """Continue after a halt, a person's decision, or a failure (errored stages are retried)."""
     flow = flow or load_flow()
+    store = store or MemoryStore()
     wf = store.load_workflow(workflow_id)
     if wf is None:
         raise KeyError(workflow_id)

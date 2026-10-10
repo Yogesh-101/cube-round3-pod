@@ -19,41 +19,39 @@ from shared.utils import sample_data
 from shared.utils.records import build_output, build_record, check, utcnow
 from shared.utils.server import make_app
 from shared.utils.stubs import STUB_MODEL, effective_verdict, previous
+from shared.utils.omni_agent import evaluate_data
 
 STAGE = "recovery"
-AGENT_ID = "recovery-manager@2"
+AGENT_ID = "recovery-manager@omni"
 
 from shared.intelligence.investigation_runner import investigate_charge
 from shared.intelligence.claim_dossier import build_claim_dossier
 
-
-def position(line: dict, request: dict) -> tuple[str, str, list[str]]:
-    """(CONTRADICTS | SUPPORTS | SILENT, detail, evidence record ids). Uses EFFECTIVE verdicts (overrides applied)."""
-    ctype = line["charge_type"]
-    if ctype == "inbound_defect_fee":
-        prep = previous(request, "prep")
-        if not prep or prep["status"] != "completed":
-            return "SILENT", "no usable Prep record for this subject", []
-        v = effective_verdict(request, prep)
-        if v == "PASS":
-            return "CONTRADICTS", "Prep evidence shows the unit compliant", [prep["record_id"]]
-        if v == "FAIL":
-            return "SUPPORTS", "Prep evidence shows a defect", [prep["record_id"]]
-        return "SILENT", "Prep evidence is uncertain", [prep["record_id"]]
-    if ctype == "refund_issued_item_not_returned":
-        ret = previous(request, "returns")
-        if ret and ret["status"] == "completed" and ret["checks"] and ret["checks"][0]["verdict"] == "PASS":
-            return "CONTRADICTS", "Returns record shows the right item came back", [ret["record_id"]]
-        return "SILENT", "no usable Returns record", []
-    if ctype == "fulfilment_fee_weight_tier":
-        return "SILENT", "no measured weight/dimensions upstream (finding F-07)", []
-    if ctype == "lost_inbound":
-        return "SILENT", "receiving shortfall is supplier-side, not channel-side loss (finding F-10)", []
-    return "SILENT", f"no rule for {ctype}", []
-
-
 def handle(request: dict) -> dict:
     s = request["subject"]
+
+    # DYNAMIC DATA PATH (Hackathon feature)
+    case_data = request.get("context", {}).get("case", {})
+    if case_data and case_data.get("use_omni"):
+        rules = "1. Reconcile evidence against fee lines. 2. Highlight contradictions as claims."
+        omni_result = evaluate_data(STAGE, case_data, rules)
+        
+        checks = []
+        for c in omni_result.get("checks", []):
+            if isinstance(c, dict):
+                conf = c.get("confidence")
+                conf = float(conf) if conf is not None else None
+                checks.append(check(str(c.get("check_key")), str(c.get("verdict")), conf, detail=str(c.get("detail", ""))))
+            
+        record = build_record(
+            request, agent_id=AGENT_ID, record_id=f"RCY-OMNI-{s['subject_id']}", captured_at=utcnow(), operator_id="omni-agent",
+            unit_scope="account", refs={"subject_id": s["subject_id"]},
+            checks=checks, outcome=str(omni_result.get("outcome", "unknown")), model={"name": "omni-gemini", "version": "1.0"}, inputs=request.get("inputs", []),
+            reason=str(omni_result.get("reason", "")), verdict=str(omni_result.get("verdict", "UNCERTAIN")), payload={"dynamic_data_processed": True}
+        )
+        return build_output(record)
+
+    # STUB PATH (Backward compatibility)
     if not sample_data.has("receiving", s["subject_id"], s["org_id"]):
         raise LookupError(f"unknown subject {s['subject_id']} in {s['org_id']}")
     

@@ -1,11 +1,12 @@
 import uuid
 from shared.utils import sample_data
-from shared.utils.records import build_output, build_record, check
+from shared.utils.records import build_output, build_record, check, utcnow
 from shared.utils.server import make_app
+from shared.utils.omni_agent import evaluate_data
 from agents.returns.backend.returns_manager_agent import ReturnsManagerAgent, MODEL_VERSION
 
 STAGE = "returns"
-AGENT_ID = "returns-manager@1"
+AGENT_ID = "returns-manager@omni"
 
 def handle(request: dict) -> dict:
     s = request["subject"]
@@ -13,6 +14,28 @@ def handle(request: dict) -> dict:
     if s["org_id"] not in ["org_demo_alpha", "org_demo_bravo"]:
         raise LookupError("Tenant not isolated / unknown tenant")
 
+    # DYNAMIC DATA PATH (Hackathon feature)
+    case_data = request.get("context", {}).get("case", {})
+    if case_data and case_data.get("use_omni"):
+        rules = "1. Verify return condition. 2. Verify return components are complete."
+        omni_result = evaluate_data(STAGE, case_data, rules)
+        
+        checks = []
+        for c in omni_result.get("checks", []):
+            if isinstance(c, dict):
+                conf = c.get("confidence")
+                conf = float(conf) if conf is not None else None
+                checks.append(check(str(c.get("check_key")), str(c.get("verdict")), conf, detail=str(c.get("detail", ""))))
+            
+        record = build_record(
+            request, agent_id=AGENT_ID, record_id=f"RTN-OMNI-{s['subject_id']}", captured_at=utcnow(), operator_id="omni-agent",
+            unit_scope="unit", refs={"subject_id": s["subject_id"]},
+            checks=checks, outcome=str(omni_result.get("outcome", "unknown")), model={"name": "omni-gemini", "version": "1.0"}, inputs=request.get("inputs", []),
+            reason=str(omni_result.get("reason", "")), verdict=str(omni_result.get("verdict", "UNCERTAIN")), payload={"dynamic_data_processed": True}
+        )
+        return build_output(record)
+
+    # STUB PATH (Backward compatibility)
     r = sample_data.row("returns", s["subject_id"], s["org_id"])
     if not r:
         raise ValueError(f"No return record for {s['subject_id']}")
