@@ -11,6 +11,8 @@ services:
         value: 3.11.9
       - key: OUT_DIR
         value: "out"
+      - key: JWT_SECRET
+        generateValue: true
 
   # React / Vite Frontend Static Site (static sites are always free on Render, plan key is omitted)
   - type: web
@@ -19,6 +21,9 @@ services:
     buildCommand: "npm install && npm run build"
     staticPublishPath: "./dist"
     rootDir: "web"
+    envVars:
+      - key: VITE_API_URL
+        value: "https://cube-orchestrator-api.onrender.com"
     routes:
       - type: rewrite
         source: "/*"
