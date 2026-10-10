@@ -50,7 +50,8 @@ class FileStore(MemoryStore):
             (self.root / "workflows").mkdir(parents=True, exist_ok=True)
             (self.root / "evidence").mkdir(parents=True, exist_ok=True)
 
-        self._seed_default_workflows()
+        if root is None:
+            self._seed_default_workflows()
 
     def _seed_default_workflows(self) -> None:
         """Seed pre-computed demo workflows if the directory is empty on a fresh deployment."""
