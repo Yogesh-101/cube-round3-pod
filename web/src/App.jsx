@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useParams, Link } from 'react-router-dom'
+import { User, Inbox, Package, RefreshCcw, DollarSign } from 'lucide-react'
 import './App.css'
 import { 
   orchestratorApi, 
@@ -431,8 +432,8 @@ function App({ defaultMode = 'dashboard' }) {
 
             {currentUser ? (
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ fontSize: '0.8rem', color: 'var(--brand-300)', fontWeight: 600 }}>
-                  👤 {currentUser.name || currentUser.email.split('@')[0]}
+                <span style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.8rem', color: 'var(--brand-300)', fontWeight: 600 }}>
+                  <User size={14} /> {currentUser.name || currentUser.email.split('@')[0]}
                 </span>
                 <button
                   type="button"
@@ -617,11 +618,11 @@ function App({ defaultMode = 'dashboard' }) {
 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))', gap: '14px' }}>
                   {[
-                    { stage: 'receiving', icon: '📥', title: 'Receiving Agent', desc: 'Dock Intake & PO Shortfall Verification', tag: 'Stage 1' },
-                    { stage: 'prep', icon: '📦', title: 'Prep Agent', desc: 'Amazon FBA Polybag & Barcode Prep', tag: 'Stage 2' },
-                    { stage: 'pack', icon: '📦', title: 'Pack Agent', desc: 'MFN Order-Blind Vision & Seal Verification', tag: 'Stage 3' },
-                    { stage: 'returns', icon: '🔄', title: 'Returns Agent', desc: 'Customer Return Grading & Restock Disposition', tag: 'Stage 4' },
-                    { stage: 'recovery', icon: '💰', title: 'Recovery Agent', desc: 'Amazon Fee Audit & Claim Dossier Builder', tag: 'Stage 5' },
+                    { stage: 'receiving', icon: <Inbox size="1em" />, title: 'Receiving Agent', desc: 'Dock Intake & PO Shortfall Verification', tag: 'Stage 1' },
+                    { stage: 'prep', icon: <Package size="1em" />, title: 'Prep Agent', desc: 'Amazon FBA Polybag & Barcode Prep', tag: 'Stage 2' },
+                    { stage: 'pack', icon: <Package size="1em" />, title: 'Pack Agent', desc: 'MFN Order-Blind Vision & Seal Verification', tag: 'Stage 3' },
+                    { stage: 'returns', icon: <RefreshCcw size="1em" />, title: 'Returns Agent', desc: 'Customer Return Grading & Restock Disposition', tag: 'Stage 4' },
+                    { stage: 'recovery', icon: <DollarSign size="1em" />, title: 'Recovery Agent', desc: 'Amazon Fee Audit & Claim Dossier Builder', tag: 'Stage 5' },
                   ].map((ag) => (
                     <div 
                       key={ag.stage}

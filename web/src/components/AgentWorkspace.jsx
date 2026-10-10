@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { orchestratorApi } from '../apiClient'
+import { Inbox, Package, RefreshCcw, DollarSign, Search, AlertTriangle, CheckCircle, Info, Target, Download, Zap, Play } from 'lucide-react'
 
 const AGENT_CONFIGS = {
   receiving: {
     stage: 'receiving',
     title: 'Receiving Agent',
-    icon: '📥',
+    icon: <Inbox size="1em" />,
     version: '1.0.0',
     owner: '@team',
     description: 'Inspects inbound freight at the dock. Compares PO lines against received quantities, flags carton and unit damages, and evaluates supplier quality.',
@@ -24,7 +25,7 @@ const AGENT_CONFIGS = {
   prep: {
     stage: 'prep',
     title: 'Prep Agent',
-    icon: '📦',
+    icon: <Package size="1em" />,
     version: '1.0.0',
     owner: '@team',
     description: 'Enforces Amazon FBA prep standards before shipment: polybag seals, suffocation warnings, FNSKU label placement, barcode coverage, and pricing.',
@@ -43,7 +44,7 @@ const AGENT_CONFIGS = {
   pack: {
     stage: 'pack',
     title: 'Pack Agent',
-    icon: '📦',
+    icon: <Package size="1em" />,
     version: '2.0.0',
     owner: '@team',
     description: 'Verifies MFN and 3PL packing orders using order-blind vision and deterministic matching. Validates items present, quantities, and prevents wrong items.',
@@ -62,7 +63,7 @@ const AGENT_CONFIGS = {
   returns: {
     stage: 'returns',
     title: 'Returns Agent',
-    icon: '🔄',
+    icon: <RefreshCcw size="1em" />,
     version: '1.0.0',
     owner: '@team',
     description: 'Inspects customer returns, grades physical condition, verifies serial numbers and included accessories, and assigns final disposition.',
@@ -82,7 +83,7 @@ const AGENT_CONFIGS = {
   recovery: {
     stage: 'recovery',
     title: 'Recovery Agent',
-    icon: '💰',
+    icon: <DollarSign size="1em" />,
     version: '2.0.0',
     owner: '@team',
     description: 'Audits Amazon fee reports against accumulated physical evidence. Validates fee accuracy and automatically builds claim dossiers for contradicted charges.',
@@ -262,7 +263,7 @@ export default function AgentWorkspace({ initialStage = 'receiving', onSwitchToW
             className="btn btn-secondary"
             style={{ fontSize: '0.85rem', padding: '8px 16px' }}
           >
-            ⚡ Switch to Full Pipeline Mode
+            <Zap size={14} style={{ marginRight: '4px' }} /> Switch to Full Pipeline Mode
           </button>
         )}
       </div>
@@ -323,7 +324,7 @@ export default function AgentWorkspace({ initialStage = 'receiving', onSwitchToW
           <div className="card" style={{ padding: '20px' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
               <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#fff', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span>🔍</span> Upstream Dependency Analysis
+                <Search size={16} /> Upstream Dependency Analysis
               </h3>
               {loadingDeps && <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Checking...</span>}
             </div>
@@ -344,7 +345,7 @@ export default function AgentWorkspace({ initialStage = 'receiving', onSwitchToW
                       borderRadius: '6px',
                     }}
                   >
-                    <span>{detail.includes('Missing') ? '⚠️' : (detail.includes('found') || detail.includes('complete') ? '✅' : 'ℹ️')}</span>
+                    <span>{detail.includes('Missing') ? <AlertTriangle size={14} /> : (detail.includes('found') || detail.includes('complete') ? <CheckCircle size={14} /> : <Info size={14} />)}</span>
                     <span>{detail}</span>
                   </div>
                 ))}
@@ -460,7 +461,7 @@ export default function AgentWorkspace({ initialStage = 'receiving', onSwitchToW
                   color: 'var(--stop)',
                   fontSize: '0.85rem',
                 }}>
-                  ⚠️ {errorMsg}
+                  <AlertTriangle size={14} style={{ marginRight: '6px' }} /> {errorMsg}
                 </div>
               )}
 
@@ -479,7 +480,7 @@ export default function AgentWorkspace({ initialStage = 'receiving', onSwitchToW
                 {executing ? (
                   <span>⏳ Executing {currentConfig.title}...</span>
                 ) : (
-                  <span>▶ Run {currentConfig.title} Independently</span>
+                  <span><Play size={14} style={{ marginRight: '4px' }} /> Run {currentConfig.title} Independently</span>
                 )}
               </button>
             </form>
@@ -518,7 +519,7 @@ export default function AgentWorkspace({ initialStage = 'receiving', onSwitchToW
                     style={{ fontSize: '0.78rem', padding: '6px 10px' }}
                     title="Export Evidence JSON"
                   >
-                    📥 JSON
+                    <Download size={14} style={{ marginRight: '4px' }} /> JSON
                   </button>
                   <button
                     onClick={handleExecute}
@@ -526,7 +527,7 @@ export default function AgentWorkspace({ initialStage = 'receiving', onSwitchToW
                     style={{ fontSize: '0.78rem', padding: '6px 10px' }}
                     title="Re-run Agent"
                   >
-                    🔄 Re-Run
+                    <RefreshCcw size={14} style={{ marginRight: '4px' }} /> Re-Run
                   </button>
                 </div>
               </div>
@@ -700,7 +701,7 @@ export default function AgentWorkspace({ initialStage = 'receiving', onSwitchToW
             </div>
           ) : (
             <div className="card" style={{ padding: '40px 24px', textAlign: 'center' }}>
-              <div style={{ fontSize: '2.5rem', marginBottom: '12px', opacity: 0.6 }}>🎯</div>
+              <div style={{ marginBottom: '12px', opacity: 0.6 }}><Target size={40} /></div>
               <h4 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#fff', marginBottom: '6px' }}>
                 Ready to Execute
               </h4>
