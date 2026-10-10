@@ -1606,6 +1606,8 @@ function App({ defaultMode = 'dashboard' }) {
             </div>
           </div>
         </div>
+      )}
+
       {/* Interactive Authentication Modal */}
       <AuthModal
         isOpen={showAuthModal}

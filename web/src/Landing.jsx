@@ -73,10 +73,13 @@ const MetricsBar = () => {
 // ------------------------------------------------------------------
 // STAGE CARD (Elevated with Stage Badge & Capability Chips)
 // ------------------------------------------------------------------
-const StageCard = ({ stageNum, icon: Icon, title, desc, color, delay, tags }) => (
+// STAGE CARD (Elevated with Stage Badge & Capability Chips)
+// ------------------------------------------------------------------
+const StageCard = ({ stageNum, stageKey, icon: Icon, title, desc, color, delay, tags, onLaunch }) => (
   <div
     data-aos="fade-up"
     data-aos-delay={delay}
+    onClick={() => onLaunch && onLaunch(stageKey)}
     style={{
       background: 'rgba(15, 23, 42, 0.65)',
       backdropFilter: 'blur(16px)',
@@ -87,7 +90,7 @@ const StageCard = ({ stageNum, icon: Icon, title, desc, color, delay, tags }) =>
       flex: '1 1 320px',
       maxWidth: '370px',
       transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-      cursor: 'default',
+      cursor: 'pointer',
       display: 'flex',
       flexDirection: 'column',
       position: 'relative',
@@ -155,6 +158,12 @@ const StageCard = ({ stageNum, icon: Icon, title, desc, color, delay, tags }) =>
           {t}
         </span>
       ))}
+    </div>
+
+    <div style={{ marginTop: '14px', paddingTop: '12px', borderTop: '1px solid rgba(255,255,255,0.06)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <span style={{ fontSize: '0.8rem', fontWeight: 700, color: color, display: 'flex', alignItems: 'center', gap: '4px' }}>
+        Launch Agent Workspace →
+      </span>
     </div>
   </div>
 );
