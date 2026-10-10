@@ -231,6 +231,16 @@ def run_agent_independently(
     record_id = evidence["record_id"]
     latency_ms = int((time.monotonic() - t0) * 1000)
 
+    # Check if record_id already exists with different content; version it if needed to preserve immutability
+    existing_rec = store.get_evidence(record_id)
+    if existing_rec and existing_rec.get("content_hash") != evidence.get("content_hash"):
+        from shared.utils.hashing import seal
+        new_rid = f"{record_id}-r{int(time.time())}"
+        evidence["record_id"] = new_rid
+        evidence = seal(evidence)
+        out["evidence"] = evidence
+        record_id = new_rid
+
     # Store evidence immutably
     store.put_evidence(evidence)
 
