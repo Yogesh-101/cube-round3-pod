@@ -19,6 +19,7 @@ from .auth import (
     enforce_rate_limit,
     get_current_user,
     hash_password,
+    is_secure_context,
     normalize_email,
     validate_password_strength,
     verify_password,
@@ -99,14 +100,14 @@ def register(req: RegisterRequest, request: Request, response: Response, db: Ses
     # 6. Generate JWT token
     token = create_access_token(user)
 
-    # 7. Set secure session cookie
+    # 7. Set secure session cookie (secure=True on HTTPS/production)
     response.set_cookie(
         key="cube_session",
         value=token,
         max_age=7 * 24 * 3600,
         httponly=True,
         samesite="lax",
-        secure=False,  # Set to True in HTTPS production if desired
+        secure=is_secure_context(),
     )
 
     return AuthSuccessResponse(
@@ -144,7 +145,7 @@ def login(req: LoginRequest, request: Request, response: Response, db: Session =
         max_age=7 * 24 * 3600,
         httponly=True,
         samesite="lax",
-        secure=False,
+        secure=is_secure_context(),
     )
 
     return AuthSuccessResponse(
