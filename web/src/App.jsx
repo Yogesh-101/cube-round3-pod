@@ -9,12 +9,9 @@ import {
   setForceEmbedded,
   subscribeConnectionState 
 } from './apiClient'
-<<<<<<< HEAD
 import WorkflowStudio from './WorkflowStudio'
-=======
 import AgentWorkspace from './components/AgentWorkspace'
 import AuthModal from './components/AuthModal'
->>>>>>> 68bf0176cf2b9bea0e8baadf7c934899b770cb63
 
 // Safe Error Boundary to guarantee zero white-screen crashes
 class ErrorBoundary extends React.Component {
