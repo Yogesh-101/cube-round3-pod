@@ -449,25 +449,6 @@ export default function Landing() {
             <button
               onClick={() => navigate('/app')}
               style={{
-                background: 'transparent',
-                border: '1px solid rgba(255, 255, 255, 0.15)',
-                borderRadius: '999px',
-                color: '#fff',
-                fontSize: '0.85rem',
-                fontWeight: 600,
-                cursor: 'pointer',
-                padding: '8px 16px',
-                transition: 'all 0.2s'
-              }}
-              onMouseOver={e => e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.4)'}
-              onMouseOut={e => e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.15)'}
-            >
-              Sign In
-            </button>
-
-            <button
-              onClick={() => navigate('/app')}
-              style={{
                 display: 'flex', alignItems: 'center', gap: '8px',
                 padding: '10px 24px',
                 background: 'linear-gradient(135deg, #0a84ff, #0056d6)',
@@ -489,7 +470,7 @@ export default function Landing() {
                 e.currentTarget.style.boxShadow = '0 4px 16px rgba(10, 132, 255, 0.4), inset 0 1px 0 rgba(255,255,255,0.2)';
               }}
             >
-              Sign Up <ArrowRight size={15} />
+              Enter Platform <ArrowRight size={15} />
             </button>
           </div>
         </nav>
