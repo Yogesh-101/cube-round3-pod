@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import Hero from './components/ui/animated-shader-hero';
 import { ContainerScroll } from './components/ui/container-scroll-animation';
+import ScrollStack, { ScrollStackItem } from './components/ui/ScrollStack';
 
 // ------------------------------------------------------------------
 // METRICS BAR (Instant Enterprise Authority Above the Fold)
@@ -305,7 +306,7 @@ const EvidenceShowcase = () => {
 // ------------------------------------------------------------------
 // FEATURE ROW (Upgraded with Interactive UI Preview Cards)
 // ------------------------------------------------------------------
-const FeatureRow = ({ title, desc, icon: Icon, reversed, previewComponent }) => (
+const FeatureRow = ({ title, desc, icon: Icon, reversed, previewComponent, imageUrl }) => (
   <div
     data-aos={reversed ? 'fade-left' : 'fade-right'}
     style={{
@@ -313,7 +314,7 @@ const FeatureRow = ({ title, desc, icon: Icon, reversed, previewComponent }) => 
       flexDirection: reversed ? 'row-reverse' : 'row',
       alignItems: 'center',
       gap: '48px',
-      padding: '56px 0',
+      padding: '24px 0',
       borderBottom: '1px solid rgba(255,255,255,0.05)',
       flexWrap: 'wrap'
     }}
@@ -339,14 +340,15 @@ const FeatureRow = ({ title, desc, icon: Icon, reversed, previewComponent }) => 
       {previewComponent || (
         <div style={{
           width: '100%', minHeight: '260px', borderRadius: '20px',
-          background: 'linear-gradient(145deg, rgba(30,41,59,0.7), rgba(15,23,42,0.85))',
+          background: imageUrl ? `url(${imageUrl}) center/cover no-repeat` : 'linear-gradient(145deg, rgba(30,41,59,0.7), rgba(15,23,42,0.85))',
           border: '1px solid rgba(59,130,246,0.15)',
           position: 'relative', overflow: 'hidden',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           boxShadow: '0 16px 36px -10px rgba(0,0,0,0.5)'
         }}>
-          <div style={{ position: 'absolute', inset: 0, opacity: 0.08, backgroundImage: 'radial-gradient(circle at center, #60a5fa 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
-          <Icon size={80} color="rgba(96,165,250,0.15)" />
+          {imageUrl && <div style={{ position: 'absolute', inset: 0, background: 'rgba(15,23,42,0.4)' }} />}
+          {!imageUrl && <div style={{ position: 'absolute', inset: 0, opacity: 0.08, backgroundImage: 'radial-gradient(circle at center, #60a5fa 1px, transparent 1px)', backgroundSize: '20px 20px' }} />}
+          {!imageUrl && <Icon size={80} color="rgba(96,165,250,0.15)" />}
         </div>
       )}
     </div>
@@ -627,9 +629,9 @@ export default function Landing() {
       </section>
 
       {/* ── FEATURE ROWS ─────────────────────────────────────── */}
-      <section id="features" style={{ padding: '60px 24px 120px', background: '#020617' }}>
-        <div style={{ maxWidth: '1060px', margin: '0 auto' }}>
-          <div data-aos="fade-up" style={{ textAlign: 'center', marginBottom: '72px' }}>
+      <section id="features" style={{ padding: '20px 0', background: '#020617' }}>
+        <div style={{ margin: '0 auto' }}>
+          <div data-aos="fade-up" style={{ textAlign: 'center', marginBottom: '24px' }}>
             <div style={{
               display: 'inline-flex', alignItems: 'center', gap: '8px',
               padding: '6px 16px', background: 'rgba(59,130,246,0.08)',
@@ -644,24 +646,35 @@ export default function Landing() {
             </h2>
           </div>
 
-          <FeatureRow
-            title="Immutable Evidence Records"
-            desc="Every agent emits a deterministic JSON envelope. Outcomes, decisions, and raw VLM outputs are signed with SHA-256 hashes. The orchestrator references these hashes, ensuring a fully auditable chain of custody that survives process restarts and disputes."
-            icon={Database}
-            reversed={false}
-          />
-          <FeatureRow
-            title="Fail-Open Architecture"
-            desc="The physical world doesn't pause for 503 errors. If the VLM hallucinates or an API times out, the agent falls back to PENDING_REVIEW. Operators are never blocked by the software, and decisions are safely routed to human dashboards."
-            icon={Activity}
-            reversed={true}
-          />
-          <FeatureRow
-            title="Deterministic Decision Engine"
-            desc="We separate vision from reasoning. The Vision Language Model operates at Temperature 0.0 to strictly report physical geometry and features. A deterministic, rule-based Python engine digests this to render the final PASS/FAIL verdict, eliminating LLM flakiness."
-            icon={ShieldCheck}
-            reversed={false}
-          />
+          <ScrollStack>
+            <ScrollStackItem>
+              <FeatureRow
+                title="Immutable Evidence Records"
+                desc="Every agent emits a deterministic JSON envelope. Outcomes, decisions, and raw VLM outputs are signed with SHA-256 hashes. The orchestrator references these hashes, ensuring a fully auditable chain of custody that survives process restarts and disputes."
+                icon={Database}
+                reversed={false}
+                imageUrl="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&q=80&w=2034"
+              />
+            </ScrollStackItem>
+            <ScrollStackItem>
+              <FeatureRow
+                title="Fail-Open Architecture"
+                desc="The physical world doesn't pause for 503 errors. If the VLM hallucinates or an API times out, the agent falls back to PENDING_REVIEW. Operators are never blocked by the software, and decisions are safely routed to human dashboards."
+                icon={Activity}
+                reversed={true}
+                imageUrl="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=2070"
+              />
+            </ScrollStackItem>
+            <ScrollStackItem>
+              <FeatureRow
+                title="Deterministic Decision Engine"
+                desc="We separate vision from reasoning. The Vision Language Model operates at Temperature 0.0 to strictly report physical geometry and features. A deterministic, rule-based Python engine digests this to render the final PASS/FAIL verdict, eliminating LLM flakiness."
+                icon={ShieldCheck}
+                reversed={false}
+                imageUrl="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=2070"
+              />
+            </ScrollStackItem>
+          </ScrollStack>
         </div>
       </section>
 
