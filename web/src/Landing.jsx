@@ -104,7 +104,7 @@ const StageCard = ({ stageNum, stageKey, icon: Icon, title, desc, color, delay, 
     }}
     onMouseLeave={(e) => {
       e.currentTarget.style.transform = 'translateY(0)';
-      e.currentTarget.style.boxShadow = 'none';
+      e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,0,0,0.3)';
       e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.06)';
       e.currentTarget.style.background = 'rgba(15, 23, 42, 0.65)';
     }}
@@ -465,46 +465,29 @@ export default function Landing() {
             >
               Sign In
             </button>
-            <button
-              onClick={() => navigate('/app/agents')}
-              style={{
-                background: 'rgba(59, 130, 246, 0.12)',
-                border: '1px solid rgba(59, 130, 246, 0.35)',
-                borderRadius: '999px',
-                color: '#60a5fa',
-                fontSize: '0.85rem',
-                fontWeight: 700,
-                cursor: 'pointer',
-                padding: '8px 16px',
-                transition: 'all 0.2s'
-              }}
-              onMouseOver={e => e.currentTarget.style.background = 'rgba(59, 130, 246, 0.22)'}
-              onMouseOut={e => e.currentTarget.style.background = 'rgba(59, 130, 246, 0.12)'}
-            >
-              5 Agents Mode
-            </button>
+
             <button
               onClick={() => navigate('/app')}
               style={{
                 display: 'flex', alignItems: 'center', gap: '8px',
-                padding: '10px 20px',
-                background: 'linear-gradient(135deg, #3b82f6, #0284c7)',
+                padding: '10px 24px',
+                background: 'linear-gradient(135deg, #0a84ff, #0056d6)',
                 color: '#fff',
-                border: 'none',
+                border: '1px solid rgba(255,255,255,0.15)',
                 borderRadius: '999px',
-                fontSize: '0.88rem',
+                fontSize: '0.9rem',
                 fontWeight: 700,
                 cursor: 'pointer',
-                transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
-                boxShadow: '0 4px 16px rgba(59,130,246,0.45)'
+                transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+                boxShadow: '0 4px 16px rgba(10, 132, 255, 0.4), inset 0 1px 0 rgba(255,255,255,0.2)'
               }}
               onMouseOver={e => {
-                e.currentTarget.style.transform = 'scale(1.04)';
-                e.currentTarget.style.boxShadow = '0 6px 22px rgba(59,130,246,0.65)';
+                e.currentTarget.style.transform = 'translateY(-2px) scale(1.02)';
+                e.currentTarget.style.boxShadow = '0 8px 24px rgba(10, 132, 255, 0.6), inset 0 1px 0 rgba(255,255,255,0.3)';
               }}
               onMouseOut={e => {
-                e.currentTarget.style.transform = 'scale(1)';
-                e.currentTarget.style.boxShadow = '0 4px 16px rgba(59,130,246,0.45)';
+                e.currentTarget.style.transform = 'translateY(0) scale(1)';
+                e.currentTarget.style.boxShadow = '0 4px 16px rgba(10, 132, 255, 0.4), inset 0 1px 0 rgba(255,255,255,0.2)';
               }}
             >
               Enter Platform <ArrowRight size={15} />
