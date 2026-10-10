@@ -36,7 +36,7 @@ def effective(workflow: dict, record: dict) -> tuple[str, bool]:
 def _latest(workflow: dict, evidence: dict) -> list[tuple[dict, dict]]:
     """[(stage_result, record)] for stages that produced a record."""
     return [(sr, evidence[sr["record_id"]]) for sr in workflow["stage_results"]
-            if sr.get("record_id") and sr["record_id"] in evidence]
+            if sr.get("record_id") and evidence.get(sr["record_id"])]
 
 
 def derive_status(workflow: dict, evidence: dict) -> tuple[str, str]:

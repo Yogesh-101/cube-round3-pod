@@ -73,10 +73,13 @@ const MetricsBar = () => {
 // ------------------------------------------------------------------
 // STAGE CARD (Elevated with Stage Badge & Capability Chips)
 // ------------------------------------------------------------------
-const StageCard = ({ stageNum, icon: Icon, title, desc, color, delay, tags }) => (
+// STAGE CARD (Elevated with Stage Badge & Capability Chips)
+// ------------------------------------------------------------------
+const StageCard = ({ stageNum, stageKey, icon: Icon, title, desc, color, delay, tags, onLaunch }) => (
   <div
     data-aos="fade-up"
     data-aos-delay={delay}
+    onClick={() => onLaunch && onLaunch(stageKey)}
     style={{
       background: 'rgba(15, 23, 42, 0.65)',
       backdropFilter: 'blur(16px)',
@@ -87,7 +90,7 @@ const StageCard = ({ stageNum, icon: Icon, title, desc, color, delay, tags }) =>
       flex: '1 1 320px',
       maxWidth: '370px',
       transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-      cursor: 'default',
+      cursor: 'pointer',
       display: 'flex',
       flexDirection: 'column',
       position: 'relative',
@@ -155,6 +158,12 @@ const StageCard = ({ stageNum, icon: Icon, title, desc, color, delay, tags }) =>
           {t}
         </span>
       ))}
+    </div>
+
+    <div style={{ marginTop: '14px', paddingTop: '12px', borderTop: '1px solid rgba(255,255,255,0.06)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <span style={{ fontSize: '0.8rem', fontWeight: 700, color: color, display: 'flex', alignItems: 'center', gap: '4px' }}>
+        Launch Agent Workspace →
+      </span>
     </div>
   </div>
 );
@@ -437,7 +446,43 @@ export default function Landing() {
           </div>
 
           {/* CTA Group */}
-          <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+            <button
+              onClick={() => navigate('/login')}
+              style={{
+                background: 'transparent',
+                border: '1px solid rgba(255, 255, 255, 0.15)',
+                borderRadius: '999px',
+                color: '#fff',
+                fontSize: '0.85rem',
+                fontWeight: 600,
+                cursor: 'pointer',
+                padding: '8px 16px',
+                transition: 'all 0.2s'
+              }}
+              onMouseOver={e => e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.4)'}
+              onMouseOut={e => e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.15)'}
+            >
+              Sign In
+            </button>
+            <button
+              onClick={() => navigate('/app/agents')}
+              style={{
+                background: 'rgba(59, 130, 246, 0.12)',
+                border: '1px solid rgba(59, 130, 246, 0.35)',
+                borderRadius: '999px',
+                color: '#60a5fa',
+                fontSize: '0.85rem',
+                fontWeight: 700,
+                cursor: 'pointer',
+                padding: '8px 16px',
+                transition: 'all 0.2s'
+              }}
+              onMouseOver={e => e.currentTarget.style.background = 'rgba(59, 130, 246, 0.22)'}
+              onMouseOut={e => e.currentTarget.style.background = 'rgba(59, 130, 246, 0.12)'}
+            >
+              5 Agents Mode
+            </button>
             <button
               onClick={() => navigate('/app')}
               style={{
@@ -515,48 +560,58 @@ export default function Landing() {
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '22px', justifyContent: 'center' }}>
             <StageCard
               stageNum="STAGE 01"
+              stageKey="receiving"
               delay="0"
               color="#3b82f6"
               icon={Box}
               title="Receiving Agent"
               desc="Verifies vendor shipments at the dock. Audits inbound POs, flags quantity mismatches, and issues first-mile evidence records."
               tags={['PO Inbound Audit', 'Discrepancy Flagging', 'First-Mile Seal']}
+              onLaunch={(s) => navigate(`/app/agents/${s}`)}
             />
             <StageCard
               stageNum="STAGE 02"
+              stageKey="prep"
               delay="100"
               color="#10b981"
               icon={RefreshCcw}
               title="Prep Agent"
               desc="Ensures individual items are barcoded, poly-bagged, or bubble-wrapped according to strict warehouse routing requirements."
               tags={['Barcode Compliance', 'Poly-Bag Specs', 'Route Certification']}
+              onLaunch={(s) => navigate(`/app/agents/${s}`)}
             />
             <StageCard
               stageNum="STAGE 03"
+              stageKey="pack"
               delay="200"
               color="#8b5cf6"
               icon={PackageCheck}
               title="Pack Manager"
               desc="Order-blind VLM inspection of open cartons. Implements scene-coverage analysis and robust substitution detection before sealing."
               tags={['Order-Blind VLM', 'Substitution Guard', 'Carton Closure Seal']}
+              onLaunch={(s) => navigate(`/app/agents/${s}`)}
             />
             <StageCard
               stageNum="STAGE 04"
+              stageKey="returns"
               delay="300"
               color="#f59e0b"
               icon={AlertTriangle}
               title="Returns Agent"
               desc="Inspects customer returns. Determines grading condition, restock viability, and detects policy abuse or missing accessories."
               tags={['Condition Grading', 'Abuse Detection', 'Restock Routing']}
+              onLaunch={(s) => navigate(`/app/agents/${s}`)}
             />
             <StageCard
               stageNum="STAGE 05"
+              stageKey="recovery"
               delay="400"
               color="#06b6d4"
               icon={Network}
               title="Recovery Agent"
               desc="Deep conflict resolution. Investigates cross-stage discrepancies, checks missing items against scale weight, and proposes resolution actions."
               tags={['Cross-Stage Audit', 'Weight Discrepancy', 'Resolution Engine']}
+              onLaunch={(s) => navigate(`/app/agents/${s}`)}
             />
           </div>
         </div>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams, Link } from 'react-router-dom'
 import './App.css'
 import { 
   orchestratorApi, 
@@ -9,7 +9,12 @@ import {
   setForceEmbedded,
   subscribeConnectionState 
 } from './apiClient'
+<<<<<<< HEAD
 import WorkflowStudio from './WorkflowStudio'
+=======
+import AgentWorkspace from './components/AgentWorkspace'
+import AuthModal from './components/AuthModal'
+>>>>>>> 68bf0176cf2b9bea0e8baadf7c934899b770cb63
 
 // Safe Error Boundary to guarantee zero white-screen crashes
 class ErrorBoundary extends React.Component {
@@ -82,9 +87,14 @@ function formatDuration(ms) {
   return `${(ms / 1000).toFixed(2)}s`
 }
 
-function App() {
+function App({ defaultMode = 'dashboard' }) {
   const navigate = useNavigate()
-  const [activeTab, setActiveTab] = useState('dashboard') // 'dashboard' | 'inspect' | 'results'
+  const { stage: urlStage } = useParams()
+  const [activeTab, setActiveTab] = useState(defaultMode === 'agents' || urlStage ? 'agents' : 'dashboard') // 'dashboard' | 'agents' | 'inspect' | 'results'
+  const [selectedAgentStage, setSelectedAgentStage] = useState(urlStage || 'receiving')
+  const [currentUser, setCurrentUser] = useState(orchestratorApi.getAuthUser())
+  const [showAuthModal, setShowAuthModal] = useState(false)
+  const [authModalMode, setAuthModalMode] = useState('login')
   const [health, setHealth] = useState(null)
   const [loadingHealth, setLoadingHealth] = useState(true)
   const [engineMode, setEngineMode] = useState('detecting') // 'live' | 'embedded' | 'detecting'
@@ -176,6 +186,19 @@ function App() {
       unsubscribe()
     }
   }, [orgId])
+
+  useEffect(() => {
+    orchestratorApi.fetchMe().then(user => {
+      if (user) setCurrentUser(user)
+    })
+  }, [])
+
+  useEffect(() => {
+    if (urlStage) {
+      setSelectedAgentStage(urlStage)
+      setActiveTab('agents')
+    }
+  }, [urlStage])
 
   const selectWorkflow = async (wf) => {
     setWorkflow(wf)
@@ -348,6 +371,21 @@ function App() {
               </svg>
               Dashboard
             </a>
+
+            <a 
+              href="#agents" 
+              className={activeTab === 'agents' ? 'active' : ''} 
+              onClick={(e) => { 
+                e.preventDefault()
+                setActiveTab('agents')
+                setMobileNavOpen(false)
+              }}
+            >
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+              </svg>
+              5 Agents Mode
+            </a>
             
             <a 
               href="#inspect" 
@@ -361,7 +399,7 @@ function App() {
               <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
               </svg>
-              New Inspection
+              Pipeline Run
             </a>
 
             <a 
@@ -393,6 +431,66 @@ function App() {
               </svg>
               Results {workflow ? `(${workflow.subject_id || 'Active'})` : ''}
             </a>
+
+            {currentUser ? (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ fontSize: '0.8rem', color: 'var(--brand-300)', fontWeight: 600 }}>
+                  👤 {currentUser.name || currentUser.email.split('@')[0]}
+                </span>
+                <button
+                  type="button"
+                  onClick={async () => {
+                    await orchestratorApi.logout()
+                    setCurrentUser(null)
+                    showToast('Logged out successfully', 'info')
+                  }}
+                  style={{
+                    background: 'none',
+                    border: '1px solid var(--edge)',
+                    borderRadius: '6px',
+                    color: 'var(--text-muted)',
+                    fontSize: '0.75rem',
+                    padding: '4px 8px',
+                    cursor: 'pointer',
+                  }}
+                >
+                  Sign Out
+                </button>
+              </div>
+            ) : (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setAuthModalMode('login')
+                    setShowAuthModal(true)
+                  }}
+                  style={{
+                    background: 'none',
+                    border: '1px solid var(--border)',
+                    borderRadius: '6px',
+                    color: '#fff',
+                    fontSize: '0.8rem',
+                    padding: '5px 10px',
+                    cursor: 'pointer',
+                    fontWeight: 600,
+                  }}
+                >
+                  Sign In
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setAuthModalMode('register')
+                    setShowAuthModal(true)
+                  }}
+                  className="btn btn-primary btn-sm"
+                  style={{ fontSize: '0.8rem', padding: '5px 10px' }}
+                >
+                  Register
+                </button>
+              </div>
+            )}
 
             <div className="org-switch">
               <label>Org</label>
@@ -497,6 +595,72 @@ function App() {
                   <div className="stat-label">Needs Review</div>
                   <div className="stat-value">{loadingWorkflows ? '—' : reviewCount}</div>
                   <div className="stat-sub">requires human review</div>
+                </div>
+              </div>
+
+              {/* FIVE INDEPENDENT AGENT WORKSPACES CARDS */}
+              <div style={{ marginBottom: 28 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
+                  <div>
+                    <span className="eyebrow" style={{ color: 'var(--brand-400)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase' }}>Modular Architecture</span>
+                    <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#fff', margin: 0 }}>
+                      Five Independent Agent Workspaces
+                    </h2>
+                    <p style={{ fontSize: '0.86rem', color: 'var(--text-muted)', margin: '4px 0 0 0' }}>
+                      Execute, test, and inspect individual agents in isolation without running upstream or downstream stages.
+                    </p>
+                  </div>
+                  <button 
+                    className="btn btn-secondary btn-sm"
+                    onClick={() => { setSelectedAgentStage('receiving'); setActiveTab('agents'); }}
+                  >
+                    Open Workspace Hub ▶
+                  </button>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))', gap: '14px' }}>
+                  {[
+                    { stage: 'receiving', icon: '📥', title: 'Receiving Agent', desc: 'Dock Intake & PO Shortfall Verification', tag: 'Stage 1' },
+                    { stage: 'prep', icon: '📦', title: 'Prep Agent', desc: 'Amazon FBA Polybag & Barcode Prep', tag: 'Stage 2' },
+                    { stage: 'pack', icon: '📦', title: 'Pack Agent', desc: 'MFN Order-Blind Vision & Seal Verification', tag: 'Stage 3' },
+                    { stage: 'returns', icon: '🔄', title: 'Returns Agent', desc: 'Customer Return Grading & Restock Disposition', tag: 'Stage 4' },
+                    { stage: 'recovery', icon: '💰', title: 'Recovery Agent', desc: 'Amazon Fee Audit & Claim Dossier Builder', tag: 'Stage 5' },
+                  ].map((ag) => (
+                    <div 
+                      key={ag.stage}
+                      className="card"
+                      style={{
+                        padding: '18px',
+                        cursor: 'pointer',
+                        transition: 'transform 0.15s ease, border-color 0.15s ease',
+                        border: '1px solid var(--edge)',
+                        display: 'flex',
+                        flexDirection: 'column',
+                      }}
+                      onClick={() => {
+                        setSelectedAgentStage(ag.stage)
+                        setActiveTab('agents')
+                      }}
+                      onMouseOver={(e) => { e.currentTarget.style.borderColor = 'var(--brand-500)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
+                      onMouseOut={(e) => { e.currentTarget.style.borderColor = 'var(--edge)'; e.currentTarget.style.transform = 'translateY(0)'; }}
+                    >
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                        <span style={{ fontSize: '1.6rem' }}>{ag.icon}</span>
+                        <span style={{ fontSize: '0.7rem', padding: '2px 7px', borderRadius: '4px', background: 'var(--surface3)', color: 'var(--brand-300)', fontWeight: 700 }}>
+                          {ag.tag}
+                        </span>
+                      </div>
+                      <h3 style={{ fontSize: '0.98rem', fontWeight: 700, color: '#fff', margin: '0 0 6px 0' }}>
+                        {ag.title}
+                      </h3>
+                      <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', margin: '0 0 14px 0', lineHeight: 1.45, flex: 1 }}>
+                        {ag.desc}
+                      </p>
+                      <span style={{ fontSize: '0.78rem', color: 'var(--brand-400)', fontWeight: 600 }}>
+                        Run Independently →
+                      </span>
+                    </div>
+                  ))}
                 </div>
               </div>
 
@@ -683,6 +847,17 @@ function App() {
                 </div>
               </div>
             </>
+          )}
+
+          {/* =========================================================================
+              VIEW: INDIVIDUAL AGENT WORKSPACES
+              ========================================================================= */}
+          {activeTab === 'agents' && (
+            <AgentWorkspace
+              initialStage={selectedAgentStage}
+              onSwitchToWorkflow={() => setActiveTab('inspect')}
+              showToast={showToast}
+            />
           )}
 
           {/* =========================================================================
@@ -1465,6 +1640,17 @@ function App() {
           </div>
         </div>
       )}
+
+      {/* Interactive Authentication Modal */}
+      <AuthModal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        initialMode={authModalMode}
+        onAuthSuccess={(user) => {
+          setCurrentUser(user)
+          showToast(`Welcome, ${user.name || user.email}!`, 'seal')
+        }}
+      />
 
       <footer>
         <div className="container" style={{display: 'flex', justifyContent: 'space-between', padding: '24px 0', color: 'var(--ink-400)', fontSize: '0.8125rem', flexWrap: 'wrap', gap: 12}}>
