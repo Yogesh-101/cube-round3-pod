@@ -11,3 +11,6 @@ out/
 .pytest_cache/
 *.egg-info/
 powershell.cmd
+*.db
+data/*.db
+web/dist/
