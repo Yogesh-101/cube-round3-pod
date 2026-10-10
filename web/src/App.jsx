@@ -579,6 +579,72 @@ function App({ defaultMode = 'dashboard' }) {
                 </div>
               </div>
 
+              {/* FIVE INDEPENDENT AGENT WORKSPACES CARDS */}
+              <div style={{ marginBottom: 28 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
+                  <div>
+                    <span className="eyebrow" style={{ color: 'var(--brand-400)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase' }}>Modular Architecture</span>
+                    <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#fff', margin: 0 }}>
+                      Five Independent Agent Workspaces
+                    </h2>
+                    <p style={{ fontSize: '0.86rem', color: 'var(--text-muted)', margin: '4px 0 0 0' }}>
+                      Execute, test, and inspect individual agents in isolation without running upstream or downstream stages.
+                    </p>
+                  </div>
+                  <button 
+                    className="btn btn-secondary btn-sm"
+                    onClick={() => { setSelectedAgentStage('receiving'); setActiveTab('agents'); }}
+                  >
+                    Open Workspace Hub ▶
+                  </button>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))', gap: '14px' }}>
+                  {[
+                    { stage: 'receiving', icon: '📥', title: 'Receiving Agent', desc: 'Dock Intake & PO Shortfall Verification', tag: 'Stage 1' },
+                    { stage: 'prep', icon: '📦', title: 'Prep Agent', desc: 'Amazon FBA Polybag & Barcode Prep', tag: 'Stage 2' },
+                    { stage: 'pack', icon: '📦', title: 'Pack Agent', desc: 'MFN Order-Blind Vision & Seal Verification', tag: 'Stage 3' },
+                    { stage: 'returns', icon: '🔄', title: 'Returns Agent', desc: 'Customer Return Grading & Restock Disposition', tag: 'Stage 4' },
+                    { stage: 'recovery', icon: '💰', title: 'Recovery Agent', desc: 'Amazon Fee Audit & Claim Dossier Builder', tag: 'Stage 5' },
+                  ].map((ag) => (
+                    <div 
+                      key={ag.stage}
+                      className="card"
+                      style={{
+                        padding: '18px',
+                        cursor: 'pointer',
+                        transition: 'transform 0.15s ease, border-color 0.15s ease',
+                        border: '1px solid var(--edge)',
+                        display: 'flex',
+                        flexDirection: 'column',
+                      }}
+                      onClick={() => {
+                        setSelectedAgentStage(ag.stage)
+                        setActiveTab('agents')
+                      }}
+                      onMouseOver={(e) => { e.currentTarget.style.borderColor = 'var(--brand-500)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
+                      onMouseOut={(e) => { e.currentTarget.style.borderColor = 'var(--edge)'; e.currentTarget.style.transform = 'translateY(0)'; }}
+                    >
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                        <span style={{ fontSize: '1.6rem' }}>{ag.icon}</span>
+                        <span style={{ fontSize: '0.7rem', padding: '2px 7px', borderRadius: '4px', background: 'var(--surface3)', color: 'var(--brand-300)', fontWeight: 700 }}>
+                          {ag.tag}
+                        </span>
+                      </div>
+                      <h3 style={{ fontSize: '0.98rem', fontWeight: 700, color: '#fff', margin: '0 0 6px 0' }}>
+                        {ag.title}
+                      </h3>
+                      <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', margin: '0 0 14px 0', lineHeight: 1.45, flex: 1 }}>
+                        {ag.desc}
+                      </p>
+                      <span style={{ fontSize: '0.78rem', color: 'var(--brand-400)', fontWeight: 600 }}>
+                        Run Independently →
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
               <div className="grid-sidebar">
                 {/* Recent Inspections Table */}
                 <div className="card">
@@ -762,6 +828,17 @@ function App({ defaultMode = 'dashboard' }) {
                 </div>
               </div>
             </>
+          )}
+
+          {/* =========================================================================
+              VIEW: INDIVIDUAL AGENT WORKSPACES
+              ========================================================================= */}
+          {activeTab === 'agents' && (
+            <AgentWorkspace
+              initialStage={selectedAgentStage}
+              onSwitchToWorkflow={() => setActiveTab('inspect')}
+              showToast={showToast}
+            />
           )}
 
           {/* =========================================================================
@@ -1529,7 +1606,16 @@ function App({ defaultMode = 'dashboard' }) {
             </div>
           </div>
         </div>
-      )}
+      {/* Interactive Authentication Modal */}
+      <AuthModal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        initialMode={authModalMode}
+        onAuthSuccess={(user) => {
+          setCurrentUser(user)
+          showToast(`Welcome, ${user.name || user.email}!`, 'seal')
+        }}
+      />
 
       <footer>
         <div className="container" style={{display: 'flex', justifyContent: 'space-between', padding: '24px 0', color: 'var(--ink-400)', fontSize: '0.8125rem', flexWrap: 'wrap', gap: 12}}>
