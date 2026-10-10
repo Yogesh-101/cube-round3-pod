@@ -159,9 +159,9 @@ def test_all_five_agents_run_independently():
     assert pack_data["stage"] == "pack"
     assert pack_data["outcome"] in ("seal", "stop_and_fix", "pending_review")
 
-    # 4. Returns Agent
+    # 4. Returns Agent (UNIT-0014 is a valid return case in org_demo_alpha)
     ret_res = client.post("/agents/returns/run", json={
-        "unit_id": "UNIT-0001",
+        "unit_id": "UNIT-0014",
         "org_id": "org_demo_alpha",
     }, headers=headers)
     assert ret_res.status_code == 200

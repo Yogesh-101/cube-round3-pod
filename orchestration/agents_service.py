@@ -19,7 +19,7 @@ from typing import Any, Optional
 from shared.utils import sample_data
 from shared.utils.records import utcnow
 
-from .clients import HttpClient, InProcClient, client_for, load_manifest
+from .clients import AgentRejected, HttpClient, InProcClient, client_for, load_manifest
 from .database import ExecutionRecord, SessionLocal
 from .orchestrator import (
     _previous_evidence,
@@ -67,7 +67,7 @@ STAGE_METADATA = {
         "version": "1.0.0",
         "owner": "@team",
         "prerequisites": [],
-        "sample_units": ["UNIT-0001", "UNIT-0004", "UNIT-0006"],
+        "sample_units": ["UNIT-0014", "UNIT-0016", "UNIT-0023", "UNIT-0003"],
         "input_types": ["unit_id", "org_id", "return_id", "order_id", "photos"],
     },
     "recovery": {
@@ -215,7 +215,10 @@ def run_agent_independently(
     }
 
     # Execute agent
-    out = client.run(request, timeout_s=30.0)
+    try:
+        out = client.run(request, timeout_s=30.0)
+    except AgentRejected as ar:
+        raise LookupError(f"Agent {stage} rejected execution for {unit_id} in {org_id}: {ar}")
 
     # Validate agent output against official schema and contracts
     dummy_wf = {
