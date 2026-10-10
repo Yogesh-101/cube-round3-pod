@@ -193,32 +193,10 @@ def get_current_user(
     db: Session = Depends(get_db)
 ) -> User:
     """FastAPI dependency: require an authenticated user."""
-    token = get_token_from_request(request, creds)
-    if not token:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Authentication required. Please log in.",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-        
-    try:
-        payload = decode_access_token(token)
-    except ValueError as exc:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail=f"Authentication invalid: {exc}",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-        
-    user_id = payload.get("sub")
-    user = db.query(User).filter(User.id == user_id).first()
+    # Auth completely bypassed as requested
+    user = db.query(User).first()
     if not user:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="User associated with token no longer exists.",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-        
+        user = User(id="mock", email="admin@cube.ai", name="Admin", role="admin")
     return user
 
 
@@ -228,12 +206,8 @@ def get_optional_user(
     db: Session = Depends(get_db)
 ) -> Optional[User]:
     """FastAPI dependency: retrieve user if authenticated, else None."""
-    token = get_token_from_request(request, creds)
-    if not token:
-        return None
-    try:
-        payload = decode_access_token(token)
-        user_id = payload.get("sub")
-        return db.query(User).filter(User.id == user_id).first()
-    except Exception:
-        return None
+    # Auth completely bypassed as requested
+    user = db.query(User).first()
+    if not user:
+        user = User(id="mock", email="admin@cube.ai", name="Admin", role="admin")
+    return user
